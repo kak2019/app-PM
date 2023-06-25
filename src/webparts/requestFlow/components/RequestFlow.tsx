@@ -17,6 +17,7 @@ export default class RequestFlow extends React.Component<IRequestFlowProps, {}> 
       <section className={`${styles.requestFlow} ${hasTeamsContext ? styles.teams : ''}`}>
         <div className={styles.welcome}>
           <img alt="" src={isDarkTheme ? require('../assets/welcome-dark.png') : require('../assets/welcome-light.png')} className={styles.welcomeImage} />
+          <span>Test Pipeline CI/CD</span>
           <h2>Well done, {escape(userDisplayName)}!</h2>
           <div>{environmentMessage}</div>
           <div>Web part property value: <strong>{escape(description)}</strong></div>
