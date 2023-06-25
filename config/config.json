@@ -26,14 +26,6 @@
         }
       ]
     },
-    "inventory-management-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/inventoryManagement/InventoryManagementWebPart.js",
-          "manifest": "./src/webparts/inventoryManagement/InventoryManagementWebPart.manifest.json"
-        }
-      ]
-    },
     "distribution-flow-tracker-web-part": {
       "components": [
         {
@@ -48,7 +40,7 @@
     "RequestFlowWebPartStrings": "lib/webparts/requestFlow/loc/{locale}.js",
     "GoodsIssueFlowWebPartStrings": "lib/webparts/goodsIssueFlow/loc/{locale}.js",
     "DistributionFlowWebPartStrings": "lib/webparts/distributionFlow/loc/{locale}.js",
-    "InventoryManagementWebPartStrings": "lib/webparts/inventoryManagement/loc/{locale}.js",
-    "DistributionFlowTrackerWebPartStrings": "lib/webparts/distributionFlowTracker/loc/{locale}.js"
+    "DistributionFlowTrackerWebPartStrings": "lib/webparts/distributionFlowTracker/loc/{locale}.js",
+    "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js"
   }
 }
