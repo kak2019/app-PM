@@ -1,0 +1,54 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "request-flow-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/requestFlow/RequestFlowWebPart.js",
+          "manifest": "./src/webparts/requestFlow/RequestFlowWebPart.manifest.json"
+        }
+      ]
+    },
+    "goods-issue-flow-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/goodsIssueFlow/GoodsIssueFlowWebPart.js",
+          "manifest": "./src/webparts/goodsIssueFlow/GoodsIssueFlowWebPart.manifest.json"
+        }
+      ]
+    },
+    "distribution-flow-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/distributionFlow/DistributionFlowWebPart.js",
+          "manifest": "./src/webparts/distributionFlow/DistributionFlowWebPart.manifest.json"
+        }
+      ]
+    },
+    "inventory-management-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/inventoryManagement/InventoryManagementWebPart.js",
+          "manifest": "./src/webparts/inventoryManagement/InventoryManagementWebPart.manifest.json"
+        }
+      ]
+    },
+    "distribution-flow-tracker-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/distributionFlowTracker/DistributionFlowTrackerWebPart.js",
+          "manifest": "./src/webparts/distributionFlowTracker/DistributionFlowTrackerWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "RequestFlowWebPartStrings": "lib/webparts/requestFlow/loc/{locale}.js",
+    "GoodsIssueFlowWebPartStrings": "lib/webparts/goodsIssueFlow/loc/{locale}.js",
+    "DistributionFlowWebPartStrings": "lib/webparts/distributionFlow/loc/{locale}.js",
+    "InventoryManagementWebPartStrings": "lib/webparts/inventoryManagement/loc/{locale}.js",
+    "DistributionFlowTrackerWebPartStrings": "lib/webparts/distributionFlowTracker/loc/{locale}.js"
+  }
+}
