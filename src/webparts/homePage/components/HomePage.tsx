@@ -1,42 +1,41 @@
 import * as React from 'react';
 import styles from './HomePage.module.scss';
 import { IHomePageProps } from './IHomePageProps';
-import { escape } from '@microsoft/sp-lodash-subset';
-
+import { DefaultButton } from '@fluentui/react/lib/Button';
+import { Stack, IStackStyles } from '@fluentui/react/lib/Stack';
+import { DefaultPalette } from '@fluentui/react/lib/Styling';
 export default class HomePage extends React.Component<IHomePageProps, {}> {
   public render(): React.ReactElement<IHomePageProps> {
-    const {
-      description,
-      isDarkTheme,
-      environmentMessage,
-      hasTeamsContext,
-      userDisplayName
-    } = this.props;
+    // const {
+    //   description,
+    //   isDarkTheme,
+    //   environmentMessage,
+    //   hasTeamsContext,
+    //   userDisplayName
+    // } = this.props;
+    const stackStyles: IStackStyles = {
+      root: {
+        background: DefaultPalette. white,
+        margin:100
+      },
+    };
+    // if need 
+    // const getUrlFunction=()=>{
+    //   window.location.href
+    // }
+    const disabledvalue = true
 
     return (
-      <section className={`${styles.homePage} ${hasTeamsContext ? styles.teams : ''}`}>
-        <div className={styles.welcome}>
-          <img alt="" src={isDarkTheme ? require('../assets/welcome-dark.png') : require('../assets/welcome-light.png')} className={styles.welcomeImage} />
-          <h2>Well done, {escape(userDisplayName)}!</h2>
-          <div>{environmentMessage}</div>
-          <div>Web part property value: <strong>{escape(description)}</strong></div>
-        </div>
-        <div>
-          <h3>Welcome to SharePoint Framework!</h3>
-          <p>
-            The SharePoint Framework (SPFx) is a extensibility model for Microsoft Viva, Microsoft Teams and SharePoint. It&#39;s the easiest way to extend Microsoft 365 with automatic Single Sign On, automatic hosting and industry standard tooling.
-          </p>
-          <h4>Learn more about SPFx development:</h4>
-          <ul className={styles.links}>
-            <li><a href="https://aka.ms/spfx" target="_blank" rel="noreferrer">SharePoint Framework Overview</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-graph" target="_blank" rel="noreferrer">Use Microsoft Graph in your solution</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-teams" target="_blank" rel="noreferrer">Build for Microsoft Teams using SharePoint Framework</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-viva" target="_blank" rel="noreferrer">Build for Microsoft Viva Connections using SharePoint Framework</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-store" target="_blank" rel="noreferrer">Publish SharePoint Framework applications to the marketplace</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-api" target="_blank" rel="noreferrer">SharePoint Framework API reference</a></li>
-            <li><a href="https://aka.ms/m365pnp" target="_blank" rel="noreferrer">Microsoft 365 Developer Community</a></li>
-          </ul>
-        </div>
+      <section >
+        <Stack enableScopedSelectors styles={stackStyles}>
+        <DefaultButton text='Create New Request' className={styles.homePageButton} href='http://www.baidu.com'/>
+        <DefaultButton text='Request List' className={styles.homePageButton}/>
+        <DefaultButton text='Goods Issue List' className={styles.homePageButton}/>
+        <DefaultButton text='Create New Distribution Request' className={styles.homePageButton}/>
+        <DefaultButton text='My Distribution Request' className={styles.homePageButton}/>
+        <DefaultButton text='Received Distribution' className={styles.homePageButton}/>
+        <DefaultButton text='Inventory Management' className={disabledvalue?styles.homePageButtonDisabled : styles.homePageButton} disabled={disabledvalue}/>
+        </Stack>
       </section>
     );
   }
