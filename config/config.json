@@ -33,6 +33,14 @@
           "manifest": "./src/webparts/distributionFlowTracker/DistributionFlowTrackerWebPart.manifest.json"
         }
       ]
+    },
+    "home-page-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/homePage/HomePageWebPart.js",
+          "manifest": "./src/webparts/homePage/HomePageWebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
@@ -41,6 +49,7 @@
     "GoodsIssueFlowWebPartStrings": "lib/webparts/goodsIssueFlow/loc/{locale}.js",
     "DistributionFlowWebPartStrings": "lib/webparts/distributionFlow/loc/{locale}.js",
     "DistributionFlowTrackerWebPartStrings": "lib/webparts/distributionFlowTracker/loc/{locale}.js",
-    "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js"
+    "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js",
+    "HomePageWebPartStrings": "lib/webparts/homePage/loc/{locale}.js"
   }
 }
