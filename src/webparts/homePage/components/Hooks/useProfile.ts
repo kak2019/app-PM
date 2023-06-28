@@ -1,6 +1,12 @@
 import { spfi } from '@pnp/sp';
 import { getSP } from '../pnpjsConfig'
 import "@pnp/sp/profiles";
+interface profilevalue{
+  AccountName:string,
+  Requestor: string,
+  Designation: string,
+  Email: string,
+}
 function useProfile(): { fetchData: () => Promise<any> } {
   const fetchData = async (): Promise<any> => {
     const sp = spfi(getSP());
