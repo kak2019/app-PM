@@ -35,3 +35,7 @@ obj
 *.scss.d.ts
 # Idea
 .idea
+
+# CI
+artifacts
+package-lock.json

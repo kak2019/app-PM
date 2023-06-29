@@ -1,0 +1,12 @@
+.listWrapper {
+    background-color: #dedede;
+    min-height:70vh;
+}
+.list {
+    list-style: none;
+
+}
+.list div[role="gridcell"] {
+    align-items: center;
+    display: flex;
+}

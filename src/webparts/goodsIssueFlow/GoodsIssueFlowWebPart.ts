@@ -11,6 +11,8 @@ import { IReadonlyTheme } from '@microsoft/sp-component-base';
 import * as strings from 'GoodsIssueFlowWebPartStrings';
 import GoodsIssueFlow from './components/GoodsIssueFlow';
 import { IGoodsIssueFlowProps } from './components/IGoodsIssueFlowProps';
+import { getSP } from '../../common/pnpjsConfig';
+import PnPTelemetry from "@pnp/telemetry-js";
 
 export interface IGoodsIssueFlowWebPartProps {
   description: string;
@@ -20,6 +22,7 @@ export default class GoodsIssueFlowWebPart extends BaseClientSideWebPart<IGoodsI
 
   private _isDarkTheme: boolean = false;
   private _environmentMessage: string = '';
+  
 
   public render(): void {
     const element: React.ReactElement<IGoodsIssueFlowProps> = React.createElement(
@@ -29,16 +32,19 @@ export default class GoodsIssueFlowWebPart extends BaseClientSideWebPart<IGoodsI
         isDarkTheme: this._isDarkTheme,
         environmentMessage: this._environmentMessage,
         hasTeamsContext: !!this.context.sdks.microsoftTeams,
-        userDisplayName: this.context.pageContext.user.displayName
+        userDisplayName: this.context.pageContext.user.displayName,
+        context:this.context
       }
     );
 
     ReactDom.render(element, this.domElement);
   }
-
+  
   protected onInit(): Promise<void> {
     this._environmentMessage = this._getEnvironmentMessage();
-
+    getSP(this.context);
+    const telemetry = PnPTelemetry.getInstance();
+    telemetry.optOut();
     return super.onInit();
   }
 
