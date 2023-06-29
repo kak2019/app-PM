@@ -2,7 +2,7 @@ import * as React from "react";
 import { memo, useContext, useEffect, useCallback } from "react";
 import { useEntities } from "../../../common/hooks";
 import AppContext from "../../../common/AppContext";
-import "./App.css";
+// import "./App.css";
 import { EntitiesStatus } from "../../../common/features/entities";
 import {
   MessageBar,
