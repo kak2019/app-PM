@@ -3,9 +3,7 @@
     min-height:73vh;
     min-width:94vw;
     overflow: scroll;
-}
-.listWrapper .ms-ScrollablePane--contentContainer{
-    overflow: inherit;
+    overflow-x: inherit;
 }
 .list {
     overflow: inherit;
