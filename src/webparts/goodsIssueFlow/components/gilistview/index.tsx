@@ -1,5 +1,7 @@
 import * as React from "react";
-import { memo, useState, useEffect, useContext, useCallback } from "react";
+import { memo, useEffect, useContext, useState } from "react";
+import { Field, FieldArray, Form, Formik } from "formik";
+import * as Yup from "yup";
 import {
   ListView,
   IViewField,
@@ -11,32 +13,34 @@ import { IRequestListItem } from "../../../../common/model/requests";
 import AppContext from "../../../../common/AppContext";
 import { FieldUserRenderer } from "@pnp/spfx-controls-react";
 import {
-  Dropdown,
-  TextField,
-  Checkbox,
-  DatePicker,
   IDropdownStyles,
+  ITextFieldStyles,
   mergeStyleSets,
+  PrimaryButton,
 } from "office-ui-fabric-react";
 import { REQUESTSCONST } from "../../../../common/features/requests";
+import { FormikDropdown,FormikDatePicker,FormikCheckbox,FormikTextField } from "../../../../common/components";
 
 export default memo(function index() {
   const ctx = useContext(AppContext);
-  const userEmail = ctx.context._pageContext._user.email;
-  console.log(userEmail);
+
   const [, , , requests, , , , , , , , , , ,] = useRequests();
   const [listviewItems, setListViewItems] =
     useState<IRequestListItem[]>(undefined);
 
+  useEffect(() => {
+    setListViewItems([...requests]);
+  }, [requests]);
+
+  //#region ==============Styles and Templates==============
+  const textFieldStyles: Partial<ITextFieldStyles> = { fieldGroup: { width: 150 } };
+  const narrowTextFieldStyles: Partial<ITextFieldStyles> = { fieldGroup: { width: 100 } };
   const dataPickerClass = mergeStyleSets({
     control: {
       maxWidth: "300px",
       minWidth: "165px",
     },
   });
-  const onFormatDate = (date?: Date): string => {
-    return !date ? '' : (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
-  };
   const dropdownStyles: Partial<IDropdownStyles> = {
     dropdown: { width: 120 },
     dropdownItemSelected: {
@@ -69,26 +73,23 @@ export default memo(function index() {
       maxWidth: 150,
       isResizable: true,
       sorting: true,
-      render: useCallback(
-        (rowitem: IRequestListItem) => {
-          return (
-            (
-              <FieldUserRenderer
-                users={JSON.parse(rowitem.Requestor)}
-                context={ctx.context}
-              />
-            ) || ""
-          );
-          //return <FieldUserRenderer users={JSON.parse("[{\"id\":\"11\",\"title\":\"Qin Howard (Consultant)\",\"email\":\"howard.qin@consultant.udtrucks.com\",\"sip\":\"howard.qin@consultant.udtrucks.com\",\"picture\":\"https://udtrucks-my.sharepoint.com:443/User%20Photos/Profile%20Pictures/c1f6b293-e3c7-4c33-9b17-040ffdb5a3b7_MThumb.jpg?t=63800730891\",\"jobTitle\":\"Consultant_EX\",\"department\":\"BP15861\"}]")} context={ctx.context}/>
-          // if (rowitem.Requestor !== "") {
-          //   const u: IPrincipal[] = JSON.parse(rowitem.Requestor) as IPrincipal[];
-          //   return u[0].title;
-          // } else {
-          //   return "";
-          // }
-        },
-        [listviewItems]
-      ),
+      render: (rowitem: IRequestListItem) => {
+        return (
+          (
+            <FieldUserRenderer
+              users={JSON.parse(rowitem.Requestor)}
+              context={ctx.context}
+            />
+          ) || ""
+        );
+        //return <FieldUserRenderer users={JSON.parse("[{\"id\":\"11\",\"title\":\"Qin Howard (Consultant)\",\"email\":\"howard.qin@consultant.udtrucks.com\",\"sip\":\"howard.qin@consultant.udtrucks.com\",\"picture\":\"https://udtrucks-my.sharepoint.com:443/User%20Photos/Profile%20Pictures/c1f6b293-e3c7-4c33-9b17-040ffdb5a3b7_MThumb.jpg?t=63800730891\",\"jobTitle\":\"Consultant_EX\",\"department\":\"BP15861\"}]")} context={ctx.context}/>
+        // if (rowitem.Requestor !== "") {
+        //   const u: IPrincipal[] = JSON.parse(rowitem.Requestor) as IPrincipal[];
+        //   return u[0].title;
+        // } else {
+        //   return "";
+        // }
+      },
     },
     {
       name: "RequesterId_x003a_Name",
@@ -147,25 +148,39 @@ export default memo(function index() {
       sorting: true,
     },
     {
+      name: "HowMuchCanBeFullfilled",
+      displayName: "How much can be full filled",
+      minWidth: 175,
+      maxWidth: 200,
+      isResizable: false,
+      sorting: true,
+      render: (rowitem: IRequestListItem, index: number) => {
+        return (
+          <Field
+            component={FormikTextField}
+            name={`formlvItems[${index}].HowMuchCanBeFullfilled`} styles={narrowTextFieldStyles}
+          />
+        );
+      },
+    },
+    {
       name: "Status",
       displayName: "Status",
       isResizable: true,
       sorting: true,
       minWidth: 150,
       maxWidth: 210,
-      render: useCallback(
-        (rowitem) => {
-          return (
-            <Dropdown
-              defaultSelectedKey={rowitem.Status}
-              styles={dropdownStyles}
-              placeholder="Select a status"
-              options={REQUESTSCONST.STATUS_OPTIONS}
-            />
-          );
-        },
-        [listviewItems]
-      ),
+      render: (rowitem: IRequestListItem, index: number) => {
+        return (
+          <Field
+            name={`formlvItems[${index}].Status`}
+            component={FormikDropdown}
+            styles={dropdownStyles}
+            placeholder="Select a status"
+            options={REQUESTSCONST.STATUS_OPTIONS}
+          />
+        );
+      },
     },
     {
       name: "FullOrPartialFilled",
@@ -174,19 +189,17 @@ export default memo(function index() {
       sorting: true,
       minWidth: 150,
       maxWidth: 210,
-      render: useCallback(
-        (rowitem) => {
-          return (
-            <Dropdown
-              defaultSelectedKey={rowitem.FullOrPartialFilled}
-              styles={dropdownStyles}
-              placeholder="Select a option"
-              options={REQUESTSCONST.FULLORPARTIAL_OPTIONS}
-            />
-          );
-        },
-        [listviewItems]
-      ),
+      render: (rowitem: IRequestListItem, index: number) => {
+        return (
+          <Field
+            name={`formlvItems[${index}].FullOrPartialFilled`}
+            component={FormikDropdown}
+            styles={dropdownStyles}
+            placeholder="Select a option"
+            options={REQUESTSCONST.FULLORPARTIAL_OPTIONS}
+          />
+        );
+      },
     },
     {
       name: "StatusUpdateBy",
@@ -195,19 +208,16 @@ export default memo(function index() {
       maxWidth: 210,
       isResizable: true,
       sorting: true,
-      render: useCallback(
-        (rowitem: IRequestListItem) => {
-          return (
-            (
-              <FieldUserRenderer
-                users={JSON.parse(rowitem.StatusUpdateBy)}
-                context={ctx.context}
-              />
-            ) || ""
-          );
-        },
-        [listviewItems]
-      ),
+      render: (rowitem: IRequestListItem) => {
+        return (
+          (
+            <FieldUserRenderer
+              users={JSON.parse(rowitem.StatusUpdateBy)}
+              context={ctx.context}
+            />
+          ) || ""
+        );
+      },
     },
     {
       name: "QtySent",
@@ -216,12 +226,9 @@ export default memo(function index() {
       maxWidth: 120,
       isResizable: false,
       sorting: true,
-      render: useCallback(
-        (rowitem: IRequestListItem) => {
-          return <TextField value={rowitem.QtySent + ""} width={95} /> || "";
-        },
-        [listviewItems]
-      ),
+      render: (rowitem: IRequestListItem, index: number) => {
+        return <Field component={FormikTextField} name={`formlvItems[${index}].QtySent`} styles={narrowTextFieldStyles} />;
+      },
     },
     {
       name: "DateByWhenItWillReach",
@@ -230,20 +237,17 @@ export default memo(function index() {
       maxWidth: 300,
       isResizable: true,
       sorting: true,
-      render: useCallback(
-        (rowitem: IRequestListItem) => {
-          return (
-            <DatePicker
-              value={rowitem.DateByWhenItWillReach}
-              className={dataPickerClass.control}
-              formatDate={onFormatDate}
-              placeholder="Select a date..."
-              ariaLabel="Select a date"
-            />
-          );
-        },
-        [listviewItems]
-      ),
+      render: (rowitem: IRequestListItem, index: number) => {
+        return (
+          <Field
+            name={`formlvItems[${index}].DateByWhenItWillReach`}
+            component={FormikDatePicker}
+            className={dataPickerClass.control}
+            placeholder="Select a date..."
+            ariaLabel="Select a date"
+          />
+        );
+      },
     },
     {
       name: "ConfirmationFromSupplier",
@@ -252,15 +256,11 @@ export default memo(function index() {
       maxWidth: 300,
       isResizable: true,
       sorting: true,
-      render: useCallback(
-        (rowitem: IRequestListItem) => {
-          return (
-            <Checkbox defaultChecked={rowitem.ConfirmationFromSupplier==="Yes"}
-            />
-          );
-        },
-        [listviewItems]
-      ),
+      render: (rowitem: IRequestListItem,index:number) => {
+        return (
+          <Field name={`formlvItems[${index}].ConfirmationFromSupplier`} component={FormikCheckbox}/>
+        );
+      },
     },
     {
       name: "Field1",
@@ -269,12 +269,9 @@ export default memo(function index() {
       maxWidth: 180,
       isResizable: false,
       sorting: true,
-      render: useCallback(
-        (rowitem: IRequestListItem) => {
-          return <TextField value={rowitem.Field1} width={135} /> || "";
-        },
-        [listviewItems]
-      ),
+      render: (rowitem: IRequestListItem,index:number) => {
+        return <Field component={FormikTextField} name={`formlvItems[${index}].Field1`}  styles={textFieldStyles}/>;
+      },
     },
     {
       name: "Field2",
@@ -283,33 +280,65 @@ export default memo(function index() {
       maxWidth: 180,
       isResizable: false,
       sorting: true,
-      render: useCallback(
-        (rowitem: IRequestListItem) => {
-          return <TextField value={rowitem.Field2} width={135} /> || "";
-        },
-        [listviewItems]
-      ),
+      render: (rowitem: IRequestListItem,index:number) => {
+        return <Field component={FormikTextField} name={`formlvItems[${index}].Field2`}  styles={textFieldStyles}/>;
+      },
     },
   ];
-
-  useEffect(() => {
-    setListViewItems([...requests]);
-  }, [requests]);
+  //#endregion
+  const formValidationSchema = Yup.object().shape({
+    formlvItems: Yup.array()
+      .of(
+        Yup.object().shape({
+          HowMuchCanBeFullfilled: Yup.number().min(1, 'should be greater than 0').integer(),
+          QtySent: Yup.number().min(1, 'should be greater than 0').integer(),
+        })
+      ),
+  });
 
   return (
     <div style={{ flex: "0 0 auto" }}>
-      {requests?.length > 0 && (
-        <ListView
-          items={listviewItems}
-          viewFields={listviewFields}
-          selectionMode={SelectionMode.none}
-          showFilter={true}
-          filterPlaceHolder="Search..."
-          stickyHeader={true}
-          className={styles.listWrapper}
-          listClassName={styles.list}
-        />
-      )}
+      {listviewItems?.length > 0 ? (
+        <Formik
+          initialValues={{ formlvItems: listviewItems }}
+          onSubmit={(values, actions) => {
+            setTimeout(() => {
+              console.log(JSON.stringify(values.formlvItems[0], null, 2));
+              actions.setSubmitting(false);
+            }, 1000);
+          }}
+          validationSchema={formValidationSchema}
+        >
+          {(props) => (
+            <Form>
+              <FieldArray
+                name="formlvItems"
+                render={(arrayHelpers) => (
+                  <div>
+                    {props.values.formlvItems &&
+                    props.values.formlvItems.length > 0 ? (
+                      <ListView
+                        items={props.values.formlvItems}
+                        viewFields={listviewFields}
+                        selectionMode={SelectionMode.none}
+                        showFilter={true}
+                        filterPlaceHolder="Search..."
+                        stickyHeader={true}
+                        className={styles.listWrapper}
+                        listClassName={styles.list}
+                      />
+                    ) : null}
+
+                    <div>
+                      <PrimaryButton type="submit">Submit</PrimaryButton>
+                    </div>
+                  </div>
+                )}
+              />
+            </Form>
+          )}
+        </Formik>
+      ) : null}
     </div>
   );
 });
