@@ -43,8 +43,11 @@ export default function RequestView(): JSX.Element {
     entities,
     errorMessage,
   ] = useEntities();
+  const [allItems, setAllItems] = React.useState<Iitem[]>(REQUESTSCONST.PART_LIST)
   const [items, setitems] = React.useState<Iitem[]>(REQUESTSCONST.PART_LIST)
   const [itemsValue, setitemsValue] = React.useState<string>()
+  const [options, setOptions] = React.useState<IDropdownOption[]>([])
+  const [address, setAddress] = React.useState<string>('')
   //const items1:Iitem[] = [{"PartID":"123","PartDescription":"456" ,"Count":"11"},{"Emballage Number":"254","Emballage Type":"456" ,"Count":"11"}]
 
   const _getKey = (item: IColumn, index?: number): string => {
@@ -52,13 +55,14 @@ export default function RequestView(): JSX.Element {
   }
   const _onChangeText = (ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, text: string): void => {
     setitems(
-      text ? items?.filter(i => i.PartID.toLowerCase().indexOf(text) > -1) : REQUESTSCONST.PART_LIST,
+      text ? allItems.filter(i => i.PartID.toLowerCase().indexOf(text) > -1) : allItems,
     );
   };
   const onChangeSecondTextFieldValue = React.useCallback(
-    (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
+    (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string, i?: number) => {
       if (!newValue || newValue.length <= 5) {
-        setitemsValue(newValue || '');
+        allItems[i].Count = newValue || ''
+        setAllItems([...allItems])
       }
     },
     [],
@@ -67,7 +71,6 @@ export default function RequestView(): JSX.Element {
   const today = useConst(new Date(Date.now()));
   const minDate = useConst(addDays(today, 10));
   const datePickerStyles: Partial<IDatePickerStyles> = { root: { maxWidth: 300 } };
-  const options: IDropdownOption[] = []
 
   const columns: IColumn[] = [
     {
@@ -107,8 +110,8 @@ export default function RequestView(): JSX.Element {
       minWidth: 201,
       maxWidth: 201,
       //onColumnClick: this._onColumnClick,
-      onRender: (item: Iitem) => (
-        <TextField defaultValue={item.Count} onChange={onChangeSecondTextFieldValue} />
+      onRender: (item: Iitem, i: number) => (
+        <TextField key={item.PartID} value={item.Count} onChange={(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => onChangeSecondTextFieldValue(event, newValue, i)} />
       ),
     }]
   const dropdownStyles: Partial<IDropdownStyles> = {
@@ -119,18 +122,27 @@ export default function RequestView(): JSX.Element {
     
     
     const items  = sp.web.lists.getByTitle("Request Mapping").items.select("Requester/Name", "Terminal/Name").filter(`Requester/Title eq ${myterminalID}`).
-    expand("Terminal,Requester").getAll().then((reponse:IMappingOBJ[])=>{console.log(reponse)
-    for(let i=0;i<reponse.length;i++){
-      MappingterminalArray.push(reponse[i].Requester.Name)
-      options.push({"text":reponse[i].Terminal[0].Name,"key":reponse[i].Terminal[0].Name})
-    } });
-    console.log(MappingterminalArray,items)
-  }
-  const getTargetAddress=(taregetID:string):void=>{
+    expand("Terminal,Requester").getAll().then((reponse:IMappingOBJ[])=>{
+        console.log(reponse)
+        const ops = []
+      for(let i=0;i<reponse.length;i++){
+        MappingterminalArray.push(reponse[i].Requester.Name)
+        ops.push({"text":reponse[i].Terminal[0].Name,"key":reponse[i].Terminal[0].Name})
+      } 
+      
+      setOptions([...ops])
+    });
+      // console.log(MappingterminalArray,items)
+    }
+  const getTargetAddress=(taregetID:string)=>{
     // 变量拼起来 空格会导致搜索不到
     //const temp_Address = sp.web.lists.getByTitle("Entities").items.select("Title","Country","Address").filter(`Name eq ${(taregetID)}`).getAll();
-    const temp_Address = sp.web.lists.getByTitle("Entities").items.select("Title","Country","Address").filter("Name eq 'Supplier 01'").getAll();
-    console.log(temp_Address)
+    sp.web.lists.getByTitle("Entities").items.select("Title","Country","Address").filter("Name eq '"+ taregetID +"'").getAll().then(temp_Address => {
+      setAddress(temp_Address[0].Title + ' ' + temp_Address[0].Country + ' ' + temp_Address[0].Address)
+      console.log(temp_Address)
+    }).catch(err => {
+      console.log(err)
+    })
   }
   const [selectedItem, setSelectedItem] = React.useState<IDropdownOption>();
 
@@ -138,7 +150,7 @@ export default function RequestView(): JSX.Element {
     setSelectedItem(item);
     console.log("key",item.key.toString())
     getTargetAddress(item.key.toString())
-    getMapping(myEntity?.Title)
+    // getMapping(myEntity?.Title)
   };
   React.useEffect(() => {
     fetchMyEntity();
@@ -184,7 +196,7 @@ export default function RequestView(): JSX.Element {
         />
       </Stack>
       <Stack horizontal>
-        <Label>Delivery Address: </Label> <Text variant={'large'}>{"request-flow-web-part.js"}</Text>
+        <Label>Delivery Address: </Label> <Text variant={'large'}>{address}</Text>
       </Stack>
 
       <Stack horizontal>
@@ -196,7 +208,7 @@ export default function RequestView(): JSX.Element {
         columns={columns}
         selectionMode={SelectionMode.none}
         getKey={_getKey}
-        setKey="none"
+        setKey="PartID"
         layoutMode={DetailsListLayoutMode.justified}
         isHeaderVisible={true}
         onShouldVirtualize={() => false}
