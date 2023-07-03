@@ -69,7 +69,7 @@ const fetchById = async (arg: { Id: number }): Promise<IRequestListItem> => {
             StatusUpdateBy: JSON.stringify(response.Row[0].StatusUpdateBy),
             QtySent: response.Row[0].QtySent,
             DateByWhenItWillReach: response.Row[0].DateByWhenItWillReach,
-            ConfirmationFromSupplier: response.Row[0].ConfirmationFromSupplier,
+            ConfirmationFromSupplier: response.Row[0].ConfirmationFromSupplier==="Yes",
             Field1: response.Row[0].Field1,
             Field2: response.Row[0].Field2,
           } as IRequestListItem;
@@ -152,7 +152,7 @@ const fetchByTerminalId = async (arg: {
                 StatusUpdateBy: JSON.stringify(item.StatusUpdateBy),
                 QtySent: item.QtySent,
                 DateByWhenItWillReach: item.DateByWhenItWillReach,
-                ConfirmationFromSupplier: item.ConfirmationFromSupplier,
+                ConfirmationFromSupplier: item.ConfirmationFromSupplier==="Yes",
                 Field1: item.Field1,
                 Field2: item.Field2,
               } as IRequestListItem)

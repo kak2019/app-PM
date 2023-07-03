@@ -1,4 +1,21 @@
+/*SharePoint workbench full width webpart*/
+#workbenchPageContent {
+  min-width: 100vw !important;
+}
+.CanvasComponent.LCS .Canvas--edit.Canvas--withLayout {
+  margin-left: 0;
+}
+.CanvasComponent.LCS .CanvasSection-col {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 /*remove left navigation box from the SharePoint page*/
+#spLeftNav {
+  display: none !important;
+}
+
+
 #sideNavBox {
     display: none !important;
   }
@@ -33,6 +50,3 @@
     display: none;
   }
 
-  body {
-    background-color: #dddddd;
-  }

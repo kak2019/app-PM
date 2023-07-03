@@ -19,7 +19,7 @@ export interface IRequestListItem {
     StatusUpdateBy?:string;
     QtySent?:number;
     DateByWhenItWillReach?:Date; //not DateByWhenItWillReach. UTC
-    ConfirmationFromSupplier?:string; //Yes No
+    ConfirmationFromSupplier?:boolean; //1 0
     Field1?:string;
     Field2?:string;
 }
