@@ -25,15 +25,15 @@ import { IWebEnsureUserResult } from '@pnp/sp/site-users/types';
 import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
 import { useId, useBoolean } from '@fluentui/react-hooks';
 import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
-interface IPartJson {
-  [ID:number]: {
-    "PartID": string,
-    "PartDescription": string,
-    "Count"?: string
+// interface IPartJson {
+//   [ID:number]: {
+//     "PartID": string,
+//     "PartDescription": string,
+//     "Count"?: string
 
-  }
+//   }
 
-}
+// }
 interface Iitem {
   "PartID": string,
   "PartDescription": string,
@@ -47,7 +47,7 @@ export default function RequestView(): JSX.Element {
   const [DateValue, setDateValue] = React.useState<Date>();
   // Dialog
   const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
-  const [isDraggable, { toggle: toggleIsDraggable }] = useBoolean(false);
+  const [isDraggable] = useBoolean(false);
 
   const dialogStyles = { main: { maxWidth: 800 } };
   const labelId: string = useId('dialogLabel');
@@ -72,15 +72,10 @@ export default function RequestView(): JSX.Element {
   const MappingterminalArray: string[] = []
   const ctx = useContext(AppContext);
   const userEmail = ctx.context._pageContext._user.email;
-  const [
-    isFetching,
-    type,
+  const {
     fetchMyEntity,
-    fetchEntitiesByType,
     myEntity,
-    entities,
-    errorMessage,
-  ] = useEntities();
+  } = useEntities();
   const [dialogitems, setdialogitems] = React.useState<Iitem[]>([])
   const [allItems, setAllItems] = React.useState<Iitem[]>(REQUESTSCONST.PART_LIST)
   const [items, setitems] = React.useState<Iitem[]>(REQUESTSCONST.PART_LIST)
@@ -109,7 +104,7 @@ export default function RequestView(): JSX.Element {
 
   const today = useConst(new Date(Date.now()));
   const minDate = useConst(addDays(today, 10));
-  const datePickerStyles: Partial<IDatePickerStyles> = { root: { maxWidth: 300 } };
+  const datePickerStyles: Partial<IDatePickerStyles> = { root: { width: 400 } };
   const columns: IColumn[] = [
     {
       key: 'column1',
@@ -153,13 +148,13 @@ export default function RequestView(): JSX.Element {
       ),
     }]
   const dropdownStyles: Partial<IDropdownStyles> = {
-    dropdown: { width: 300 },
+    dropdown: { width: 400 },
   };
   // Get Mapping Relationship according Own Terminal ID
   const getMapping = (myterminalID: string): void => {
 
 
-    const items = sp.web.lists.getByTitle("Request Mapping").items.select("Requester/Name", "Terminal/Name", "Terminal/ID").filter(`Requester/Title eq ${myterminalID}`).
+    sp.web.lists.getByTitle("Request Mapping").items.select("Requester/Name", "Terminal/Name", "Terminal/ID").filter(`Requester/Title eq ${myterminalID}`).
       expand("Terminal,Requester").getAll().then((reponse: IMappingOBJ[]) => {
         console.log("terminal", reponse)
         const ops = []
@@ -169,10 +164,12 @@ export default function RequestView(): JSX.Element {
         }
 
         setOptions([...ops])
-      });
+      }).catch(err => {
+        console.log(err)
+      })
     // console.log(MappingterminalArray,items)
   }
-  const getTargetAddress = (taregetID: string) => {
+  const getTargetAddress = (taregetID: string): void => {
     // 变量拼起来 空格会导致搜索不到
     //const temp_Address = sp.web.lists.getByTitle("Entities").items.select("Title","Country","Address").filter(`Name eq ${(taregetID)}`).getAll();
     sp.web.lists.getByTitle("Entities").items.select("Title", "Country", "Address").filter("Name eq '" + taregetID + "'").getAll().then(temp_Address => {
@@ -239,15 +236,20 @@ export default function RequestView(): JSX.Element {
     addRequest({ request }).catch((error) => console.log(error))
 
   }
+
+  const stackClass = {
+    marginTop: '10px'
+  }
+
   return (
     <section>
 
-      <Stack horizontal>
-        <Label >Request By: </Label>{" "} <Text variant={'large'}>{myEntity?.Title}</Text>
+      <Stack verticalAlign="center" horizontal>
+        <Label style={{textAlign: 'right', marginRight: '10px'}} >Request By: </Label>{" "} <Text variant={'large'}>{myEntity?.Title}</Text>
         {/* <TextField disabled defaultValue="I am disabled" style={{ width: 100 }} /> */}
       </Stack>
-      <Stack horizontal>
-        <Label>Terminal: </Label>
+      <Stack horizontal verticalAlign="center" style={stackClass}>
+        <Label style={{textAlign: 'right', marginRight: '10px'}}>Terminal: </Label>
         <Dropdown
           placeholder="Select an option"
           //label="Basic uncontrolled example"
@@ -258,12 +260,10 @@ export default function RequestView(): JSX.Element {
         />
 
       </Stack>
-      <Stack horizontal>
-        <Label>Date Needed: </Label>
+      <Stack horizontal verticalAlign="center" style={stackClass}>
+        <Label style={{textAlign: 'right', marginRight: '10px'}}>Date Needed: </Label>
         <DatePicker
           styles={datePickerStyles}
-
-
           placeholder="Select a date..."
           ariaLabel="Select a date"
           minDate={minDate}
@@ -276,12 +276,12 @@ export default function RequestView(): JSX.Element {
         // allowTextInput
         />
       </Stack>
-      <Stack horizontal>
-        <Label>Delivery Address: </Label> <Text variant={'large'}>{address}</Text>
+      <Stack horizontal verticalAlign="center" style={stackClass}>
+        <Label style={{textAlign: 'right', marginRight: '10px'}}>Delivery Address: </Label> <Text variant={'large'}>{address}</Text>
       </Stack>
 
-      <Stack horizontal>
-        <Label>Filter by Emballage Number:</Label><TextField onChange={_onChangeText} />    {/* //label="Filter by Emballage Number:" */}
+      <Stack horizontal verticalAlign="center" style={stackClass}>
+        <Label style={{textAlign: 'right', marginRight: '10px'}}>Filter by Emballage Number:</Label><TextField  onChange={_onChangeText} />    {/* //label="Filter by Emballage Number:" */}
       </Stack>
       <DetailsList
         items={items}// [{"Emballage Number":"123","Emballage Type":"456" ,"Count":"11"},]
@@ -304,7 +304,7 @@ export default function RequestView(): JSX.Element {
       >{
 
           dialogitems.map((item: Iitem) =>
-            <div>
+            <div key={item.PartID}>
               <ul>{item.PartID} {item.PartDescription} {item.Count}</ul>
             </div>
           )
