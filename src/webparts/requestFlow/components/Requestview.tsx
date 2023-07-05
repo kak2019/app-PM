@@ -248,15 +248,12 @@ export default function RequestView(): JSX.Element {
       PartJSON: JSON.stringify(jsonData),
       Delivery_x0020_Address:address
     }
-<<<<<<< HEAD
     addRequest({ request }).catch((error) => console.log(error))
-=======
     addRequest({ request }).then(() => {
       const returnUrl = window.location.href
 
       document.location.href = returnUrl.slice(0, returnUrl.indexOf("SitePage")) + "SitePages/Home.aspx"
     }).catch((error) => console.log(error))
->>>>>>> 23edf3cfc6901a98a2e195b3e86dc0ffcac09c2b
 
   }
 
@@ -341,7 +338,6 @@ export default function RequestView(): JSX.Element {
 
           document.location.href = returnUrl.slice(0, returnUrl.indexOf("SitePage")) + "SitePage/Home.aspx"
         }} text="Cancel" />
->>>>>>> 23edf3cfc6901a98a2e195b3e86dc0ffcac09c2b
       </Stack>
       {dialogvisible ?
         <Dialog
