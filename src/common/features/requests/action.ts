@@ -183,7 +183,8 @@ const fetchListId = async (): Promise<string> => {
   }
 };
 const editRequest = async (arg: {
-  request: IRequestListItem;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  request: any;
 }): Promise<IRequestListItem> => {
   const { request } = arg;
   const sp = spfi(getSP());

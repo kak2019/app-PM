@@ -81,9 +81,10 @@ const requestsSlice = createSlice({
         state.statue = RequestStatus.Loading;
       })
       .addCase(editRequestAction.fulfilled, (state, action) => {
-        const { request } = action.meta.arg;
+        //const { request } = action.meta.arg;
         state.statue = RequestStatus.Idle;
-        state.item = {...state.item,...request};
+        //state.item = {...state.item,...request};
+        state.item = action.payload as IRequestListItem;
       })
       .addCase(editRequestAction.rejected, (state, action) => {
         state.statue = RequestStatus.Failed;
