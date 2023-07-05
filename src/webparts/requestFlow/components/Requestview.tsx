@@ -72,10 +72,15 @@ export default function RequestView(): JSX.Element {
   const MappingterminalArray: string[] = []
   const ctx = useContext(AppContext);
   const userEmail = ctx.context._pageContext._user.email;
-  const {
+  const [
+    ,
+    ,
     fetchMyEntity,
+    ,
     myEntity,
-  } = useEntities();
+    ,
+    ,
+  ]= useEntities();
   const [dialogitems, setdialogitems] = React.useState<Iitem[]>([])
   const [allItems, setAllItems] = React.useState<Iitem[]>(REQUESTSCONST.PART_LIST)
   const [items, setitems] = React.useState<Iitem[]>(REQUESTSCONST.PART_LIST)
