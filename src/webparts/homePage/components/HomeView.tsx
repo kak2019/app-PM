@@ -125,13 +125,13 @@ export default function HomePageView():JSX.Element {
     return (
         <section >
             <Stack enableScopedSelectors styles={stackStyles}>
-                <DefaultButton text='Create New Request' className={userRoleobj.CreateFlowV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.CreateFlowV} href='sitepages/request.aspx' />
-                <DefaultButton text='Request List' className={userRoleobj.RequestFlowV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.RequestFlowV} href='Lists/Request%20List'/>
-                <DefaultButton text='Goods Issue List' className={userRoleobj.GoodIssueV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.GoodIssueV} href='sitepages/GI.aspx'/>
+                <DefaultButton text='Create New Request' className={userRoleobj.CreateFlowV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.CreateFlowV} href={`${this._spPageContextInfo.webAbsoluteUrl}/sitepages/request.aspx`} />
+                <DefaultButton text='Request List' className={userRoleobj.RequestFlowV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.RequestFlowV} href={`${this._spPageContextInfo.webAbsoluteUrl}/Lists/Request%20List`}/>
+                <DefaultButton text='Goods Issue List' className={userRoleobj.GoodIssueV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.GoodIssueV} href={`${this._spPageContextInfo.webAbsoluteUrl}/sitepages/GI.aspx`} />
                 <DefaultButton text='Create New Distribution Request' className={userRoleobj.CreateDistributionV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.CreateDistributionV} />
                 <DefaultButton text='My Distribution Request' className={userRoleobj.MyDistributionV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.MyDistributionV} />
                 <DefaultButton text='Received Distribution' className={userRoleobj.ReciecedDistributionV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.ReciecedDistributionV} />
-                <DefaultButton text='Inventory Management' className={userRoleobj.InventoryV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.InventoryV} href='Lists/Inventory%20Management' />
+                <DefaultButton text='Inventory Management' className={userRoleobj.InventoryV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.InventoryV} href={`${this._spPageContextInfo.webAbsoluteUrl}/Lists/Inventory%20Management`} />
             </Stack>
 
         </section>
