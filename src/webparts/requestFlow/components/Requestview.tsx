@@ -44,7 +44,12 @@ interface IMappingOBJ {
   "Terminal": [{ "Name": string, "ID": string }]
 }
 export default function RequestView(): JSX.Element {
-  const [DateValue, setDateValue] = React.useState<Date>();
+  const today = useConst(new Date(Date.now()));
+  const minDate = useConst(addDays(today, 10));
+  const datePickerStyles: Partial<IDatePickerStyles> = { root: { width: 400 } };
+  const [hinterrormessage, sethinterrormessage] = React.useState<string>(null);
+  const [dialogvisible, setdialogvisible] = React.useState<boolean>(false)
+  const [DateValue, setDateValue] = React.useState<Date>(minDate);
   // Dialog
   const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
   const [isDraggable] = useBoolean(false);
@@ -68,6 +73,12 @@ export default function RequestView(): JSX.Element {
     closeButtonAriaLabel: 'Close',
     subText: 'Below parts would be included:',
   };
+  const dialogContentProps1 = {
+    type: DialogType.normal,
+    title: 'Error Message',
+    closeButtonAriaLabel: 'Close',
+    subText: '',
+  };
   const sp = spfi(getSP());
   const MappingterminalArray: string[] = []
   const ctx = useContext(AppContext);
@@ -80,7 +91,7 @@ export default function RequestView(): JSX.Element {
     myEntity,
     ,
     ,
-  ]= useEntities();
+  ] = useEntities();
   const [dialogitems, setdialogitems] = React.useState<Iitem[]>([])
   const [allItems, setAllItems] = React.useState<Iitem[]>(REQUESTSCONST.PART_LIST)
   const [items, setitems] = React.useState<Iitem[]>(REQUESTSCONST.PART_LIST)
@@ -107,9 +118,7 @@ export default function RequestView(): JSX.Element {
     [],
   );
 
-  const today = useConst(new Date(Date.now()));
-  const minDate = useConst(addDays(today, 10));
-  const datePickerStyles: Partial<IDatePickerStyles> = { root: { width: 400 } };
+
   const columns: IColumn[] = [
     {
       key: 'column1',
@@ -177,8 +186,8 @@ export default function RequestView(): JSX.Element {
   const getTargetAddress = (taregetID: string): void => {
     // 变量拼起来 空格会导致搜索不到
     //const temp_Address = sp.web.lists.getByTitle("Entities").items.select("Title","Country","Address").filter(`Name eq ${(taregetID)}`).getAll();
-    sp.web.lists.getByTitle("Entities").items.select("Title", "Country", "Address").filter("Name eq '" + taregetID + "'").getAll().then(temp_Address => {
-      setAddress(temp_Address[0].Title + ' ' + temp_Address[0].Country + ' ' + temp_Address[0].Address)
+    sp.web.lists.getByTitle("Entities").items.select("Name", "Country", "Address").filter("Name eq '" + taregetID + "'").getAll().then(temp_Address => {
+      setAddress(temp_Address[0].Name + ' ' + temp_Address[0].Country + ' ' + temp_Address[0].Address)
       console.log(temp_Address)
     }).catch(err => {
       console.log(err)
@@ -216,18 +225,18 @@ export default function RequestView(): JSX.Element {
   }, [allItems])
   const submitFunction = async (): Promise<void> => {
     const resultRequestor: IWebEnsureUserResult = await sp.web.ensureUser("i:0#.f|membership|" + userEmail);
-    const jsonData:{ [key: string]: object } = {};
-    const templist= []
-    for(let i=0;i<dialogitems.length;i++){
-    
+    const jsonData: { [key: string]: object } = {};
+    const templist = []
+    for (let i = 0; i < dialogitems.length; i++) {
+
       //templist.push({key:i.toString(),value:dialogitems[i]})  
-      templist[i] =dialogitems[i] ;
-      jsonData[i+1] = dialogitems[i];
+      templist[i] = dialogitems[i];
+      jsonData[i + 1] = dialogitems[i];
     }
     // dialogitems.forEach((element, index) => {
     //   //let obj :IPartJson= {}
     //   //templist.push(obj[ID]=JSON.stringify(element))
-      
+
     // });
     console.log("temp", jsonData)
     const request = {
@@ -236,7 +245,8 @@ export default function RequestView(): JSX.Element {
       RequesterIdId: myEntity?.ID,
       TerminalIdId: itemsValuekey,
       Date_x0020_Needed: DateValue,
-      PartJSON: JSON.stringify(jsonData)
+      PartJSON: JSON.stringify(jsonData),
+      Delivery_x0020_Address:address
     }
     addRequest({ request }).catch((error) => console.log(error))
 
@@ -245,16 +255,31 @@ export default function RequestView(): JSX.Element {
   const stackClass = {
     marginTop: '10px'
   }
+  const validateRequest = (): void => {
+    sethinterrormessage(null)
+    if (selectedItem === null || selectedItem === undefined) {
+      sethinterrormessage("Please check if Terminal is selected");
+      setdialogvisible(false)
+    } else if (dialogitems.length === 0) {
+      sethinterrormessage("Please fill in at least one part of the information");
+      setdialogvisible(false)
+    } else {
+      sethinterrormessage(null);
+      setdialogvisible(true)
+    }
 
+
+    toggleHideDialog();
+  }
   return (
     <section>
 
       <Stack verticalAlign="center" horizontal>
-        <Label style={{textAlign: 'right', marginRight: '10px'}} >Request By: </Label>{" "} <Text variant={'large'}>{myEntity?.Title}</Text>
+        <Label style={{ textAlign: 'right', marginRight: '10px' }} >Request By: </Label>{" "} <Text variant={'large'}>{myEntity?.Name}</Text>
         {/* <TextField disabled defaultValue="I am disabled" style={{ width: 100 }} /> */}
       </Stack>
       <Stack horizontal verticalAlign="center" style={stackClass}>
-        <Label style={{textAlign: 'right', marginRight: '10px'}}>Terminal: </Label>
+        <Label style={{ textAlign: 'right', marginRight: '10px' }}>Terminal: </Label>
         <Dropdown
           placeholder="Select an option"
           //label="Basic uncontrolled example"
@@ -266,7 +291,7 @@ export default function RequestView(): JSX.Element {
 
       </Stack>
       <Stack horizontal verticalAlign="center" style={stackClass}>
-        <Label style={{textAlign: 'right', marginRight: '10px'}}>Date Needed: </Label>
+        <Label style={{ textAlign: 'right', marginRight: '10px' }}>Date Needed: </Label>
         <DatePicker
           styles={datePickerStyles}
           placeholder="Select a date..."
@@ -282,11 +307,11 @@ export default function RequestView(): JSX.Element {
         />
       </Stack>
       <Stack horizontal verticalAlign="center" style={stackClass}>
-        <Label style={{textAlign: 'right', marginRight: '10px'}}>Delivery Address: </Label> <Text variant={'large'}>{address}</Text>
+        <Label style={{ textAlign: 'right', marginRight: '10px' }}>Delivery Address: </Label> <Text variant={'large'}>{address}</Text>
       </Stack>
 
       <Stack horizontal verticalAlign="center" style={stackClass}>
-        <Label style={{textAlign: 'right', marginRight: '10px'}}>Filter by Emballage Number:</Label><TextField  onChange={_onChangeText} />    {/* //label="Filter by Emballage Number:" */}
+        <Label style={{ textAlign: 'right', marginRight: '10px' }}>Filter by Emballage Number:</Label><TextField onChange={_onChangeText} />    {/* //label="Filter by Emballage Number:" */}
       </Stack>
       <DetailsList
         items={items}// [{"Emballage Number":"123","Emballage Type":"456" ,"Count":"11"},]
@@ -300,28 +325,46 @@ export default function RequestView(): JSX.Element {
         onShouldVirtualize={() => false}
       //onItemInvoked={this._onItemInvoked}
       />
-      <DefaultButton secondaryText="Opens the Sample Dialog" onClick={toggleHideDialog} text="Next step" />
-      <Dialog
-        hidden={hideDialog}
-        onDismiss={toggleHideDialog}
-        dialogContentProps={dialogContentProps}
-        modalProps={modalProps}
-      >{
+      <Stack horizontal>
+      <PrimaryButton secondaryText="Opens the Sample Dialog" onClick={validateRequest} text="Next Step"  style={{marginRight:10}}/>
+      <DefaultButton  onClick={() => {
+          const returnUrl = window.location.href
+          //document.location.href = "https://udtrucks.sharepoint.com/sites/app-RealEstateServiceDesk-QA/Lists/REIndia%20Taxi%20Request/AllItems.aspx"
 
-          dialogitems.map((item: Iitem) =>
-            <div key={item.PartID}>
-              <ul>{item.PartID} {item.PartDescription} {item.Count}</ul>
-            </div>
-          )
-        }
+          document.location.href = returnUrl.slice(0, returnUrl.indexOf("SitePage")) + "Request.aspx"
+        }}  text="Cancel" />
+      </Stack>
+      {dialogvisible ?
+        <Dialog
+          hidden={hideDialog}
+          onDismiss={toggleHideDialog}
+          dialogContentProps={dialogContentProps}
+          modalProps={modalProps}
+        >{
+
+            dialogitems.map((item: Iitem) =>
+              <div key={item.PartID}>
+                <ul>{item.PartID} {item.PartDescription} {item.Count}</ul>
+              </div>
+            )
+          }
 
 
-        <DialogFooter>
-          <PrimaryButton onClick={submitFunction} text="Submit" />
-          <DefaultButton onClick={toggleHideDialog} text="Cancel" />
-        </DialogFooter>
-      </Dialog>
-
+          <DialogFooter>
+            <PrimaryButton onClick={submitFunction} text="Submit" />
+            <DefaultButton onClick={toggleHideDialog} text="Cancel" />
+          </DialogFooter>
+        </Dialog>
+        : <Dialog
+          dialogContentProps={dialogContentProps1}
+          modalProps={modalProps}
+          hidden={hideDialog}
+          onDismiss={toggleHideDialog}>
+          <div>
+            {hinterrormessage}
+          </div>
+        </Dialog>
+      }
     </section>
   )
 

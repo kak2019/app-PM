@@ -126,8 +126,8 @@ export default function HomePageView():JSX.Element {
         <section >
             <Stack enableScopedSelectors styles={stackStyles}>
                 <DefaultButton text='Create New Request' className={userRoleobj.CreateFlowV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.CreateFlowV} href='http://www.baidu.com' />
-                <DefaultButton text='Request List' className={userRoleobj.RequestFlowV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.RequestFlowV} />
-                <DefaultButton text='Goods Issue List' className={userRoleobj.GoodIssueV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.GoodIssueV} />
+                <DefaultButton text='Request List' className={userRoleobj.RequestFlowV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.RequestFlowV} href='/SitePages/Request.aspx'/>
+                <DefaultButton text='Goods Issue List' className={userRoleobj.GoodIssueV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.GoodIssueV} href='/SitePages/GI.aspx'/>
                 <DefaultButton text='Create New Distribution Request' className={userRoleobj.CreateDistributionV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.CreateDistributionV} />
                 <DefaultButton text='My Distribution Request' className={userRoleobj.MyDistributionV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.MyDistributionV} />
                 <DefaultButton text='Received Distribution' className={userRoleobj.ReciecedDistributionV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.ReciecedDistributionV} />
