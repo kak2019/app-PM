@@ -1,14 +1,14 @@
 .listWrapper {
-    background-color: #f0f0f0;
-    min-height:73vh;
-    min-width:94vw;
-    overflow: scroll;
-    overflow-x: inherit;
+  background-color: #f0f0f0;
+  min-height: 73vh;
+  min-width: 94vw;
+  overflow: scroll;
+  overflow-x: inherit;
 }
 .list {
-    overflow: inherit;
+  overflow: inherit;
 }
 .list div[role="gridcell"] {
-    align-items: center;
-    display: flex;
+  align-items: flex-start;
+  display: flex;
 }

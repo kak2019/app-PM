@@ -36,7 +36,8 @@ type RequestsOperators = [
   fetchRequestListId: () => void,
   changeRequestId:(Id:string) => void,
   changeRequestListId: (Id: string) => void,
-  editRequest: (arg: { request: IRequestListItem }) => Promise<number>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  editRequest: (arg: { request: any }) => Promise<number>,
 ];
 export const useRequests = (): Readonly<RequestsOperators> => {
   const dispatch = useAppDispatch();
@@ -75,7 +76,8 @@ export const useRequests = (): Readonly<RequestsOperators> => {
   );
 
   const editRequest = useCallback(
-    async (arg: { request: IRequestListItem }) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async (arg: { request: any }) => {
       try {
         await dispatch(editRequestAction(arg));
         return 0;
@@ -90,7 +92,7 @@ export const useRequests = (): Readonly<RequestsOperators> => {
     return dispatch(fetchRequestListIdAction());
   }, [dispatch]);
 
-  const chnageRequestId = useCallback((Id:string)=>{
+  const changeRequestId = useCallback((Id:string)=>{
     return dispatch(RequestItemIdChanged(Id));
   },[dispatch])
 
@@ -113,7 +115,7 @@ export const useRequests = (): Readonly<RequestsOperators> => {
     addRequest,
     requestListId,
     fetchRequestListId,
-    chnageRequestId,
+    changeRequestId,
     changeRequestListId,
     editRequest,
   ] as const;

@@ -1,7 +1,7 @@
 import * as React from "react";
-import { memo, useEffect, useContext, useState } from "react";
+import { memo, useEffect, useContext, useState, useCallback } from "react";
 import { Field, FieldArray, Form, Formik } from "formik";
-import * as Yup from "yup";
+
 import {
   ListView,
   IViewField,
@@ -14,16 +14,25 @@ import AppContext from "../../../../common/AppContext";
 import { FieldUserRenderer } from "@pnp/spfx-controls-react";
 import {
   IDropdownStyles,
+  IStackTokens,
   ITextFieldStyles,
   mergeStyleSets,
-  PrimaryButton,
+  Stack,
 } from "office-ui-fabric-react";
 import { REQUESTSCONST } from "../../../../common/features/requests";
-import { FormikDropdown,FormikDatePicker,FormikCheckbox,FormikTextField } from "../../../../common/components";
+import {
+  FormikDropdown,
+  FormikDatePicker,
+  FormikCheckbox,
+  FormikTextField,
+} from "../../../../common/components";
+import ResetAction from "./resetAction";
+import AllErrors from "./allErrors";
+import { formValidationSchema } from "./formValidation";
+import SubmitAction from "./submitAction";
 
 export default memo(function index() {
   const ctx = useContext(AppContext);
-
   const [, , , requests, , , , , , , , , , ,] = useRequests();
   const [listviewItems, setListViewItems] =
     useState<IRequestListItem[]>(undefined);
@@ -32,9 +41,37 @@ export default memo(function index() {
     setListViewItems([...requests]);
   }, [requests]);
 
+  const getIndexByID = useCallback(
+    (ID: string): number => {
+      const res = listviewItems.filter((i) => i.ID === ID);
+      if (res.length > 0) {
+        return listviewItems.indexOf(res[0]);
+      }
+      return -1;
+    },
+    [listviewItems]
+  );
+
+  const isFreezed = useCallback(
+    (ID: string): boolean => {
+      const res = requests.filter((i) => i.ID === ID);
+      if (res.length > 0) {
+        return (
+          res[0].Status === "GI / In Transit" || res[0].Status === "Completed"
+        );
+      }
+      return false;
+    },
+    [requests]
+  );
+
   //#region ==============Styles and Templates==============
-  const textFieldStyles: Partial<ITextFieldStyles> = { fieldGroup: { width: 150 } };
-  const narrowTextFieldStyles: Partial<ITextFieldStyles> = { fieldGroup: { width: 100 } };
+  const textFieldStyles: Partial<ITextFieldStyles> = {
+    fieldGroup: { width: 150 },
+  };
+  const narrowTextFieldStyles: Partial<ITextFieldStyles> = {
+    fieldGroup: { width: 100 },
+  };
   const dataPickerClass = mergeStyleSets({
     control: {
       maxWidth: "300px",
@@ -57,6 +94,7 @@ export default memo(function index() {
       },
     },
   };
+  const stackTokens: IStackTokens = { childrenGap: 8 };
   const listviewFields: IViewField[] = [
     {
       name: "RequestNumber",
@@ -64,7 +102,7 @@ export default memo(function index() {
       minWidth: 100,
       maxWidth: 150,
       isResizable: true,
-      sorting: true,
+      sorting: false,
     },
     {
       name: "Requestor",
@@ -72,24 +110,20 @@ export default memo(function index() {
       minWidth: 100,
       maxWidth: 150,
       isResizable: true,
-      sorting: true,
-      render: (rowitem: IRequestListItem) => {
-        return (
-          (
-            <FieldUserRenderer
-              users={JSON.parse(rowitem.Requestor)}
-              context={ctx.context}
-            />
-          ) || ""
-        );
-        //return <FieldUserRenderer users={JSON.parse("[{\"id\":\"11\",\"title\":\"Qin Howard (Consultant)\",\"email\":\"howard.qin@consultant.udtrucks.com\",\"sip\":\"howard.qin@consultant.udtrucks.com\",\"picture\":\"https://udtrucks-my.sharepoint.com:443/User%20Photos/Profile%20Pictures/c1f6b293-e3c7-4c33-9b17-040ffdb5a3b7_MThumb.jpg?t=63800730891\",\"jobTitle\":\"Consultant_EX\",\"department\":\"BP15861\"}]")} context={ctx.context}/>
-        // if (rowitem.Requestor !== "") {
-        //   const u: IPrincipal[] = JSON.parse(rowitem.Requestor) as IPrincipal[];
-        //   return u[0].title;
-        // } else {
-        //   return "";
-        // }
-      },
+      sorting: false,
+      render: useCallback(
+        (rowitem: IRequestListItem) => {
+          return (
+            (
+              rowitem.Requestor!==""?
+              <FieldUserRenderer
+                users={JSON.parse(rowitem.Requestor)} //FieldUserRenderer users value {JSON.parse("[{\"id\":\"11\",\"title\":\"Qin Howard (Consultant)\",\"email\":\"howard.qin@consultant.udtrucks.com\",\"sip\":\"howard.qin@consultant.udtrucks.com\",\"picture\":\"https://udtrucks-my.sharepoint.com:443/User%20Photos/Profile%20Pictures/c1f6b293-e3c7-4c33-9b17-040ffdb5a3b7_MThumb.jpg?t=63800730891\",\"jobTitle\":\"Consultant_EX\",\"department\":\"BP15861\"}]")}
+                context={ctx.context}
+              />:"")
+          );
+        },
+        [listviewItems]
+      ),
     },
     {
       name: "RequesterId_x003a_Name",
@@ -97,7 +131,7 @@ export default memo(function index() {
       minWidth: 80,
       maxWidth: 100,
       isResizable: true,
-      sorting: true,
+      sorting: false,
     },
     {
       name: "TerminalId_x003a_Name",
@@ -105,7 +139,7 @@ export default memo(function index() {
       minWidth: 80,
       maxWidth: 100,
       isResizable: true,
-      sorting: true,
+      sorting: false,
     },
     {
       name: "PartID",
@@ -113,7 +147,7 @@ export default memo(function index() {
       minWidth: 80,
       maxWidth: 100,
       isResizable: true,
-      sorting: true,
+      sorting: false,
     },
     {
       name: "PartDescription",
@@ -121,7 +155,7 @@ export default memo(function index() {
       minWidth: 120,
       maxWidth: 150,
       isResizable: true,
-      sorting: true,
+      sorting: false,
     },
     {
       name: "Quantity",
@@ -129,7 +163,7 @@ export default memo(function index() {
       minWidth: 65,
       maxWidth: 80,
       isResizable: true,
-      sorting: true,
+      sorting: false,
     },
     {
       name: "DateNeeded",
@@ -137,7 +171,7 @@ export default memo(function index() {
       minWidth: 100,
       maxWidth: 120,
       isResizable: true,
-      sorting: true,
+      sorting: false,
     },
     {
       name: "DeliveryLocationAndCountry",
@@ -145,7 +179,7 @@ export default memo(function index() {
       minWidth: 200,
       maxWidth: 250,
       isResizable: true,
-      sorting: true,
+      sorting: false,
     },
     {
       name: "HowMuchCanBeFullfilled",
@@ -153,53 +187,70 @@ export default memo(function index() {
       minWidth: 175,
       maxWidth: 200,
       isResizable: false,
-      sorting: true,
-      render: (rowitem: IRequestListItem, index: number) => {
-        return (
-          <Field
-            component={FormikTextField}
-            name={`formlvItems[${index}].HowMuchCanBeFullfilled`} styles={narrowTextFieldStyles}
-          />
-        );
-      },
+      sorting: false,
+      render: useCallback(
+        (rowitem: IRequestListItem) => {
+          return (
+            <Field
+              component={FormikTextField}
+              name={`formlvItems[${getIndexByID(
+                rowitem.ID
+              )}].HowMuchCanBeFullfilled`}
+              styles={narrowTextFieldStyles}
+              disabled={isFreezed(rowitem.ID)}
+            />
+          );
+        },
+        [listviewItems]
+      ),
     },
     {
       name: "Status",
       displayName: "Status",
       isResizable: true,
-      sorting: true,
+      sorting: false,
       minWidth: 150,
       maxWidth: 210,
-      render: (rowitem: IRequestListItem, index: number) => {
-        return (
-          <Field
-            name={`formlvItems[${index}].Status`}
-            component={FormikDropdown}
-            styles={dropdownStyles}
-            placeholder="Select a status"
-            options={REQUESTSCONST.STATUS_OPTIONS}
-          />
-        );
-      },
+      render: useCallback(
+        (rowitem: IRequestListItem) => {
+          return (
+            <Field
+              name={`formlvItems[${getIndexByID(rowitem.ID)}].Status`}
+              component={FormikDropdown}
+              styles={dropdownStyles}
+              placeholder="Select a status"
+              options={REQUESTSCONST.STATUS_OPTIONS}
+              disabled={isFreezed(rowitem.ID)}
+            />
+          );
+        },
+        [listviewItems]
+      ),
     },
     {
       name: "FullOrPartialFilled",
       displayName: "Full//Partial Filled",
       isResizable: true,
-      sorting: true,
+      sorting: false,
       minWidth: 150,
       maxWidth: 210,
-      render: (rowitem: IRequestListItem, index: number) => {
-        return (
-          <Field
-            name={`formlvItems[${index}].FullOrPartialFilled`}
-            component={FormikDropdown}
-            styles={dropdownStyles}
-            placeholder="Select a option"
-            options={REQUESTSCONST.FULLORPARTIAL_OPTIONS}
-          />
-        );
-      },
+      render: useCallback(
+        (rowitem: IRequestListItem) => {
+          return (
+            <Field
+              name={`formlvItems[${getIndexByID(
+                rowitem.ID
+              )}].FullOrPartialFilled`}
+              component={FormikDropdown}
+              styles={dropdownStyles}
+              placeholder="Select a option"
+              options={REQUESTSCONST.FULLORPARTIAL_OPTIONS}
+              disabled={isFreezed(rowitem.ID)}
+            />
+          );
+        },
+        [listviewItems]
+      ),
     },
     {
       name: "StatusUpdateBy",
@@ -207,17 +258,20 @@ export default memo(function index() {
       minWidth: 150,
       maxWidth: 210,
       isResizable: true,
-      sorting: true,
-      render: (rowitem: IRequestListItem) => {
-        return (
-          (
-            <FieldUserRenderer
-              users={JSON.parse(rowitem.StatusUpdateBy)}
-              context={ctx.context}
-            />
-          ) || ""
-        );
-      },
+      sorting: false,
+      render: useCallback(
+        (rowitem: IRequestListItem) => {
+          return (
+            (rowitem.StatusUpdateBy!==""?
+              <FieldUserRenderer
+                users={JSON.parse(rowitem.StatusUpdateBy)}
+                context={ctx.context}
+              />:""
+            ) 
+          );
+        },
+        [listviewItems]
+      ),
     },
     {
       name: "QtySent",
@@ -225,10 +279,20 @@ export default memo(function index() {
       minWidth: 100,
       maxWidth: 120,
       isResizable: false,
-      sorting: true,
-      render: (rowitem: IRequestListItem, index: number) => {
-        return <Field component={FormikTextField} name={`formlvItems[${index}].QtySent`} styles={narrowTextFieldStyles} />;
-      },
+      sorting: false,
+      render: useCallback(
+        (rowitem: IRequestListItem) => {
+          return (
+            <Field
+              component={FormikTextField}
+              name={`formlvItems[${getIndexByID(rowitem.ID)}].QtySent`}
+              styles={narrowTextFieldStyles}
+              disabled={isFreezed(rowitem.ID)}
+            />
+          );
+        },
+        [listviewItems]
+      ),
     },
     {
       name: "DateByWhenItWillReach",
@@ -236,18 +300,25 @@ export default memo(function index() {
       minWidth: 165,
       maxWidth: 300,
       isResizable: true,
-      sorting: true,
-      render: (rowitem: IRequestListItem, index: number) => {
-        return (
-          <Field
-            name={`formlvItems[${index}].DateByWhenItWillReach`}
-            component={FormikDatePicker}
-            className={dataPickerClass.control}
-            placeholder="Select a date..."
-            ariaLabel="Select a date"
-          />
-        );
-      },
+      sorting: false,
+      render: useCallback(
+        (rowitem: IRequestListItem) => {
+          return (
+            <Field
+              name={`formlvItems[${getIndexByID(
+                rowitem.ID
+              )}].DateByWhenItWillReach`}
+              component={FormikDatePicker}
+              className={dataPickerClass.control}
+              placeholder="Select a date..."
+              ariaLabel="Select a date"
+              disabled={isFreezed(rowitem.ID)}
+              minDate={new Date(Date.now())}
+            />
+          );
+        },
+        [listviewItems]
+      ),
     },
     {
       name: "ConfirmationFromSupplier",
@@ -255,12 +326,21 @@ export default memo(function index() {
       minWidth: 165,
       maxWidth: 300,
       isResizable: true,
-      sorting: true,
-      render: (rowitem: IRequestListItem,index:number) => {
-        return (
-          <Field name={`formlvItems[${index}].ConfirmationFromSupplier`} component={FormikCheckbox}/>
-        );
-      },
+      sorting: false,
+      render: useCallback(
+        (rowitem: IRequestListItem) => {
+          return (
+            <Field
+              name={`formlvItems[${getIndexByID(
+                rowitem.ID
+              )}].ConfirmationFromSupplier`}
+              component={FormikCheckbox}
+              disabled={isFreezed(rowitem.ID)}
+            />
+          );
+        },
+        [listviewItems]
+      ),
     },
     {
       name: "Field1",
@@ -268,10 +348,20 @@ export default memo(function index() {
       minWidth: 150,
       maxWidth: 180,
       isResizable: false,
-      sorting: true,
-      render: (rowitem: IRequestListItem,index:number) => {
-        return <Field component={FormikTextField} name={`formlvItems[${index}].Field1`}  styles={textFieldStyles}/>;
-      },
+      sorting: false,
+      render: useCallback(
+        (rowitem: IRequestListItem) => {
+          return (
+            <Field
+              component={FormikTextField}
+              name={`formlvItems[${getIndexByID(rowitem.ID)}].Field1`}
+              styles={textFieldStyles}
+              disabled={isFreezed(rowitem.ID)}
+            />
+          );
+        },
+        [listviewItems]
+      ),
     },
     {
       name: "Field2",
@@ -279,22 +369,42 @@ export default memo(function index() {
       minWidth: 150,
       maxWidth: 180,
       isResizable: false,
-      sorting: true,
-      render: (rowitem: IRequestListItem,index:number) => {
-        return <Field component={FormikTextField} name={`formlvItems[${index}].Field2`}  styles={textFieldStyles}/>;
-      },
+      sorting: false,
+      render: useCallback(
+        (rowitem: IRequestListItem) => {
+          return (
+            <Field
+              component={FormikTextField}
+              name={`formlvItems[${getIndexByID(rowitem.ID)}].Field2`}
+              styles={textFieldStyles}
+              disabled={isFreezed(rowitem.ID)}
+            />
+          );
+        },
+        [listviewItems]
+      ),
+    },
+    {
+      name: "Actions",
+      minWidth: 250,
+      isResizable: false,
+      render:useCallback((rowitem: IRequestListItem) => {
+        return (
+          <Stack horizontal tokens={stackTokens}>
+            <SubmitAction
+              disabled={isFreezed(rowitem.ID)}
+              idx={getIndexByID(rowitem.ID)}
+            />
+            <ResetAction
+              disabled={isFreezed(rowitem.ID)}
+              idx={getIndexByID(rowitem.ID)}
+            />
+          </Stack>
+        );
+      },[listviewItems]),
     },
   ];
   //#endregion
-  const formValidationSchema = Yup.object().shape({
-    formlvItems: Yup.array()
-      .of(
-        Yup.object().shape({
-          HowMuchCanBeFullfilled: Yup.number().min(1, 'should be greater than 0').integer(),
-          QtySent: Yup.number().min(1, 'should be greater than 0').integer(),
-        })
-      ),
-  });
 
   return (
     <div style={{ flex: "0 0 auto" }}>
@@ -303,7 +413,7 @@ export default memo(function index() {
           initialValues={{ formlvItems: listviewItems }}
           onSubmit={(values, actions) => {
             setTimeout(() => {
-              console.log(JSON.stringify(values.formlvItems[0], null, 2));
+              console.log(JSON.stringify(values.formlvItems, null, 2));
               actions.setSubmitting(false);
             }, 1000);
           }}
@@ -318,7 +428,7 @@ export default memo(function index() {
                     {props.values.formlvItems &&
                     props.values.formlvItems.length > 0 ? (
                       <ListView
-                        items={props.values.formlvItems}
+                        items={listviewItems}
                         viewFields={listviewFields}
                         selectionMode={SelectionMode.none}
                         showFilter={true}
@@ -328,10 +438,7 @@ export default memo(function index() {
                         listClassName={styles.list}
                       />
                     ) : null}
-
-                    <div>
-                      <PrimaryButton type="submit">Submit</PrimaryButton>
-                    </div>
+                    {props.errors && <AllErrors errors={props.errors} />}
                   </div>
                 )}
               />

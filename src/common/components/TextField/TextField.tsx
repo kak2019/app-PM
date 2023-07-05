@@ -53,7 +53,7 @@ import {
   
     return (
       <TextField
-        errorMessage={errorMessage} // allow for prop overwrite
+        errorMessage={errorMessage?"Invalid":""} // allow for prop overwrite
         {...props}
         {...fieldProps}
       />

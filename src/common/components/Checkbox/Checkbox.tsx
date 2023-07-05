@@ -30,5 +30,5 @@ export function FormikCheckbox<V extends boolean, FormValues = any>({
   meta,
   ...props
 }: FormikCheckboxProps<V, FormValues>):JSX.Element {
-  return <Checkbox {...props} {...mapFieldToCheckbox({ field, form, meta })} label={field.value?"Yes":"No"} />
+  return <div style={{paddingTop:4}}><Checkbox {...props} {...mapFieldToCheckbox({ field, form, meta })} label={field.value?"Yes":"No"}/></div>
 }
