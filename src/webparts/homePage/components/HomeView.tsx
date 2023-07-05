@@ -11,7 +11,7 @@ import { IWebEnsureUserResult } from '@pnp/sp/site-users/types';
 import { ISiteUser } from "@pnp/sp/site-users/";
 import { useContext } from "react";
 import AppContext from '../../../common/AppContext';
-export default function HomePageView():JSX.Element {
+export default function HomePageView(): JSX.Element {
     interface IuserRoleobj {
         CreateFlowV: boolean;
         RequestFlowV: boolean;
@@ -27,10 +27,10 @@ export default function HomePageView():JSX.Element {
         MyDistributionV: true, ReciecedDistributionV: true, InventoryV: true
     });
     const USER_ROLE = { supplier: "Supplier", terminal: "Terminal", fc: "Factory", kdfc: "KDFactory", wh: "WareHouse" }
-    const userarray: string[] =[];
+    const userarray: string[] = [];
     const ctx = useContext(AppContext);
     const userEmail = ctx.context._pageContext._user.email;
-    const init = async ():Promise<void> => {
+    const init = async (): Promise<void> => {
 
         const sp = spfi(getSP());
         // // const { fetchData } = useProfile();
@@ -43,21 +43,21 @@ export default function HomePageView():JSX.Element {
         console.log(CurrentUser)
         const users = sp.web.siteUsers.getById(CurrentUser.Id).groups;
         // const userinfo = users().then(response => { console.log(response[0].Title) })
-        
-         const userinfo1 = await users().then(response => {
-            
+
+        const userinfo1 = await users().then(response => {
+
             for (let i = 0; i < response.length; i++) {
-                 userarray.push(response[i].Title)
+                userarray.push(response[i].Title)
             }
         })
         console.log("userinfo", userinfo1, typeof (userinfo1))
-        console.log("userRoleArray", userarray,userarray.length)
+        console.log("userRoleArray", userarray, userarray.length)
         ///await setuserarrayList(userarray)
     }
-    const checkbuttonV = ():void=> {
-        
+    const checkbuttonV = (): void => {
+
         if (userarray.length > 0) {
-           console.log(userarray[0])
+            console.log(userarray[0])
             switch (userarray[0]) {
                 case USER_ROLE.supplier:
                     setuserRoleobj({
@@ -100,11 +100,11 @@ export default function HomePageView():JSX.Element {
         }
     }
     React.useEffect(() => {
-      init().then(()=>checkbuttonV()).catch(error=>console.log(error));
-        
+        init().then(() => checkbuttonV()).catch(error => console.log(error));
+
     }, []);
     // React.useEffect(()=>{
-        
+
     // },[userarrayList])
     const stackStyles: IStackStyles = {
         root: {
@@ -125,13 +125,19 @@ export default function HomePageView():JSX.Element {
     return (
         <section >
             <Stack enableScopedSelectors styles={stackStyles}>
-                <DefaultButton text='Create New Request' className={userRoleobj.CreateFlowV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.CreateFlowV} href='/sites/PMDEV/SitePages/Request.aspx' />
-                <DefaultButton text='Request List' className={userRoleobj.RequestFlowV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.RequestFlowV} href='/sites/PMDEV/Lists/Request%20List/AllItems.aspx'/>
-                <DefaultButton text='Goods Issue List' className={userRoleobj.GoodIssueV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.GoodIssueV} href='/sites/PMDEV/SitePages/GI.aspx'/>
-                <DefaultButton text='Create New Distribution Request' className={userRoleobj.CreateDistributionV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.CreateDistributionV} />
-                <DefaultButton text='My Distribution Request' className={userRoleobj.MyDistributionV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.MyDistributionV} />
-                <DefaultButton text='Received Distribution' className={userRoleobj.ReciecedDistributionV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.ReciecedDistributionV} />
-                <DefaultButton text='Inventory Management' className={userRoleobj.InventoryV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.InventoryV} />
+                <DefaultButton text='Create New Request' className={userRoleobj.CreateFlowV ? styles.homePageButton : styles.homePageButtonDisabled} disabled={!userRoleobj.CreateFlowV} href={`${this._spPageContextInfo.webAbsoluteUrl}/sitepages/request.aspx`} />
+
+                <DefaultButton text='Request List' className={userRoleobj.RequestFlowV ? styles.homePageButton : styles.homePageButtonDisabled} disabled={!userRoleobj.RequestFlowV} href={`${this._spPageContextInfo.webAbsoluteUrl}/Lists/Request%20List`} />
+
+                <DefaultButton text='Goods Issue List' className={userRoleobj.GoodIssueV ? styles.homePageButton : styles.homePageButtonDisabled} disabled={!userRoleobj.GoodIssueV} href={`${this._spPageContextInfo.webAbsoluteUrl}/sitepages/GI.aspx`} />
+
+                <DefaultButton text='Create New Distribution Request' className={userRoleobj.CreateDistributionV ? styles.homePageButton : styles.homePageButtonDisabled} disabled={!userRoleobj.CreateDistributionV} />
+
+                <DefaultButton text='My Distribution Request' className={userRoleobj.MyDistributionV ? styles.homePageButton : styles.homePageButtonDisabled} disabled={!userRoleobj.MyDistributionV} />
+
+                <DefaultButton text='Received Distribution' className={userRoleobj.ReciecedDistributionV ? styles.homePageButton : styles.homePageButtonDisabled} disabled={!userRoleobj.ReciecedDistributionV} />
+
+                <DefaultButton text='Inventory Management' className={userRoleobj.InventoryV ? styles.homePageButton : styles.homePageButtonDisabled} disabled={!userRoleobj.InventoryV} href={`${this._spPageContextInfo.webAbsoluteUrl}/Lists/Inventory%20Management`} />
             </Stack>
 
         </section>
