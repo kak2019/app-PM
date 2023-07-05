@@ -374,7 +374,7 @@ export default function RequestView(): JSX.Element {
         <DefaultButton onClick={() => {
           const returnUrl = window.location.href
 
-          document.location.href = returnUrl.slice(0, returnUrl.indexOf("SitePage")) + "SitePage/Request.aspx"
+          document.location.href = returnUrl.slice(0, returnUrl.indexOf("SitePage")) + "SitePage/Home.aspx"
         }} text="Cancel" />
       </Stack>
       {dialogvisible ?
