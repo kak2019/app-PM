@@ -7,9 +7,10 @@ import { getSP } from './pnpjsConfig';
 import { spfi } from '@pnp/sp';
 import "@pnp/sp/webs";
 import "@pnp/sp/site-users/web";
-import useProfile from './Hooks/useProfile';
 import { IWebEnsureUserResult } from '@pnp/sp/site-users/types';
 import { ISiteUser } from "@pnp/sp/site-users/";
+import { useContext } from "react";
+import AppContext from '../../../common/AppContext';
 export default function HomePageView():JSX.Element {
     interface IuserRoleobj {
         CreateFlowV: boolean;
@@ -26,14 +27,16 @@ export default function HomePageView():JSX.Element {
         MyDistributionV: true, ReciecedDistributionV: true, InventoryV: true
     });
     const USER_ROLE = { supplier: "Supplier", terminal: "Terminal", fc: "Factory", kdfc: "KDFactory", wh: "WareHouse" }
-    const userarray: string[] =[]
+    const userarray: string[] =[];
+    const ctx = useContext(AppContext);
+    const userEmail = ctx.context._pageContext._user.email;
     const init = async ():Promise<void> => {
 
         const sp = spfi(getSP());
-        const { fetchData } = useProfile();
-        const profileuser = await fetchData();
-        console.log(profileuser.AccountName)
-        const resultUser: IWebEnsureUserResult = await sp.web.ensureUser(profileuser.AccountName);
+        // // const { fetchData } = useProfile();
+        // // const profileuser = await fetchData();
+        // console.log("Accountname",profileuser.AccountName)
+        const resultUser: IWebEnsureUserResult = await sp.web.ensureUser("i:0#.f|membership|" + userEmail);
         //console.log(resultManager)
         const Userpromise: ISiteUser = sp.web.getUserById(resultUser.data.Id);
         const CurrentUser = await Userpromise();
@@ -123,8 +126,8 @@ export default function HomePageView():JSX.Element {
         <section >
             <Stack enableScopedSelectors styles={stackStyles}>
                 <DefaultButton text='Create New Request' className={userRoleobj.CreateFlowV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.CreateFlowV} href='http://www.baidu.com' />
-                <DefaultButton text='Request List' className={userRoleobj.RequestFlowV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.RequestFlowV} />
-                <DefaultButton text='Goods Issue List' className={userRoleobj.GoodIssueV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.GoodIssueV} />
+                <DefaultButton text='Request List' className={userRoleobj.RequestFlowV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.RequestFlowV} href='/SitePages/Request.aspx'/>
+                <DefaultButton text='Goods Issue List' className={userRoleobj.GoodIssueV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.GoodIssueV} href='/SitePages/GI.aspx'/>
                 <DefaultButton text='Create New Distribution Request' className={userRoleobj.CreateDistributionV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.CreateDistributionV} />
                 <DefaultButton text='My Distribution Request' className={userRoleobj.MyDistributionV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.MyDistributionV} />
                 <DefaultButton text='Received Distribution' className={userRoleobj.ReciecedDistributionV ? styles.homePageButton:styles.homePageButtonDisabled } disabled={!userRoleobj.ReciecedDistributionV} />
