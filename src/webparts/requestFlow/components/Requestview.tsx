@@ -213,21 +213,13 @@ export default function RequestView(): JSX.Element {
     }
   }, [myEntity]);
   const filterPartInfo = (): void => {
-    const list = allItems.filter(i => i.Count !== undefined && i.Count !== "")
+    const list = allItems.filter(i => i.Count !== undefined)
     console.log(list)
     setdialogitems(list)
     console.log("dialogitems", dialogitems, dialogitems.length)
 
   }
-  // useEffect(()=>{
-  //   const templist = []
-  //   for(let i=0;i<dialogitems.length;i++){
-  //     if(dialogitems[i].Count!==""){
-  //       templist.push(dialogitems[i])
-  //     }
-  //     setdialogitems(templist)
-  //   }
-  // },[dialogitems])
+
   useEffect(() => {
     filterPartInfo()
   }, [allItems])
@@ -254,13 +246,17 @@ export default function RequestView(): JSX.Element {
       TerminalIdId: itemsValuekey,
       Date_x0020_Needed: DateValue,
       PartJSON: JSON.stringify(jsonData),
-      Delivery_x0020_Address: address
+      Delivery_x0020_Address:address
     }
+<<<<<<< HEAD
+    addRequest({ request }).catch((error) => console.log(error))
+=======
     addRequest({ request }).then(() => {
       const returnUrl = window.location.href
 
       document.location.href = returnUrl.slice(0, returnUrl.indexOf("SitePage")) + "SitePages/Home.aspx"
     }).catch((error) => console.log(error))
+>>>>>>> 23edf3cfc6901a98a2e195b3e86dc0ffcac09c2b
 
   }
 
@@ -268,62 +264,30 @@ export default function RequestView(): JSX.Element {
     marginTop: '10px'
   }
   const validateRequest = (): void => {
-    const templist = [];
-    let flag = true;
-    setdialogvisible(false)
-    for (let i = 0; i < dialogitems.length; i++) {
-      if (/^\d+$/.test(dialogitems[i].Count) && dialogitems[i].Count !== "") {
-        templist.push(dialogitems[i])
-      }
-      setdialogitems(templist)
-    }
-    sethinterrormessage(null);
-    // console.log("listtemp1",templist)
-
-    for (let i = 0; i < dialogitems.length; i++) {
-      console.log("会执行吗", !(/^\d+$/.test(dialogitems[i].Count)))
-      if (!(/^\d+$/.test(dialogitems[i].Count)) && dialogitems[i].Count !== "") {
-        sethinterrormessage("Please checked for non-numeric values in the part count")
-        flag = false
-        toggleHideDialog();
-        break;
-
-      }
-
-
-    }
-    console.log("error", hinterrormessage)
-    console.log("flag", flag)
-    //console.log("listtemp",templist)
-    if (flag) {
-      if (selectedItem === null || selectedItem === undefined) {
-        sethinterrormessage("Please check if Terminal is selected");
-        setdialogvisible(false)
-        toggleHideDialog();
-        return
-      } else if (dialogitems.length === 0) {
-        sethinterrormessage("Please fill in at least one part of the information");
-        setdialogvisible(false)
-        toggleHideDialog();
-        return
-      } else {
-        sethinterrormessage(null);
-        setdialogvisible(true)
-        toggleHideDialog();
-      }
+    sethinterrormessage(null)
+    if (selectedItem === null || selectedItem === undefined) {
+      sethinterrormessage("Please check if Terminal is selected");
+      setdialogvisible(false)
+    } else if (dialogitems.length === 0) {
+      sethinterrormessage("Please fill in at least one part of the information");
+      setdialogvisible(false)
+    } else {
+      sethinterrormessage(null);
+      setdialogvisible(true)
     }
 
 
+    toggleHideDialog();
   }
   return (
     <section>
 
       <Stack verticalAlign="center" horizontal>
-        <Label style={{ textAlign: 'left', width: 200 }} >Request By: </Label>{" "} <Text style={{ fontFamily: '"Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif' }}>{myEntity?.Name}</Text>
+        <Label style={{ textAlign: 'right', marginRight: '10px' }} >Request By: </Label>{" "} <Text variant={'large'}>{myEntity?.Name}</Text>
         {/* <TextField disabled defaultValue="I am disabled" style={{ width: 100 }} /> */}
       </Stack>
       <Stack horizontal verticalAlign="center" style={stackClass}>
-        <Label style={{ textAlign: 'left', width: 200 }}>Terminal: </Label>
+        <Label style={{ textAlign: 'right', marginRight: '10px' }}>Terminal: </Label>
         <Dropdown
           placeholder="Select an option"
           //label="Basic uncontrolled example"
@@ -335,7 +299,7 @@ export default function RequestView(): JSX.Element {
 
       </Stack>
       <Stack horizontal verticalAlign="center" style={stackClass}>
-        <Label style={{ textAlign: 'left', width: 200 }}>Date Needed: </Label>
+        <Label style={{ textAlign: 'right', marginRight: '10px' }}>Date Needed: </Label>
         <DatePicker
           styles={datePickerStyles}
           placeholder="Select a date..."
@@ -351,11 +315,11 @@ export default function RequestView(): JSX.Element {
         />
       </Stack>
       <Stack horizontal verticalAlign="center" style={stackClass}>
-        <Label style={{ textAlign: 'left', width: 200 }}>Delivery Address: </Label> <Text style={{ fontFamily: '"Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif' }}>{address}</Text>
+        <Label style={{ textAlign: 'right', marginRight: '10px' }}>Delivery Address: </Label> <Text variant={'large'}>{address}</Text>
       </Stack>
-      <hr />
+
       <Stack horizontal verticalAlign="center" style={stackClass}>
-        <Label style={{ textAlign: 'left', width: 200 }}>Filter by Emballage Number:</Label><TextField style={{ width: 400, height: 25 }} onChange={_onChangeText} />    {/* //label="Filter by Emballage Number:" */}
+        <Label style={{ textAlign: 'right', marginRight: '10px' }}>Filter by Emballage Number:</Label><TextField onChange={_onChangeText} />    {/* //label="Filter by Emballage Number:" */}
       </Stack>
       <DetailsList
         items={items}// [{"Emballage Number":"123","Emballage Type":"456" ,"Count":"11"},]
@@ -369,13 +333,15 @@ export default function RequestView(): JSX.Element {
         onShouldVirtualize={() => false}
       //onItemInvoked={this._onItemInvoked}
       />
-      <Stack horizontal style={{ float: 'right', marginRight: 10 }}>
-        <PrimaryButton secondaryText="Opens the Sample Dialog" onClick={validateRequest} text="Next Step" style={{ marginRight: 10 }} />
-        <DefaultButton onClick={() => {
+      <Stack horizontal>
+      <PrimaryButton secondaryText="Opens the Sample Dialog" onClick={validateRequest} text="Next Step"  style={{marginRight:10}}/>
+      <DefaultButton  onClick={() => {
           const returnUrl = window.location.href
+          //document.location.href = "https://udtrucks.sharepoint.com/sites/app-RealEstateServiceDesk-QA/Lists/REIndia%20Taxi%20Request/AllItems.aspx"
 
           document.location.href = returnUrl.slice(0, returnUrl.indexOf("SitePage")) + "SitePage/Home.aspx"
         }} text="Cancel" />
+>>>>>>> 23edf3cfc6901a98a2e195b3e86dc0ffcac09c2b
       </Stack>
       {dialogvisible ?
         <Dialog
@@ -387,7 +353,7 @@ export default function RequestView(): JSX.Element {
 
             dialogitems.map((item: Iitem) =>
               <div key={item.PartID}>
-                <ul>{item.PartID}{","} {item.PartDescription}{","} {item.Count}</ul>
+                <ul>{item.PartID} {item.PartDescription} {item.Count}</ul>
               </div>
             )
           }
