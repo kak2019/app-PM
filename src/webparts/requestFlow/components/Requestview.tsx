@@ -44,6 +44,13 @@ interface IMappingOBJ {
   "Terminal": [{ "Name": string, "ID": string }]
 }
 export default function RequestView(): JSX.Element {
+  const [buttonvisible, setbuttonVisible ] = React.useState<boolean>(true)
+  const [dialogContentProps,setdialogContentProps] = React.useState( {
+    type: DialogType.normal,
+    title: 'Part Info',
+    closeButtonAriaLabel: 'Close',
+    subText: 'Below parts would be included:',
+  })
   const today = useConst(new Date(Date.now()));
   const minDate = useConst(addDays(today, 10));
   const datePickerStyles: Partial<IDatePickerStyles> = { root: { width: 400 } };
@@ -67,12 +74,7 @@ export default function RequestView(): JSX.Element {
     }),
     [isDraggable, labelId, subTextId],
   );
-  const dialogContentProps = {
-    type: DialogType.normal,
-    title: 'Part Info',
-    closeButtonAriaLabel: 'Close',
-    subText: 'Below parts would be included:',
-  };
+  
   const dialogContentProps1 = {
     type: DialogType.normal,
     title: 'Error Message',
@@ -204,6 +206,10 @@ export default function RequestView(): JSX.Element {
   };
   React.useEffect(() => {
     fetchMyEntity();
+    if (myEntity?.Type !== undefined) {
+      console.log("E", myEntity)
+      getMapping(myEntity?.Title)
+    }
     //getTargetAddress("1")
   }, [])
   useEffect(() => {
@@ -256,13 +262,27 @@ export default function RequestView(): JSX.Element {
       PartJSON: JSON.stringify(jsonData),
       Delivery_x0020_Address: address
     }
-    addRequest({ request }).then(() => {
-      //const returnUrl = window.location.href
-
-      //document.location.href = returnUrl.slice(0, returnUrl.indexOf("SitePage")) + "SitePages/Home.aspx"
-      document.location.href=`${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx`;
-    }).catch((error) => console.log(error))
-
+    ////console.log("result",result.)
+    let promiss 
+    addRequest({ request }).then(promises=>{console.log("promiss",promises,typeof(promises));promiss=promises}).catch(err=>console.log("err",err));
+   console.log("typeof promises==='string'",typeof promiss==="string")
+   if(typeof promiss!=="string"){
+   setdialogContentProps((dialogContentProps)=>({...dialogContentProps,title: "Submission Successful",subText:"The page will automatically jump after five seconds"}))
+   setbuttonVisible(false)
+   setTimeout(function(){document.location.href=`${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx`},5000)
+  }else{
+    setdialogContentProps((dialogContentProps)=>({...dialogContentProps,title: "Submission Failure"}))
+  }
+  
+  //  a.then((response) => {
+    
+  //     //const returnUrl = window.location.href
+  //     setdialogContentProps((dialogContentProps)=>({...dialogContentProps,title: "Submission Successful"}))
+  //     //document.location.href = returnUrl.slice(0, returnUrl.indexOf("SitePage")) + "SitePages/Home.aspx"
+  //     //document.location.href=`${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx`;
+  //   }).catch((error) => {console.log(error);
+  //     setdialogContentProps((dialogContentProps)=>({...dialogContentProps,title: "Submission Failure"}))})
+    
   }
 
   const stackClass = {
@@ -396,8 +416,8 @@ export default function RequestView(): JSX.Element {
 
 
           <DialogFooter>
-            <PrimaryButton onClick={submitFunction} text="Submit" />
-            <DefaultButton onClick={toggleHideDialog} text="Cancel" />
+            <PrimaryButton onClick={submitFunction} text="Submit"  style={{display:buttonvisible?'block':'none'}}/>
+            <DefaultButton onClick={toggleHideDialog} text="Cancel" style={{display:buttonvisible?'block':'none'}}/>
           </DialogFooter>
         </Dialog>
         : <Dialog
