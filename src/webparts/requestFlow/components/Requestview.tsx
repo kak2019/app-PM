@@ -257,9 +257,10 @@ export default function RequestView(): JSX.Element {
       Delivery_x0020_Address: address
     }
     addRequest({ request }).then(() => {
-      const returnUrl = window.location.href
+      //const returnUrl = window.location.href
 
-      document.location.href = returnUrl.slice(0, returnUrl.indexOf("SitePage")) + "SitePages/Home.aspx"
+      //document.location.href = returnUrl.slice(0, returnUrl.indexOf("SitePage")) + "SitePages/Home.aspx"
+      document.location.href=`${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx`;
     }).catch((error) => console.log(error))
 
   }
@@ -372,9 +373,10 @@ export default function RequestView(): JSX.Element {
       <Stack horizontal style={{ float: 'right', marginRight: 10 }}>
         <PrimaryButton secondaryText="Opens the Sample Dialog" onClick={validateRequest} text="Next Step" style={{ marginRight: 10 }} />
         <DefaultButton onClick={() => {
-          const returnUrl = window.location.href
-
-          document.location.href = returnUrl.slice(0, returnUrl.indexOf("SitePage")) + "SitePage/Home.aspx"
+          //const returnUrl = window.location.href;
+          //`${ctx.context._pageContext._web.absoluteUrl}/sitepages/GI.aspx`;
+          //document.location.href = returnUrl.slice(0, returnUrl.indexOf("SitePage")) + "SitePage/Home.aspx"
+          document.location.href=`${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx`;
         }} text="Cancel" />
       </Stack>
       {dialogvisible ?
