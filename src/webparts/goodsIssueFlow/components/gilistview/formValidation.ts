@@ -2,6 +2,7 @@ import * as Yup from "yup";
 export const formValidationSchema = Yup.object().shape({
   formlvItems: Yup.array().of(
     Yup.object().shape({
+      Status: Yup.string().required(),
       HowMuchCanBeFullfilled: Yup.number()
         .transform((_value, originalValue) =>
           Number(originalValue.replace(/,/g, ""))
@@ -23,6 +24,9 @@ export const formValidationSchema = Yup.object().shape({
         .oneOf(
           [Yup.ref("HowMuchCanBeFullfilled"), null],
           "How much can be full filled should always be equal to Qty sent"
+        )
+        .when("Status", ([value]:string[],schema:Yup.Schema)=>
+          value==="GI / In Transit"?schema.required("Qty sent is required when set GI status"):schema
         ),
     })
   ),

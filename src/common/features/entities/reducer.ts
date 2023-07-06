@@ -26,7 +26,7 @@ const entitiesSlice = createSlice({
             })
             .addCase(fetchMyEntityAction.rejected, (state, action)=> {
                 state.status= EntitiesStatus.Failed;
-                state.message = action.payload as string;
+                state.message = action.error?.message;
             })
             .addCase(fetchEntitiesByTypeAction.pending,(state,action)=>{
                 state.status = EntitiesStatus.Loading;
@@ -37,7 +37,7 @@ const entitiesSlice = createSlice({
             })
             .addCase(fetchEntitiesByTypeAction.rejected,(state,action)=>{
                 state.status= EntitiesStatus.Failed;
-                state.message = action.payload as string;
+                state.message = action.error?.message;
             })
     },
 

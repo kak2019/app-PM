@@ -6,7 +6,7 @@ import {
   PrimaryButton,
 } from "office-ui-fabric-react";
 import * as React from "react";
-import { IRequestListItem } from "../../../../common/model";
+import { IRequestGIError, IRequestListItem } from "../../../../common/model";
 import { useRequests } from "../../../../common/hooks/useRequests";
 import { useState } from "react";
 import { AnimatedDialog } from "@pnp/spfx-controls-react/lib/AnimatedDialog";
@@ -21,11 +21,14 @@ interface IResetAction {
 interface IFormValues {
   formlvItems: IRequestListItem[];
 }
+interface IFormErrors {
+  formlvItems: IRequestGIError[];
+}
 export default function SubmitAction({
   disabled,
   idx,
 }: IResetAction): JSX.Element {
-  const { values } = useFormikContext();
+  const { values, errors } = useFormikContext();
   const [, , , , myEntity, , ,] = useEntities();
   const [
     ,
@@ -48,10 +51,19 @@ export default function SubmitAction({
   const [showAnimatedDialog, setShowAnimatedDialog] = useState(false);
   const [isConfirmed, setIsConfirmed] = useState(false);
 
-
   const handleSubmit = async (): Promise<void> => {
-    setIsSubmitting(true);
     const rowValues = (values as IFormValues).formlvItems[idx];
+    const rowErrors = (errors as IFormErrors).formlvItems[idx];
+    let isValidRow = false;
+    isValidRow = !(
+      rowErrors.HowMuchCanBeFullfilled?.length > 0 ||
+      rowErrors.QtySent?.length > 0
+    );
+
+    if (!isValidRow) return;
+
+    setIsSubmitting(true);
+
     changeRequestId(rowValues.ID);
     if (rowValues.Status === "GI / In Transit" && isConfirmed === false) {
       setShowAnimatedDialog(true);
@@ -83,7 +95,9 @@ export default function SubmitAction({
     await editRequest({ request });
     fetchRequestsByTermialId(requestTermialId);
     setIsSubmitting(false);
-    await Dialog.alert(`Data you inputed in request ${rowValues.RequestNumber} saved successfully`);
+    await Dialog.alert(
+      `Data you inputed in request ${rowValues.RequestNumber} saved successfully`
+    );
   };
   //#region =========== Properties of the dialog============
   const animatedDialogContentProps = {

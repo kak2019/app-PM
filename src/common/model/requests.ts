@@ -24,3 +24,13 @@ export interface IRequestListItem {
     Field2?:string;
 }
 
+export interface IRequestGIError {   
+    HowMuchCanBeFullfilled?:string;    
+    Status?:string;
+    FullOrPartialFilled?:string;
+    QtySent?:string;
+    DateByWhenItWillReach?:string; 
+    ConfirmationFromSupplier?:string; 
+    Field1?:string;
+    Field2?:string;
+}

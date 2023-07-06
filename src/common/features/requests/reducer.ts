@@ -41,7 +41,7 @@ const requestsSlice = createSlice({
       })
       .addCase(fetchRequestListIdAction.rejected, (state, action) => {
         state.statue = RequestStatus.Failed;
-        state.message = action.payload as string;
+        state.message = action.error?.message;
       })
       .addCase(fetchByIdAction.pending, (state, action) => {
         state.statue = RequestStatus.Loading;
@@ -52,7 +52,7 @@ const requestsSlice = createSlice({
       })
       .addCase(fetchByIdAction.rejected, (state, action) => {
         state.statue = RequestStatus.Failed;
-        state.message = action.payload as string;
+        state.message = action.error?.message;
       })
       .addCase(fetchByTermialIdAction.pending, (state, action) => {
         state.statue = RequestStatus.Loading;
@@ -63,7 +63,7 @@ const requestsSlice = createSlice({
       })
       .addCase(fetchByTermialIdAction.rejected, (state, action) => {
         state.statue = RequestStatus.Failed;
-        state.message = action.payload as string;
+        state.message = action.error?.message;
       })
       .addCase(addRequestAction.pending, (state, action) => {
         state.statue = RequestStatus.Loading;
@@ -75,7 +75,7 @@ const requestsSlice = createSlice({
       })
       .addCase(addRequestAction.rejected, (state, action) => {
         state.statue = RequestStatus.Failed;
-        state.message = action.payload as string;
+        state.message = action.error?.message;
       })
       .addCase(editRequestAction.pending, (state, action) => {
         state.statue = RequestStatus.Loading;
@@ -88,7 +88,7 @@ const requestsSlice = createSlice({
       })
       .addCase(editRequestAction.rejected, (state, action) => {
         state.statue = RequestStatus.Failed;
-        state.message = action.payload as string;
+        state.message = action.error?.message;
       });
   },
 });
