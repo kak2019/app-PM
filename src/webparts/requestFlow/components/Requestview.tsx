@@ -124,7 +124,7 @@ export default function RequestView(): JSX.Element {
   const columns: IColumn[] = [
     {
       key: 'column1',
-      name: 'Emballage Number',
+      name: 'Part ID',
       ariaLabel: 'Column operations for File type, Press to sort on File type',
       //iconName: 'Page',
       isIconOnly: false,
@@ -138,7 +138,7 @@ export default function RequestView(): JSX.Element {
     },
     {
       key: 'column2',
-      name: 'Emballage Type',
+      name: 'Part Description',
       ariaLabel: 'Column operations for File type, Press to sort on File type',
       //iconName: 'Page',
       isIconOnly: false,
@@ -151,7 +151,7 @@ export default function RequestView(): JSX.Element {
       ),
     }, {
       key: 'column3',
-      name: 'Count',
+      name: 'Qty',
       ariaLabel: 'Column operations for File type, Press to sort on File type',
       //iconName: 'Page',
       isIconOnly: false,
@@ -436,3 +436,4 @@ export default function RequestView(): JSX.Element {
 }
 
 
+ 
