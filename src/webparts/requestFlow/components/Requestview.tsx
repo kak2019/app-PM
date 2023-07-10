@@ -107,15 +107,17 @@ export default function RequestView(): JSX.Element {
   }
   const _onChangeText = (ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, text: string): void => {
     setitems(
-      text ? allItems.filter(i => i.PartID.toLowerCase().indexOf(text) > -1) : allItems,
+      text ? allItems.filter(i => (i.PartID.toLowerCase().indexOf(text) > -1 || i.PartDescription.toLowerCase().indexOf(text) > -1)) : allItems,
     );
   };
   const onChangeSecondTextFieldValue = React.useCallback(
-    (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string, i?: number) => {
-      if (!newValue || newValue.length <= 5) {
-        allItems[i].Count = newValue || ''
-        setAllItems([...allItems])
-      }
+    (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string, id?: string) => {
+      allItems.forEach((val: Iitem) => {
+        if(val.PartID === id) {
+          val.Count = newValue || ''
+        }
+      })
+      setAllItems([...allItems])
     },
     [],
   );
@@ -160,7 +162,7 @@ export default function RequestView(): JSX.Element {
       maxWidth: 201,
       //onColumnClick: this._onColumnClick,
       onRender: (item: Iitem, i: number) => (
-        <TextField key={item.PartID} value={item.Count} onChange={(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => onChangeSecondTextFieldValue(event, newValue, i)} />
+        <TextField key={item.PartID} value={item.Count} onChange={(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => onChangeSecondTextFieldValue(event, newValue, item.PartID)} />
       ),
     }]
   const dropdownStyles: Partial<IDropdownStyles> = {
