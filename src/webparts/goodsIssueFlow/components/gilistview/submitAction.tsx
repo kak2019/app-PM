@@ -22,7 +22,7 @@ interface IFormValues {
   formlvItems: IRequestListItem[];
 }
 interface IFormErrors {
-  formlvItems: IRequestGIError[];
+  formlvItems?: IRequestGIError[];
 }
 export default function SubmitAction({
   disabled,
@@ -53,7 +53,7 @@ export default function SubmitAction({
 
   const handleSubmit = async (): Promise<void> => {
     const rowValues = (values as IFormValues).formlvItems[idx];
-    const rowErrors = (errors as IFormErrors).formlvItems[idx];
+    const rowErrors = (errors as IFormErrors).formlvItems?.slice(idx,1)[0] || {} as IRequestGIError;
     let isValidRow = false;
     isValidRow = !(
       rowErrors.HowMuchCanBeFullfilled?.length > 0 ||
