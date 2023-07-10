@@ -11,6 +11,7 @@ import { IWebEnsureUserResult } from '@pnp/sp/site-users/types';
 import { ISiteUser } from "@pnp/sp/site-users/";
 import { useContext } from "react";
 import AppContext from '../../../common/AppContext';
+import { Spinner, SpinnerSize } from '@fluentui/react/lib/Spinner';
 export default function HomePageView():JSX.Element {
     interface IuserRoleobj {
         CreateFlowV: boolean;
@@ -22,9 +23,10 @@ export default function HomePageView():JSX.Element {
         InventoryV: boolean;
     }
     // const[userarrayList,setuserarrayList]  = React.useState([])
+    const [viewVisible, setviewVisible] =React.useState<boolean>(false)
     const [userRoleobj, setuserRoleobj] = React.useState<IuserRoleobj>({
-        CreateFlowV: true, RequestFlowV: true, GoodIssueV: true, CreateDistributionV: true,
-        MyDistributionV: true, ReciecedDistributionV: true, InventoryV: true
+        CreateFlowV: false, RequestFlowV: false, GoodIssueV: true, CreateDistributionV: false,
+        MyDistributionV: false, ReciecedDistributionV: false, InventoryV: false
     });
     const USER_ROLE = { supplier: "Supplier", terminal: "Terminal", fc: "Factory", kdfc: "KDFactory", wh: "WareHouse" }
     const userarray: string[] =[];
@@ -100,7 +102,7 @@ export default function HomePageView():JSX.Element {
         }
     }
     React.useEffect(() => {
-      init().then(()=>checkbuttonV()).catch(error=>console.log(error));
+      init().then(()=>{checkbuttonV();setviewVisible(true)}).catch(error=>console.log(error));
         
     }, []);
     // React.useEffect(()=>{
@@ -124,7 +126,7 @@ export default function HomePageView():JSX.Element {
     //getCurrentUserRole()
     return (
         <section >
-            <Stack enableScopedSelectors styles={stackStyles}>
+            {viewVisible?<Stack enableScopedSelectors styles={stackStyles}>
                 <DefaultButton text='Create New Request' className={userRoleobj.CreateFlowV ? styles.homePageButton : styles.homePageButtonDisabled} disabled={!userRoleobj.CreateFlowV} href={`${ctx.context._pageContext._web.absoluteUrl}/sitepages/request.aspx`} />
 
                 <DefaultButton text='Request List' className={userRoleobj.RequestFlowV ? styles.homePageButton : styles.homePageButtonDisabled} disabled={!userRoleobj.RequestFlowV} href={`${ctx.context._pageContext._web.absoluteUrl}/Lists/Request%20List`} />
@@ -138,12 +140,11 @@ export default function HomePageView():JSX.Element {
                 <DefaultButton text='Received Distribution' className={userRoleobj.ReciecedDistributionV ? styles.homePageButton : styles.homePageButtonDisabled} disabled={!userRoleobj.ReciecedDistributionV} />
 
                 <DefaultButton text='Inventory Management' className={userRoleobj.InventoryV ? styles.homePageButton : styles.homePageButtonDisabled} disabled={!userRoleobj.InventoryV} href={`${ctx.context._pageContext._web.absoluteUrl}/Lists/Inventory%20Management`} />
-            </Stack>
+            </Stack>:<Spinner size={SpinnerSize.large} />}
 
         </section>
     );
 }
-
 
 
 
