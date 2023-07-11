@@ -11,6 +11,8 @@ import { IReadonlyTheme } from '@microsoft/sp-component-base';
 import * as strings from 'DistributionFlowTrackerWebPartStrings';
 import DistributionFlowTracker from './components/DistributionFlowTracker';
 import { IDistributionFlowTrackerProps } from './components/IDistributionFlowTrackerProps';
+import { getSP } from '../../common/pnpjsConfig';
+import PnPTelemetry from "@pnp/telemetry-js";
 
 export interface IDistributionFlowTrackerWebPartProps {
   description: string;
@@ -29,7 +31,8 @@ export default class DistributionFlowTrackerWebPart extends BaseClientSideWebPar
         isDarkTheme: this._isDarkTheme,
         environmentMessage: this._environmentMessage,
         hasTeamsContext: !!this.context.sdks.microsoftTeams,
-        userDisplayName: this.context.pageContext.user.displayName
+        userDisplayName: this.context.pageContext.user.displayName,
+        context: this.context
       }
     );
 
@@ -38,7 +41,9 @@ export default class DistributionFlowTrackerWebPart extends BaseClientSideWebPar
 
   protected onInit(): Promise<void> {
     this._environmentMessage = this._getEnvironmentMessage();
-
+    getSP(this.context);
+    const telemetry = PnPTelemetry.getInstance();
+    telemetry.optOut();
     return super.onInit();
   }
 

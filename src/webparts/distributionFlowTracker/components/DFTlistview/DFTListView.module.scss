@@ -1,0 +1,25 @@
+.listWrapper {
+    background-color: #f0f0f0;
+    // min-height: 65vh;
+    /* Firefox */
+    min-height: -moz-calc(100vh - 234px);
+    /* WebKit */
+    min-height: -webkit-calc(100vh - 234px);
+    /* Opera */
+    min-height: -o-calc(100vh - 234px);
+    /* Standard */
+    min-height: calc(100vh - 234px);
+
+    min-width: 94vw;
+    overflow: scroll;
+    overflow-x: inherit;
+}
+
+.list {
+    overflow: inherit;
+}
+
+.list div[role="gridcell"] {
+    align-items: flex-start;
+    display: flex;
+}

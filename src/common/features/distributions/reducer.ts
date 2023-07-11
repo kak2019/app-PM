@@ -3,7 +3,7 @@ import { FeatureKey } from "../../featureKey";
 import { DistributionStatus, initialState } from "./distributionsSlice";
 import {
     fetchByIdAction,
-    fetchByReceiverAction,
+    fetchBySenderAction,
     fetchDistributionListIdAction,
     editDistributionAction,
     addDistributionAction
@@ -26,8 +26,8 @@ const distributionsSlice = createSlice({
         DistributionListIdChange(state, action) {
             state.listId = action.payload;
         },
-        DistributionReceiverChange(state, action) {
-            state.receiver = action.payload;
+        DistributionSenderChange(state, action) {
+            state.sender = action.payload;
         }
     },
     extraReducers: (builder) => {
@@ -54,14 +54,14 @@ const distributionsSlice = createSlice({
                 state.statue = DistributionStatus.Failed;
                 state.message = action.error?.message;
             })
-            .addCase(fetchByReceiverAction.pending, (state, action) => {
+            .addCase(fetchBySenderAction.pending, (state, action) => {
                 state.statue = DistributionStatus.Loading;
             })
-            .addCase(fetchByReceiverAction.fulfilled, (state, action) => {
+            .addCase(fetchBySenderAction.fulfilled, (state, action) => {
                 state.statue = DistributionStatus.Idle;
                 state.items = [...(action.payload as readonly IDistributionListItem[])];
             })
-            .addCase(fetchByReceiverAction.rejected, (state, action) => {
+            .addCase(fetchBySenderAction.rejected, (state, action) => {
                 state.statue = DistributionStatus.Failed;
                 state.message = action.error?.message;
             })
@@ -90,5 +90,5 @@ const distributionsSlice = createSlice({
             })
     }
 });
-export const { DistributionStatusChanged, DistributionItemChanged, DistributionItemIdChanged, DistributionListIdChange, DistributionReceiverChange } = distributionsSlice.actions;
+export const { DistributionStatusChanged, DistributionItemChanged, DistributionItemIdChanged, DistributionListIdChange, DistributionSenderChange } = distributionsSlice.actions;
 export const distributionsReducer = distributionsSlice.reducer;

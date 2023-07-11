@@ -59,7 +59,7 @@ export interface IDistributionState {
     item: IDistributionListItem;
     items: IDistributionListItem[];
     itemId: string;
-    receiver: string;
+    sender: string;
     listId: string;
     statue: DistributionStatus;
     message: string;
@@ -68,7 +68,7 @@ export const initialState: IDistributionState = {
     item: {} as IDistributionListItem,
     items: [],
     itemId: "-1",
-    receiver: "",
+    sender: "",
     listId: "",
     statue: DistributionStatus.Idle,
     message:""

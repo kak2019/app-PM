@@ -47,9 +47,9 @@ export const itemIdSelector = createSelector(
 /**
  * receiver selector
  */
-export const receiverSelector = createSelector(
+export const senderSelector = createSelector(
     featureStateSelector,
-    (state: IDistributionState) => state?.receiver
+    (state: IDistributionState) => state?.sender
 );
 
 /**

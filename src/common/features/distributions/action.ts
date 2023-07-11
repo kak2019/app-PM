@@ -25,7 +25,7 @@ const fetchById = async (arg: { Id: number }): Promise<IDistributionListItem> =>
                         <FieldRef Name="Sender_x003a__x0020_Name"/>
                         <FieldRef Name="Receiver"/>
                         <FieldRef Name="Receiver_x003a__x0020_Name"/>
-                        <FieldRef Name="PartID"/>
+                        <FieldRef Name="PartNumber"/>
                         <FieldRef Name="PartDescription"/>
                         <FieldRef Name="Quantity"/>
                         <FieldRef Name="ReceivedByDate"/>
@@ -48,14 +48,14 @@ const fetchById = async (arg: { Id: number }): Promise<IDistributionListItem> =>
                     Sender_x003a__x0020_Name: response.Row[0].Sender_x0031_x0020_Name,
                     Receiver: JSON.stringify(response.Row[0].Receiver),
                     Receiver_x003a__x0020_Name: response.Row[0].Receiver_x003a__x0020_Name,
-                    PartID: response.Row[0].PartID,
+                    PartNumber: response.Row[0].PartNumber,
                     PartDescription: response.Row[0].PartDescription,
                     Quantity: response.Row[0].Quantity,
                     ReceivedByDate: response.Row[0].ReceivedByDate,
                     DeliveryLocationAndCountry: response.Row[0].DeliveryLocationAndCountry,
                     Status: response.Row[0].Status,
                     StatusUpdatedBy: JSON.stringify(response.Row[0].StatusUpdatedBy),
-                    ConfirmationFromSupplier: response.Row[0].ConfirmationFromSupplier === "Yes",
+                    ConfirmationFromReceiver: response.Row[0].ConfirmationFromReceiver === "Yes",
                     Field1: response.Row[0].Field1,
                     Field2: response.Row[0].Field2
                 } as IDistributionListItem;
@@ -70,8 +70,8 @@ const fetchById = async (arg: { Id: number }): Promise<IDistributionListItem> =>
         return Promise.reject("Error when fetch request by Id");
     }
 };
-const fetchByReceiver = async (arg: {
-    Receiver: string;
+const fetchBySender = async (arg: {
+    Sender: string;
 }): Promise<IDistributionListItem[]> => {
     const sp = spfi(getSP());
     try {
@@ -80,8 +80,8 @@ const fetchByReceiver = async (arg: {
                       <Query>
                         <Where>
                           <Eq>
-                            <FieldRef Name="Receiver"/>
-                            <Value Type="Text">${arg.Receiver}</Value>
+                            <FieldRef Name="Sender"/>
+                            <Value Type="Text">${arg.Sender}</Value>
                           </Eq>
                         </Where>
                       </Query>
@@ -92,7 +92,7 @@ const fetchByReceiver = async (arg: {
                         <FieldRef Name="Sender_x003a__x0020_Name"/>
                         <FieldRef Name="Receiver"/>
                         <FieldRef Name="Receiver_x003a__x0020_Name"/>
-                        <FieldRef Name="PartID"/>
+                        <FieldRef Name="PartNumber"/>
                         <FieldRef Name="PartDescription"/>
                         <FieldRef Name="Quantity"/>
                         <FieldRef Name="ReceivedByDate"/>
@@ -111,23 +111,23 @@ const fetchByReceiver = async (arg: {
                     return response.Row.map(
                         (item) =>
                         ({
-                            ID: response.Row[0].ID,
-                            Title: response.Row[0].Title,
-                            DistributionNumber: response.Row[0].DistributionNumber,
-                            Sender: JSON.stringify(response.Row[0].Sender),
-                            Sender_x003a__x0020_Name: response.Row[0].Sender_x0031_x0020_Name,
-                            Receiver: JSON.stringify(response.Row[0].Receiver),
-                            Receiver_x003a__x0020_Name: response.Row[0].Receiver_x003a__x0020_Name,
-                            PartID: response.Row[0].PartID,
-                            PartDescription: response.Row[0].PartDescription,
-                            Quantity: response.Row[0].Quantity,
-                            ReceivedByDate: response.Row[0].ReceivedByDate,
-                            DeliveryLocationAndCountry: response.Row[0].DeliveryLocationAndCountry,
-                            Status: response.Row[0].Status,
-                            StatusUpdatedBy: JSON.stringify(response.Row[0].StatusUpdatedBy),
-                            ConfirmationFromSupplier: response.Row[0].ConfirmationFromSupplier === "Yes",
-                            Field1: response.Row[0].Field1,
-                            Field2: response.Row[0].Field2
+                            ID: item.ID,
+                            Title: item.Title,
+                            DistributionNumber: item.DistributionNumber,
+                            Sender: JSON.stringify(item.Sender),
+                            Sender_x003a__x0020_Name: item.Sender_x0031_x0020_Name,
+                            Receiver: JSON.stringify(item.Receiver),
+                            Receiver_x003a__x0020_Name: item.Receiver_x003a__x0020_Name,
+                            PartNumber: item.PartNumber,
+                            PartDescription: item.PartDescription,
+                            Quantity: item.Quantity,
+                            ReceivedByDate: item.ReceivedByDate,
+                            DeliveryLocationAndCountry: item.DeliveryLocationAndCountry,
+                            Status: item.Status,
+                            StatusUpdatedBy: JSON.stringify(item.StatusUpdatedBy),
+                            ConfirmationFromReceiver: item.ConfirmationFromReceiver === "Yes",
+                            Field1: item.Field1,
+                            Field2: item.Field2
                         } as IDistributionListItem)
                     );
                 }
@@ -138,7 +138,7 @@ const fetchByReceiver = async (arg: {
         return result;
     } catch (err) {
         console.log(err);
-        return Promise.reject("Error when fetch request by Receiver")
+        return Promise.reject("Error when fetch request by Sender")
     }
 };
 const fetchListId = async (): Promise<string> => {
@@ -215,9 +215,9 @@ export const fetchByIdAction = createAsyncThunk(
     `${FeatureKey.DISTRIBUTIONS}/fetchById`,
     fetchById
 );
-export const fetchByReceiverAction = createAsyncThunk(
-    `${FeatureKey.DISTRIBUTIONS}/fetchByReceiver`,
-    fetchByReceiver
+export const fetchBySenderAction = createAsyncThunk(
+    `${FeatureKey.DISTRIBUTIONS}/fetchBySender`,
+    fetchBySender
 );
 export const fetchDistributionListIdAction = createAsyncThunk(
     `${FeatureKey.DISTRIBUTIONS}/fetchListId`,
