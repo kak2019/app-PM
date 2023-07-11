@@ -1,14 +1,13 @@
 import * as React from "react";
+import {memo} from "react";
 import { useFormikContext } from "formik";
-import {
-  PrimaryButton,
-} from "office-ui-fabric-react";
+import { PrimaryButton } from "office-ui-fabric-react";
 
 import { IRequestGIError, IRequestListItem } from "../../../../common/model";
 import { useBoolean } from "@fluentui/react-hooks";
 import { useRequests, useEntities } from "../../../../common/hooks";
 import { IPrincipal } from "@pnp/spfx-controls-react";
-import {ConfirmationBox} from "../../../../common/components/Box/ConfirmationBox";
+import ConfirmationBox from "../../../../common/components/Box/ConfirmationBox";
 import SuccessConfirmationBox from "../../../../common/components/Box/SuccessConfirmationBox";
 
 interface IResetAction {
@@ -22,8 +21,7 @@ interface IFormErrors {
   formlvItems?: IRequestGIError[];
 }
 
-
-export default function SubmitAction({
+export default memo(function SubmitAction({
   disabled,
   idx,
 }: IResetAction): JSX.Element {
@@ -81,18 +79,16 @@ export default function SubmitAction({
     await editRequest({ request });
     fetchRequestsByTermialId(requestTermialId);
 
-    // await alert(
-    //   `Data you inputed in request ${rowValues.RequestNumber} saved successfully`
-    // );
     toggleHideResultDialog();
     toggleIsSubmitting();
   };
   const handleSubmit = (): void => {
-    const r = (errors as IFormErrors).formlvItems?.slice(idx, 1)[0];
-    if (r !== undefined) {
-      return;
+    if ((errors as IFormErrors).formlvItems) {
+      const r = (errors as IFormErrors).formlvItems[idx];
+      if (r !== undefined) {
+        return;
+      }
     }
-
     const rowValues = { ...(values as IFormValues).formlvItems[idx] };
     changeRequestId(rowValues.ID);
     if (rowValues.Status === "GI / In Transit") {
@@ -132,4 +128,4 @@ export default function SubmitAction({
       />
     </div>
   );
-}
+})

@@ -4,10 +4,7 @@ import { useEntities } from "../../../common/hooks";
 import AppContext from "../../../common/AppContext";
 import "./App.css";
 import { EntitiesStatus } from "../../../common/features/entities";
-import {
-  MessageBar,
-  MessageBarType,
-} from "office-ui-fabric-react";
+import { MessageBar, MessageBarType } from "office-ui-fabric-react";
 import { useRequests } from "../../../common/hooks/useRequests";
 import { RequestStatus } from "../../../common/features/requests";
 import GIListView from "./gilistview";
@@ -49,7 +46,7 @@ export default memo(function App() {
     fetchRequestListId();
   }, []);
   useEffect(() => {
-    if (myEntity?.Type === "Terminal" && requestListId.length > 0) {
+    if (myEntity?.Type === "Terminal" && requestListId?.length > 0) {
       fetchRequestsByTermialId(myEntity.Title);
     }
   }, [myEntity, requestListId]);
@@ -73,35 +70,24 @@ export default memo(function App() {
     }
     return false;
   }, [myEntity, type, entities]);
+  const isLoading =
+    isFetching === EntitiesStatus.Loading ||
+    isFetchingRequest === RequestStatus.Loading;
 
   return (
     <>
-      <LoadingBox
-        isOpen={(
-          isFetching === EntitiesStatus.Loading ||
-          isFetchingRequest === RequestStatus.Loading
-        )} infoDetails={"Loading data..."}      />
-      {!isFetching && (
-        <>
-          {errorMessage.length !== 0 && (
-            <MessageBar
-              messageBarType={MessageBarType.error}
-              isMultiline={false}
-            >
-              {errorMessage}
-            </MessageBar>
-          )}
-          {errorMessageRequest.length !== 0 && (
-            <MessageBar
-              messageBarType={MessageBarType.error}
-              isMultiline={false}
-            >
-              {errorMessageRequest}
-            </MessageBar>
-          )}
-          {showGIView() && <GIListView />}
-        </>
+      <LoadingBox isOpen={isLoading} infoDetails={"Loading data..."} />
+      {errorMessage?.length !== 0 && (
+        <MessageBar messageBarType={MessageBarType.error} isMultiline={false}>
+          {errorMessage}
+        </MessageBar>
       )}
+      {errorMessageRequest?.length !== 0 && (
+        <MessageBar messageBarType={MessageBarType.error} isMultiline={false}>
+          {errorMessageRequest}
+        </MessageBar>
+      )}
+      {showGIView() && <GIListView />}
     </>
   );
 });

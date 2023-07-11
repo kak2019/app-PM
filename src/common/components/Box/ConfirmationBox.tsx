@@ -1,4 +1,5 @@
 import * as React from "react";
+import {memo } from "react";
 import {
   DefaultButton,
   PrimaryButton,
@@ -6,6 +7,7 @@ import {
   DialogType,
   DialogFooter,
 } from "office-ui-fabric-react";
+import { modalProps } from "./common";
 
 interface IConfirmationBoxProps {
   isOpen: boolean;
@@ -14,16 +16,7 @@ interface IConfirmationBoxProps {
   confirmationYesCallback: () => void;
   onDismiss: () => void;
 }
-//#region =========== Properties of the dialog============
-const modalPropsStyles = { main: { maxWidth: 450 } };
-export const modalProps = {
-  isBlocking: true,
-  styles: modalPropsStyles,
-};
-
-//#endregion
-
-export const ConfirmationBox = (props: IConfirmationBoxProps): JSX.Element => {
+export default memo(function ConfirmationBox (props: IConfirmationBoxProps): JSX.Element {
   const {
     isOpen,
     confirmationDetails,
@@ -48,4 +41,4 @@ export const ConfirmationBox = (props: IConfirmationBoxProps): JSX.Element => {
       </DialogFooter>
     </Dialog>
   );
-};
+});

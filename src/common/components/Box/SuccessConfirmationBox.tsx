@@ -3,7 +3,7 @@ import { memo } from 'react';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react';
-import { modalProps } from './ConfirmationBox';
+import { modalProps } from './common';
 
 interface ISuccessConfirmationBoxProps{
     isOpen:boolean;
