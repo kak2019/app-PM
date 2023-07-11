@@ -116,7 +116,7 @@ export default function RequestView(): JSX.Element {
   }
   const _onChangeText = (ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, text: string): void => {
     setitems(
-      text ? allItems.filter(i => (i.PartID.toLowerCase().indexOf(text) > -1 || i.PartDescription.toLowerCase().indexOf(text) > -1)) : allItems,
+      text ? allItems.filter(i => (i.PartID.toLowerCase().indexOf(text) > -1 || i.PartDescription.toLowerCase().indexOf(text.toLocaleLowerCase()) > -1)) : allItems,
     );
   };
   const onChangeSecondTextFieldValue = React.useCallback(
@@ -278,7 +278,7 @@ export default function RequestView(): JSX.Element {
     addRequest({ request }).then(promises=>{console.log("promiss",promises,typeof(promises));promiss=promises}).catch(err=>console.log("err",err));
    console.log("typeof promises==='string'",typeof promiss==="string")
    if(typeof promiss!=="string"){
-   setdialogContentProps((dialogContentProps)=>({...dialogContentProps,title: "Submission Successful",subText:"Click the OK button to return to the home page"}))
+   setdialogContentProps((dialogContentProps)=>({...dialogContentProps,title: "Submitted Successfully",subText:"Click the OK button to return to the home page"}))
    setbuttonVisible(false)
    
   }else{
