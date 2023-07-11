@@ -32,6 +32,8 @@ export default function HomePageView():JSX.Element {
     const userarray: string[] =[];
     const ctx = useContext(AppContext);
     const userEmail = ctx.context._pageContext._user.email;
+    const webURL = ctx.context._pageContext._web.absoluteUrl;
+
     const init = async ():Promise<void> => {
 
         const sp = spfi(getSP());
@@ -127,11 +129,11 @@ export default function HomePageView():JSX.Element {
     return (
         <section >
             {viewVisible?<Stack enableScopedSelectors styles={stackStyles}>
-                <DefaultButton text='Create New Request' className={userRoleobj.CreateFlowV ? styles.homePageButton : styles.homePageButtonDisabled} disabled={!userRoleobj.CreateFlowV} href={`${ctx.context._pageContext._web.absoluteUrl}/sitepages/request.aspx`} />
+                <DefaultButton text='Create New Request' className={userRoleobj.CreateFlowV ? styles.homePageButton : styles.homePageButtonDisabled} disabled={!userRoleobj.CreateFlowV} href={`${webURL?webURL+"/":""}sitepages/request.aspx`} />
 
-                <DefaultButton text='Request List' className={userRoleobj.RequestFlowV ? styles.homePageButton : styles.homePageButtonDisabled} disabled={!userRoleobj.RequestFlowV} href={`${ctx.context._pageContext._web.absoluteUrl}/Lists/Request%20List`} />
+                <DefaultButton text='Request List' className={userRoleobj.RequestFlowV ? styles.homePageButton : styles.homePageButtonDisabled} disabled={!userRoleobj.RequestFlowV} href={`${webURL?webURL+"/":""}Lists/Request%20List`} />
 
-                <DefaultButton text='Goods Issue List' className={userRoleobj.GoodIssueV ? styles.homePageButton : styles.homePageButtonDisabled} disabled={!userRoleobj.GoodIssueV} href={`${ctx.context._pageContext._web.absoluteUrl}/sitepages/GI.aspx`} />
+                <DefaultButton text='Goods Issue List' className={userRoleobj.GoodIssueV ? styles.homePageButton : styles.homePageButtonDisabled} disabled={!userRoleobj.GoodIssueV} href={`${webURL?webURL+"/":""}sitepages/GI.aspx`} />
 
                 <DefaultButton text='Create New Distribution Request' className={userRoleobj.CreateDistributionV ? styles.homePageButton : styles.homePageButtonDisabled} disabled={!userRoleobj.CreateDistributionV} />
 
@@ -139,7 +141,7 @@ export default function HomePageView():JSX.Element {
 
                 <DefaultButton text='Received Distribution' className={userRoleobj.ReciecedDistributionV ? styles.homePageButton : styles.homePageButtonDisabled} disabled={!userRoleobj.ReciecedDistributionV} />
 
-                <DefaultButton text='Inventory Management' className={userRoleobj.InventoryV ? styles.homePageButton : styles.homePageButtonDisabled} disabled={!userRoleobj.InventoryV} href={`${ctx.context._pageContext._web.absoluteUrl}/Lists/Inventory%20Management`} />
+                <DefaultButton text='Inventory Management' className={userRoleobj.InventoryV ? styles.homePageButton : styles.homePageButtonDisabled} disabled={!userRoleobj.InventoryV} href={`${webURL?webURL+"/":""}Lists/Inventory%20Management`} />
             </Stack>:<Spinner size={SpinnerSize.large} />}
 
         </section>
