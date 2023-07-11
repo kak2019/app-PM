@@ -104,7 +104,7 @@ export default function HomePageView():JSX.Element {
         }
     }
     React.useEffect(() => {
-      init().then(()=>{checkbuttonV();setviewVisible(true)}).catch(error=>console.log(error));
+      init().then(()=>{checkbuttonV();setviewVisible(true)}).catch(error=>{console.log(error);location.reload();});
         
     }, []);
     // React.useEffect(()=>{
