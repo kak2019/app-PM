@@ -31,7 +31,7 @@ const fetchById = async (arg: { Id: number }): Promise<IDistributionListItem> =>
                         <FieldRef Name="ReceivedByDate"/>
                         <FieldRef Name="DeliveryLocationAndCountry"/>
                         <FieldRef Name="Status"/>
-                        <FieldRef Name="StatusUpdateBy"/>
+                        <FieldRef Name="StatusUpdatedBy"/>
                         <FieldRef Name="ConfirmationFromReceiver"/>
                         <FieldRef Name="Field1"/>
                         <FieldRef Name="Field2"/>
@@ -75,37 +75,39 @@ const fetchBySender = async (arg: {
 }): Promise<IDistributionListItem[]> => {
     const sp = spfi(getSP());
     try {
-        const result = await sp.web.lists.getByTitle(DISTRIBUTIONCONST.LIST_NAME).renderListDataAsStream({
-            ViewXml: `<View>
-                      <Query>
-                        <Where>
-                          <Eq>
-                            <FieldRef Name="Sender"/>
-                            <Value Type="Text">${arg.Sender}</Value>
-                          </Eq>
-                        </Where>
-                      </Query>
-                      <ViewFields>
-                        <FieldRef Name="Title"/>
-                        <FieldRef Name="DistributionNumber"/>
-                        <FieldRef Name="Sender"/>
-                        <FieldRef Name="Sender_x003a__x0020_Name"/>
-                        <FieldRef Name="Receiver"/>
-                        <FieldRef Name="Receiver_x003a__x0020_Name"/>
-                        <FieldRef Name="PartNumber"/>
-                        <FieldRef Name="PartDescription"/>
-                        <FieldRef Name="Quantity"/>
-                        <FieldRef Name="ReceivedByDate"/>
-                        <FieldRef Name="DeliveryLocationAndCountry"/>
-                        <FieldRef Name="Status"/>
-                        <FieldRef Name="StatusUpdateBy"/>
-                        <FieldRef Name="ConfirmationFromReceiver"/>
-                        <FieldRef Name="Field1"/>
-                        <FieldRef Name="Field2"/>
-                      </ViewFields>
-                      <RowLimit>1</RowLimit>
-                    </View>`
-        })
+        const result = await sp.web.lists
+            .getByTitle(DISTRIBUTIONCONST.LIST_NAME)
+            .renderListDataAsStream({
+                ViewXml: `<View>
+	                        <Query>
+		                        <Where>
+			                        <Eq>
+				                        <FieldRef Name="Sender"/>
+				                        <Value Type="Text">${arg.Sender}</Value>
+			                        </Eq>
+		                        </Where>
+	                        </Query>
+	                        <ViewFields>
+		                        <FieldRef Name="Title"/>
+		                        <FieldRef Name="DistributionNumber"/>
+		                        <FieldRef Name="Sender"/>
+		                        <FieldRef Name="Sender_x003a__x0020_Name"/>
+		                        <FieldRef Name="Receiver"/>
+		                        <FieldRef Name="Receiver_x003a__x0020_Name"/>
+		                        <FieldRef Name="PartNumber"/>
+		                        <FieldRef Name="PartDescription"/>
+		                        <FieldRef Name="Quantity"/>
+		                        <FieldRef Name="ReceivedByDate"/>
+		                        <FieldRef Name="DeliveryLocationAndCountry"/>
+		                        <FieldRef Name="Status"/>
+		                        <FieldRef Name="StatusUpdatedBy"/>
+		                        <FieldRef Name="ConfirmationFromReceiver"/>
+		                        <FieldRef Name="Field1"/>
+		                        <FieldRef Name="Field2"/>
+	                        </ViewFields>
+	                        <RowLimit>5000</RowLimit>
+                        </View>`
+            })
             .then((response) => {
                 if (response.Row.length > 0) {
                     return response.Row.map(
@@ -115,7 +117,7 @@ const fetchBySender = async (arg: {
                             Title: item.Title,
                             DistributionNumber: item.DistributionNumber,
                             Sender: JSON.stringify(item.Sender),
-                            Sender_x003a__x0020_Name: item.Sender_x0031_x0020_Name,
+                            Sender_x003a__x0020_Name: item.Sender_x003a__x0020_Name,
                             Receiver: JSON.stringify(item.Receiver),
                             Receiver_x003a__x0020_Name: item.Receiver_x003a__x0020_Name,
                             PartNumber: item.PartNumber,
@@ -144,7 +146,10 @@ const fetchBySender = async (arg: {
 const fetchListId = async (): Promise<string> => {
     const sp = spfi(getSP());
     try {
-        const r = await sp.web.lists.getByTitle(DISTRIBUTIONCONST.LIST_NAME).select("Id")();
+        const r = await sp.web.lists
+            .getByTitle(DISTRIBUTIONCONST.LIST_NAME)
+            .select("Id")();
+
         return r.Id;
     } catch (err) {
         console.log(err);
@@ -152,6 +157,7 @@ const fetchListId = async (): Promise<string> => {
     }
 };
 const editDistribution = async (arg: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     distribution: any;
 }): Promise<IDistributionListItem> => {
     const { distribution } = arg;

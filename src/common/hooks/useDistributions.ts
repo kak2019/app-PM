@@ -33,6 +33,7 @@ type DistributionsOperators = [
     fetchDistributionListId: () => void,
     changeDistributionId: (Id: string) => void,
     changeDistributionListId: (Id: string) => void,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     editDistribution: (arg: { distribution: any }) => Promise<number>
 ];
 export const useDistributions = (): Readonly<DistributionsOperators> => {
@@ -71,6 +72,7 @@ export const useDistributions = (): Readonly<DistributionsOperators> => {
         [dispatch]
     );
     const editDistribution = useCallback(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         async (arg: { distribution: any }) => {
             try {
                 await dispatch(editDistributionAction(arg));

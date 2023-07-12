@@ -40,9 +40,10 @@ export default memo(function index() {
         (ID: string): boolean => {
             const res = distributions.filter((i) => i.ID === ID);
             if (res.length > 0) {
-                return (
-                    !res[0].ConfirmationFromReceiver
-                );
+                if (res[0].ConfirmationFromReceiver) {
+                    return true
+                }
+                return false
             }
             return false;
         },
@@ -168,7 +169,7 @@ export default memo(function index() {
             render: useCallback(
                 (rowitem: IDistributionListItem) => {
                     return (
-                        (rowitem.StatusUpdatedBy !== "" ?
+                        (rowitem.StatusUpdatedBy && rowitem.StatusUpdatedBy !== "" ?
                             <FieldUserRenderer
                                 users={JSON.parse(rowitem.StatusUpdatedBy)}
                                 context={ctx.context}

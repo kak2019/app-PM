@@ -4,4 +4,5 @@ export interface IDistributionFlowProps {
   environmentMessage: string;
   hasTeamsContext: boolean;
   userDisplayName: string;
+  context: any;
 }

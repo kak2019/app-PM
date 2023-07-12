@@ -9,7 +9,7 @@ import { PrimaryButton } from "office-ui-fabric-react";
 import ConfirmationBox from "../../../../common/components/Box/ConfirmationBox";
 import SuccessConfirmationBox from "../../../../common/components/Box/SuccessConfirmationBox";
 
-interface IResetAction {
+interface ISubmitAction {
     disabled: boolean;
     idx: number;
 }
@@ -23,7 +23,7 @@ interface IFormErrors {
 export default function SubmitAction({
     disabled,
     idx
-}: IResetAction): JSX.Element {
+}: ISubmitAction): JSX.Element {
     const { values, errors } = useFormikContext();
     const [, , , , myEntity, , ,] = useEntities();
     const [
@@ -49,13 +49,15 @@ export default function SubmitAction({
 
     const saveData = async (): Promise<void> => {
         toggleIsSubmitting();
+        console.log("Submit part")
+        console.log(values);
         const rowValues = { ...(values as IFormValues).formlvItems[idx] };
         const distribution = {
             ID: rowValues.ID,
             ConfirmationFromReceiver: rowValues.ConfirmationFromReceiver,
             Field1: rowValues.Field1,
             Field2: rowValues.Field2,
-            StatusUpdateById: (
+            StatusUpdatedById: (
                 JSON.parse(myEntity.Users)[0] as IPrincipal
             ).id.toString(),
         };
