@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { FeatureKey } from "../../featureKey";
 import { initialState, EntitiesStatus } from "./entitiesSlice";
-import { fetchEntitiesByTypeAction, fetchMyEntityAction } from "./action";
+import { fetchEntitiesByTypeAction, fetchGroupsByUserEmailAction, fetchMyEntityAction } from "./action";
 import { IEntitiesListItem } from "../../model";
 
 const entitiesSlice = createSlice({
@@ -36,6 +36,17 @@ const entitiesSlice = createSlice({
                 state.items=[...(action.payload as readonly IEntitiesListItem[])]
             })
             .addCase(fetchEntitiesByTypeAction.rejected,(state,action)=>{
+                state.status= EntitiesStatus.Failed;
+                state.message = action.error?.message;
+            })
+            .addCase(fetchGroupsByUserEmailAction.pending, (state, action)=>{
+                state.status = EntitiesStatus.Loading;
+            })
+            .addCase(fetchGroupsByUserEmailAction.fulfilled, (state, action)=>{
+                state.status = EntitiesStatus.Idle;
+                state.groups = [...action.payload];
+            })
+            .addCase(fetchGroupsByUserEmailAction.rejected, (state, action)=> {
                 state.status= EntitiesStatus.Failed;
                 state.message = action.error?.message;
             })

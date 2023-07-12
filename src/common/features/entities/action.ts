@@ -103,3 +103,26 @@ export const fetchEntitiesByTypeAction = createAsyncThunk(
     }
   }
 );
+export const fetchGroupsByUserEmailAction = createAsyncThunk(
+  `${FeatureKey.ENTITIES}/fetchGroupsByUserEmail`,
+  async (arg: { userEmail: string }) => {
+    try {
+      const sp = spfi(getSP());
+      let result:string[]=[];
+      const user = await sp.web.ensureUser(arg.userEmail);
+      const userId = user.data.Id;
+      await sp.web.siteUsers
+        .getById(userId)
+        .groups()
+        .then((response) =>
+          response.map((o) => {
+            result = [o.Title, ...result];
+          })
+        )
+      return result;
+    } catch (err) {
+      console.log(err);
+      return Promise.reject("Error when fetch user's groups.");
+    }
+  }
+);
