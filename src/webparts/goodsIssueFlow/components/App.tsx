@@ -59,6 +59,7 @@ export default memo(function App() {
   return (
     <>
       <LoadingBox isOpen={isLoading} infoDetails={"Loading data..."} />
+      {showGIView() && <GIListView />}
       {errorMessage?.length !== 0 && (
         <MessageBar messageBarType={MessageBarType.error} isMultiline={false}>
           {errorMessage}
@@ -69,7 +70,6 @@ export default memo(function App() {
           {errorMessageRequest}
         </MessageBar>
       )}
-      {showGIView() && <GIListView />}
     </>
   );
 });

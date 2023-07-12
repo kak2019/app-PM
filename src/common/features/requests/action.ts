@@ -75,10 +75,6 @@ const fetchById = async (arg: { Id: number }): Promise<IRequestListItem> => {
           } as IRequestListItem;
         }
       })
-      .catch((e) => {
-        console.log(e);
-        return null;
-      });
     return item;
   } catch (err) {
     console.log(err);
@@ -159,10 +155,6 @@ const fetchByTerminalId = async (arg: {
           );
         }
       })
-      .catch((e) => {
-        console.log(e);
-        return null;
-      });
     return result;
   } catch (err) {
     console.log(err);
