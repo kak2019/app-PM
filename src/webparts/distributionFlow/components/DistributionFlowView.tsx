@@ -31,7 +31,7 @@ interface IDistributionMapping {
 }
 
 export default function DistributionFlowView(): JSX.Element {
-    const [receiver,setReceiver] = useState([]);
+    const [receiver, setReceiver] = useState([]);
     const today = useConst(new Date(Date.now()));
     const minDate = useConst(addDays(today, 0));
     const ctx = useContext(AppContext);
@@ -56,8 +56,8 @@ export default function DistributionFlowView(): JSX.Element {
     const tentativeOption: IDistributionMapping[] = []
     const [address, setAddress] = React.useState<string>('')
     const [items, setItems] = React.useState<Iitem[]>(REQUESTSCONST.PART_LIST)
-    
-    
+
+
     interface Iops {
         "text": string,
         "key": string
@@ -66,9 +66,9 @@ export default function DistributionFlowView(): JSX.Element {
     const getMapping = (myterminalID: string): void => {
         sp.web.lists.getByTitle("Distribution Mapping").items.select("PMSender/Name", "PMReceiver/Name", "PMReceiver/ID", "PMReceiverType/Type").filter(`PMSender/Title eq ${myterminalID}`).expand("PMSender,PMReceiver").getAll().then((response1) => {
 
-            
+
             const typeops: Iops[] = []
-            const receiver : IDistributionMapping[] = []
+            const receiver: IDistributionMapping[] = []
 
             console.log("sender", response1)
 
@@ -105,7 +105,7 @@ export default function DistributionFlowView(): JSX.Element {
             setReceiverTypeOptions([...filterType])
             //console.log("responseMap",response)
             setReceiver(receiver)//将receiver整体返回
-            
+
         }).catch(err => {
             console.log(err)
         })
@@ -114,13 +114,13 @@ export default function DistributionFlowView(): JSX.Element {
 
     }
 
-    
+
     const onChange = (event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void => {
         setSelectedReceiverType(item);
         const ops = []
         console.log("key", item.key.toString())
-        console.log("responseMap2",receiver) //为什么在这里没有值
-        
+        console.log("responseMap2", receiver) //为什么在这里没有值
+
         for (let i = 0; i < receiver.length; i++) {
             if (item.key === receiver[i].PMReceiverType) {
                 ops.push({ "text": receiver[i].PMReceiver[0].Name, "key": receiver[i].PMReceiver[0].ID })
@@ -129,24 +129,24 @@ export default function DistributionFlowView(): JSX.Element {
                 //ops.push({ "text": options[i].PMReceiver[0].Name, "key": options[i].PMReceiver[0].ID})
             }
         }
-        
+
 
     };
     const getTargetAddress = (targetID: string): void => {
         sp.web.lists.getByTitle("Entities").items.select("Name", "Country", "Address").filter("Name eq '" + targetID + "'").getAll().then(temp_Address => {
             setAddress(temp_Address[0].Name + ' ' + temp_Address[0].Country + ' ' + temp_Address[0].Address)
             console.log(temp_Address)
-        
-    }).catch(err =>{
-        console.log(err)
-    })
-}
+
+        }).catch(err => {
+            console.log(err)
+        })
+    }
 
     const receiverNameonChange = (event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void => {
         setSelectedReceiverName(item);
-        
+
         console.log("key", item.key.toString())
- 
+
         getTargetAddress(item.text.toString())
 
 
@@ -158,35 +158,35 @@ export default function DistributionFlowView(): JSX.Element {
             name: 'Part ID',
             isIconOnly: false,
             fieldName: 'name',
-            minWidth:100,
-            maxWidth:100,
-            onRender:( item:Iitem) =>(
+            minWidth: 100,
+            maxWidth: 100,
+            onRender: (item: Iitem) => (
                 <Text>{item.PartID}</Text>
             ),
-    },
-    {
-        key: 'column2',
-        name: 'Part Description',
-        isIconOnly: false,
-        fieldName: 'name',
-        minWidth: 200,
-        maxWidth: 200,
-        onRender:(item: Iitem) =>(
-            <Text>{item.PartDescription}</Text>
-            // console.log(item.PartDescription)
-        )
-    },
-    {
-        key: 'column3',
-        name: 'Part Qty',
-        isIconOnly: false,
-        fieldName: 'name',
-        minWidth: 200,
-        maxWidth:200,
-        onRender:(item: Iitem) =>(
-<TextField key={item.PartID} value={item.PartQty}></TextField>
-        )
-    }
+        },
+        {
+            key: 'column2',
+            name: 'Part Description',
+            isIconOnly: false,
+            fieldName: 'name',
+            minWidth: 200,
+            maxWidth: 200,
+            onRender: (item: Iitem) => (
+                <Text>{item.PartDescription}</Text>
+                // console.log(item.PartDescription)
+            )
+        },
+        {
+            key: 'column3',
+            name: 'Part Qty',
+            isIconOnly: false,
+            fieldName: 'name',
+            minWidth: 200,
+            maxWidth: 200,
+            onRender: (item: Iitem) => (
+                <TextField key={item.PartID} value={item.PartQty}></TextField>
+            )
+        }
     ];
     React.useEffect(() => {
         fetchMyEntity();
@@ -234,21 +234,21 @@ export default function DistributionFlowView(): JSX.Element {
                     }}
                 />
             </Stack>
-<Stack>
-    <Label>
-        Delevery Address:
-    </Label>
-    <Label>
-        {address}
-    </Label>
-</Stack>
-<Stack  >
-        <Label style={{ textAlign: 'left', width: 200 }}>Filter by Emballage Number:</Label><TextField style={{ width: 400, height: 25 }} />   
-      </Stack>
-      <DetailsList items={items} columns={columns} 
-      />
-        
-      
+            <Stack>
+                <Label>
+                    Delevery Address:
+                </Label>
+                <Label>
+                    {address}
+                </Label>
+            </Stack>
+            <Stack  >
+                <Label style={{ textAlign: 'left', width: 200 }}>Filter by Emballage Number:</Label><TextField  />
+            </Stack>
+            <DetailsList items={items} columns={columns}
+            />
+
+
         </section>
     )
 }

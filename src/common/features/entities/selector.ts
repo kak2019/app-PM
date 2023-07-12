@@ -43,3 +43,11 @@ export const allEntitiesByTypeSelector = createSelector(
     featureStateSelector,
     (state:IEntitiesState)=>state?.items
 );
+
+/**
+ * groups by userEmail selector
+ */
+export const groupsSelector = createSelector(
+    featureStateSelector,
+    (state:IEntitiesState)=>state?.groups
+);

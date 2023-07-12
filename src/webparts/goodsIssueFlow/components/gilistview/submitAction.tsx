@@ -1,18 +1,14 @@
-import { useFormikContext } from "formik";
-import {
-  DefaultButton,
-  DialogFooter,
-  DialogType,
-  PrimaryButton,
-} from "office-ui-fabric-react";
 import * as React from "react";
+import {memo} from "react";
+import { useFormikContext } from "formik";
+import { PrimaryButton } from "office-ui-fabric-react";
+
 import { IRequestGIError, IRequestListItem } from "../../../../common/model";
-import { useRequests } from "../../../../common/hooks/useRequests";
-import { useState } from "react";
-import { AnimatedDialog } from "@pnp/spfx-controls-react/lib/AnimatedDialog";
-import { useEntities } from "../../../../common/hooks";
+import { useBoolean } from "@fluentui/react-hooks";
+import { useRequests, useEntities } from "../../../../common/hooks";
 import { IPrincipal } from "@pnp/spfx-controls-react";
-import { Dialog } from "@microsoft/sp-dialog";
+import ConfirmationBox from "../../../../common/components/Box/ConfirmationBox";
+import SuccessConfirmationBox from "../../../../common/components/Box/SuccessConfirmationBox";
 
 interface IResetAction {
   disabled: boolean;
@@ -22,9 +18,10 @@ interface IFormValues {
   formlvItems: IRequestListItem[];
 }
 interface IFormErrors {
-  formlvItems: IRequestGIError[];
+  formlvItems?: IRequestGIError[];
 }
-export default function SubmitAction({
+
+export default memo(function SubmitAction({
   disabled,
   idx,
 }: IResetAction): JSX.Element {
@@ -33,7 +30,7 @@ export default function SubmitAction({
   const [
     ,
     ,
-    ,
+    request,
     ,
     ,
     requestTermialId,
@@ -47,28 +44,15 @@ export default function SubmitAction({
     editRequest,
   ] = useRequests();
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showAnimatedDialog, setShowAnimatedDialog] = useState(false);
-  const [isConfirmed, setIsConfirmed] = useState(false);
+  const [isSubmitting, { toggle: toggleIsSubmitting }] = useBoolean(false);
+  const [hideConfirmDialog, { toggle: toggleHideConfirmDialog }] =
+    useBoolean(true);
+  const [hideResultDialog, { toggle: toggleHideResultDialog }] =
+    useBoolean(true);
 
-  const handleSubmit = async (): Promise<void> => {
-    const rowValues = (values as IFormValues).formlvItems[idx];
-    const rowErrors = (errors as IFormErrors).formlvItems[idx];
-    let isValidRow = false;
-    isValidRow = !(
-      rowErrors.HowMuchCanBeFullfilled?.length > 0 ||
-      rowErrors.QtySent?.length > 0
-    );
-
-    if (!isValidRow) return;
-
-    setIsSubmitting(true);
-
-    changeRequestId(rowValues.ID);
-    if (rowValues.Status === "GI / In Transit" && isConfirmed === false) {
-      setShowAnimatedDialog(true);
-      return;
-    }
+  const saveData = async (): Promise<void> => {
+    toggleIsSubmitting();
+    const rowValues = { ...(values as IFormValues).formlvItems[idx] };
     const request = {
       ID: rowValues.ID,
       HowMuchCanBeFullfilled:
@@ -94,23 +78,26 @@ export default function SubmitAction({
     };
     await editRequest({ request });
     fetchRequestsByTermialId(requestTermialId);
-    setIsSubmitting(false);
-    await Dialog.alert(
-      `Data you inputed in request ${rowValues.RequestNumber} saved successfully`
-    );
+
+    toggleHideResultDialog();
+    toggleIsSubmitting();
   };
-  //#region =========== Properties of the dialog============
-  const animatedDialogContentProps = {
-    type: DialogType.normal,
-    title: "Warning - Goods will be issued",
-    subText: "After save the Goods will be issued. Do you want to continue?",
+  const handleSubmit = (): void => {
+    if ((errors as IFormErrors).formlvItems) {
+      const r = (errors as IFormErrors).formlvItems[idx];
+      if (r !== undefined) {
+        return;
+      }
+    }
+    const rowValues = { ...(values as IFormValues).formlvItems[idx] };
+    changeRequestId(rowValues.ID);
+    if (rowValues.Status === "GI / In Transit") {
+      toggleHideConfirmDialog();
+      return;
+    }
+    saveData().catch(console.log);
   };
 
-  const animatedModalProps = {
-    isDarkOverlay: true,
-    isBlocking: true,
-  };
-  //#endregion
   return (
     <div style={{ width: 120 }}>
       <PrimaryButton
@@ -120,32 +107,25 @@ export default function SubmitAction({
         allowDisabledFocus
         disabled={disabled || isSubmitting}
       />
-      <AnimatedDialog
-        hidden={!showAnimatedDialog}
-        onDismiss={() => {
-          setShowAnimatedDialog(false);
-          setIsSubmitting(false);
+      <ConfirmationBox
+        isOpen={hideConfirmDialog}
+        onDismiss={toggleHideConfirmDialog}
+        confirmationDetails={{
+          title: "Warning - Goods will be issued",
+          subTitle:
+            "After save the Goods will be issued. Do you want to continue?",
         }}
-        dialogContentProps={animatedDialogContentProps}
-        modalProps={animatedModalProps}
-      >
-        <DialogFooter>
-          <PrimaryButton
-            onClick={async () => {
-              setIsConfirmed(true);
-              await handleSubmit();
-            }}
-            text="Yes"
-          />
-          <DefaultButton
-            onClick={() => {
-              setShowAnimatedDialog(false);
-              setIsSubmitting(false);
-            }}
-            text="No"
-          />
-        </DialogFooter>
-      </AnimatedDialog>
+        confirmationYesCallback={() => {
+          saveData().catch(console.log);
+          toggleHideConfirmDialog();
+        }}
+        confirmationNoCallback={toggleHideConfirmDialog}
+      />
+      <SuccessConfirmationBox
+        isOpen={hideResultDialog}
+        onDismiss={toggleHideResultDialog}
+        message={`Data you inputed in request ${request.RequestNumber} saved successfully`}
+      />
     </div>
   );
-}
+})

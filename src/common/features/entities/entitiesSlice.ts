@@ -18,6 +18,7 @@ export interface IEntitiesState {
     type: EntitiesType | undefined;
     items: IEntitiesListItem[];
     myentity:IEntitiesListItem;
+    groups:string[];
 }
 
 export const initialState: IEntitiesState = {
@@ -25,5 +26,6 @@ export const initialState: IEntitiesState = {
     message:"",
     type:undefined,
     items:[],
-    myentity:null
+    myentity:null,
+    groups:[]
 }

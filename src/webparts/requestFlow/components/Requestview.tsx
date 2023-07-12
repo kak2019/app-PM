@@ -61,14 +61,23 @@ export default function RequestView(): JSX.Element {
   const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
   const [isDraggable] = useBoolean(false);
 
-  const dialogStyles = { main: { maxWidth: 800 } };
+  const dialogStyles = { main: { selectors: {
+    '@media (min-width: 0px)': {
+      height: 220,
+      maxHeight: 500,
+      maxWidth: 650,
+      width: 350
+    }
+  }
+} } ;// main: { maxWidth: 800 }
   const labelId: string = useId('dialogLabel');
   const subTextId: string = useId('subTextLabel');
   const modalProps = React.useMemo(
     () => ({
+      
       titleAriaId: labelId,
       subtitleAriaId: subTextId,
-      isBlocking: false,
+      isBlocking: true,
       styles: dialogStyles,
 
     }),
@@ -107,7 +116,7 @@ export default function RequestView(): JSX.Element {
   }
   const _onChangeText = (ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, text: string): void => {
     setitems(
-      text ? allItems.filter(i => (i.PartID.toLowerCase().indexOf(text) > -1 || i.PartDescription.toLowerCase().indexOf(text) > -1)) : allItems,
+      text ? allItems.filter(i => (i.PartID.toLowerCase().indexOf(text) > -1 || i.PartDescription.toLowerCase().indexOf(text.toLocaleLowerCase()) > -1)) : allItems,
     );
   };
   const onChangeSecondTextFieldValue = React.useCallback(
@@ -131,8 +140,8 @@ export default function RequestView(): JSX.Element {
       //iconName: 'Page',
       isIconOnly: false,
       fieldName: 'name',
-      minWidth: 201,
-      maxWidth: 201,
+      minWidth: 81,
+      maxWidth: 81,
       //onColumnClick: this._onColumnClick,
       onRender: (item: Iitem) => (
         <Text>{item.PartID}</Text>
@@ -145,8 +154,8 @@ export default function RequestView(): JSX.Element {
       //iconName: 'Page',
       isIconOnly: false,
       fieldName: 'name',
-      minWidth: 201,
-      maxWidth: 201,
+      minWidth: 251,
+      maxWidth: 251,
       //onColumnClick: this._onColumnClick,
       onRender: (item: Iitem) => (
         <Text>{item.PartDescription}</Text>
@@ -269,9 +278,9 @@ export default function RequestView(): JSX.Element {
     addRequest({ request }).then(promises=>{console.log("promiss",promises,typeof(promises));promiss=promises}).catch(err=>console.log("err",err));
    console.log("typeof promises==='string'",typeof promiss==="string")
    if(typeof promiss!=="string"){
-   setdialogContentProps((dialogContentProps)=>({...dialogContentProps,title: "Submission Successful",subText:"The page will automatically jump after five seconds"}))
+   setdialogContentProps((dialogContentProps)=>({...dialogContentProps,title: "Submitted Successfully",subText:"Click the OK button to return to the home page"}))
    setbuttonVisible(false)
-   setTimeout(function(){document.location.href=`${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx`},5000)
+   
   }else{
     setdialogContentProps((dialogContentProps)=>({...dialogContentProps,title: "Submission Failure"}))
   }
@@ -393,7 +402,7 @@ export default function RequestView(): JSX.Element {
       //onItemInvoked={this._onItemInvoked}
       />
       <Stack horizontal style={{ float: 'right', marginRight: 10 }}>
-        <PrimaryButton secondaryText="Opens the Sample Dialog" onClick={validateRequest} text="Next Step" style={{ marginRight: 10 }} />
+        <PrimaryButton secondaryText="Opens the Sample Dialog" onClick={validateRequest} text="Submit" style={{ marginRight: 10 }} />
         <DefaultButton onClick={() => {
           //const returnUrl = window.location.href;
           //`${ctx.context._pageContext._web.absoluteUrl}/sitepages/GI.aspx`;
@@ -401,27 +410,31 @@ export default function RequestView(): JSX.Element {
           document.location.href=`${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx`;
         }} text="Cancel" />
       </Stack>
+      
       {dialogvisible ?
-        <Dialog
+        <Dialog 
           hidden={hideDialog}
           onDismiss={toggleHideDialog}
           dialogContentProps={dialogContentProps}
           modalProps={modalProps}
-        >{
+        > {
 
-            dialogitems.map((item: Iitem) =>
+          buttonvisible&&dialogitems.map((item: Iitem) =>
               <div key={item.PartID}>
-                <ul>{item.PartID}{","} {item.PartDescription}{","} {item.Count}</ul>
+                <ul style={{paddingInlineStart:0}}>{item.PartID}{","} {item.PartDescription}{","} {item.Count}</ul>
               </div>
             )
           }
 
 
           <DialogFooter>
-            <PrimaryButton onClick={submitFunction} text="Submit"  style={{display:buttonvisible?'block':'none'}}/>
+          <DefaultButton onClick={()=>{document.location.href=`${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx`}} text="OK" style={{display:!buttonvisible?'block':'none'}}/>
+            <PrimaryButton onClick={submitFunction} text="Yes"  style={{display:buttonvisible?'block':'none'}}/>
             <DefaultButton onClick={toggleHideDialog} text="Cancel" style={{display:buttonvisible?'block':'none'}}/>
+            
           </DialogFooter>
         </Dialog>
+       
         : <Dialog
           dialogContentProps={dialogContentProps1}
           modalProps={modalProps}
@@ -431,7 +444,9 @@ export default function RequestView(): JSX.Element {
             {hinterrormessage}
           </div>
         </Dialog>
+         
       }
+       
     </section>
   )
 

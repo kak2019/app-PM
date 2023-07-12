@@ -11,7 +11,8 @@ import { IReadonlyTheme } from '@microsoft/sp-component-base';
 import * as strings from 'HomePageWebPartStrings';
 import HomePage from './components/HomePage';
 import { IHomePageProps } from './components/IHomePageProps';
-import { getSP } from './components/pnpjsConfig';
+import { getSP } from '../../common/pnpjsConfig';
+
 export interface IHomePageWebPartProps {
   description: string;
 }

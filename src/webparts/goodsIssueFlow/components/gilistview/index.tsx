@@ -388,7 +388,7 @@ export default memo(function index() {
       name: "Actions",
       minWidth: 250,
       isResizable: false,
-      render:useCallback((rowitem: IRequestListItem) => {
+      render:(rowitem: IRequestListItem) => {
         return (
           <Stack horizontal tokens={stackTokens}>
             <SubmitAction
@@ -401,13 +401,13 @@ export default memo(function index() {
             />
           </Stack>
         );
-      },[listviewItems]),
+      },
     },
   ];
   //#endregion
 
   return (
-    <div style={{ flex: "0 0 auto" }}>
+    <>
       {listviewItems?.length > 0 ? (
         <Formik
           initialValues={{ formlvItems: listviewItems }}
@@ -446,6 +446,6 @@ export default memo(function index() {
           )}
         </Formik>
       ) : null}
-    </div>
+    </>
   );
 });
