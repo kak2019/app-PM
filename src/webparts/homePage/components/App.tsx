@@ -146,6 +146,7 @@ export default memo(function App() {
                 : styles.homePageButtonDisabled
             }
             disabled={!userRoleobj.CreateDistributionV}
+            href={`${webURL ? webURL + "/" : ""}sitepages/Distribute-flow.aspx`}
           />
 
           <DefaultButton
@@ -156,6 +157,7 @@ export default memo(function App() {
                 : styles.homePageButtonDisabled
             }
             disabled={!userRoleobj.MyDistributionV}
+            href={`${webURL ? webURL + "/" : ""}sitepages/Distribution-Flow-Tracker.aspx`}
           />
 
           <DefaultButton
@@ -166,6 +168,7 @@ export default memo(function App() {
                 : styles.homePageButtonDisabled
             }
             disabled={!userRoleobj.ReciecedDistributionV}
+            href={`${webURL ? webURL + "/" : ""}Lists/Distribution%20List`}
           />
 
           <DefaultButton
