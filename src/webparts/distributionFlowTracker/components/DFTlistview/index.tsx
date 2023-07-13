@@ -7,7 +7,7 @@ import { IViewField, ListView } from "@pnp/spfx-controls-react/lib/ListView";
 import { Field, FieldArray, Form, Formik } from "formik";
 import * as React from "react";
 import { FormikCheckbox, FormikDropdown, FormikTextField } from "../../../../common/components";
-import { DISTRIBUTIONCONST } from "../../../../common/features/distributions";
+import { DISTRIBUTIONCONST, DistributionStatus } from "../../../../common/features/distributions";
 import { FieldUserRenderer } from "@pnp/spfx-controls-react";
 import SubmitAction from "./submitAction";
 import ResetAction from "./resetAction";
@@ -20,7 +20,7 @@ import SimpleEmpty from "../../../../common/components/Empty";
 
 export default memo(function index() {
     const ctx = useContext(AppContext);
-    const [, , , distributions, , , , , , , , , , ,] = useDistributions();
+    const [isFetchingDistribution, , , distributions, , , , , , , , , , ,] = useDistributions();
     const [listviewItems, setListViewItems] = useState<IDistributionListItem[]>(undefined);
     useEffect(() => {
         setListViewItems([...distributions]);
@@ -311,7 +311,7 @@ export default memo(function index() {
                     )}
                 </Formik>
             ) : (
-                <SimpleEmpty />
+                (isFetchingDistribution === DistributionStatus.Idle) ? <SimpleEmpty /> : null
             )}
         </>
     )
