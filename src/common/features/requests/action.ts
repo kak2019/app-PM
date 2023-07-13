@@ -74,6 +74,8 @@ const fetchById = async (arg: { Id: number }): Promise<IRequestListItem> => {
             Field2: response.Row[0].Field2,
           } as IRequestListItem;
         }
+        else
+        return {} as IRequestListItem;
       })
     return item;
   } catch (err) {
@@ -153,6 +155,8 @@ const fetchByTerminalId = async (arg: {
                 Field2: item.Field2,
               } as IRequestListItem)
           );
+        }else{
+          return [] as IRequestListItem[];
         }
       })
     return result;

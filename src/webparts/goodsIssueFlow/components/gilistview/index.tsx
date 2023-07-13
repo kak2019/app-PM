@@ -30,6 +30,7 @@ import ResetAction from "./resetAction";
 import AllErrors from "./allErrors";
 import { formValidationSchema } from "./formValidation";
 import SubmitAction from "./submitAction";
+import SimpleEmpty from "../../../../common/components/Empty";
 
 export default memo(function index() {
   const ctx = useContext(AppContext);
@@ -113,13 +114,13 @@ export default memo(function index() {
       sorting: false,
       render: useCallback(
         (rowitem: IRequestListItem) => {
-          return (
-            (
-              rowitem.Requestor!==""?
-              <FieldUserRenderer
-                users={JSON.parse(rowitem.Requestor)} //FieldUserRenderer users value {JSON.parse("[{\"id\":\"11\",\"title\":\"Qin Howard (Consultant)\",\"email\":\"howard.qin@consultant.udtrucks.com\",\"sip\":\"howard.qin@consultant.udtrucks.com\",\"picture\":\"https://udtrucks-my.sharepoint.com:443/User%20Photos/Profile%20Pictures/c1f6b293-e3c7-4c33-9b17-040ffdb5a3b7_MThumb.jpg?t=63800730891\",\"jobTitle\":\"Consultant_EX\",\"department\":\"BP15861\"}]")}
-                context={ctx.context}
-              />:"")
+          return rowitem.Requestor !== "" ? (
+            <FieldUserRenderer
+              users={JSON.parse(rowitem.Requestor)} //FieldUserRenderer users value {JSON.parse("[{\"id\":\"11\",\"title\":\"Qin Howard (Consultant)\",\"email\":\"howard.qin@consultant.udtrucks.com\",\"sip\":\"howard.qin@consultant.udtrucks.com\",\"picture\":\"https://udtrucks-my.sharepoint.com:443/User%20Photos/Profile%20Pictures/c1f6b293-e3c7-4c33-9b17-040ffdb5a3b7_MThumb.jpg?t=63800730891\",\"jobTitle\":\"Consultant_EX\",\"department\":\"BP15861\"}]")}
+              context={ctx.context}
+            />
+          ) : (
+            ""
           );
         },
         [listviewItems]
@@ -261,13 +262,13 @@ export default memo(function index() {
       sorting: false,
       render: useCallback(
         (rowitem: IRequestListItem) => {
-          return (
-            (rowitem.StatusUpdateBy!==""?
-              <FieldUserRenderer
-                users={JSON.parse(rowitem.StatusUpdateBy)}
-                context={ctx.context}
-              />:""
-            ) 
+          return rowitem.StatusUpdateBy !== "" ? (
+            <FieldUserRenderer
+              users={JSON.parse(rowitem.StatusUpdateBy)}
+              context={ctx.context}
+            />
+          ) : (
+            ""
           );
         },
         [listviewItems]
@@ -388,7 +389,7 @@ export default memo(function index() {
       name: "Actions",
       minWidth: 250,
       isResizable: false,
-      render:(rowitem: IRequestListItem) => {
+      render: (rowitem: IRequestListItem) => {
         return (
           <Stack horizontal tokens={stackTokens}>
             <SubmitAction
@@ -437,7 +438,7 @@ export default memo(function index() {
                         className={styles.listWrapper}
                         listClassName={styles.list}
                       />
-                    ) : null}
+                    ) :null}
                     {props.errors && <AllErrors errors={props.errors} />}
                   </div>
                 )}
@@ -445,7 +446,9 @@ export default memo(function index() {
             </Form>
           )}
         </Formik>
-      ) : null}
+      ) :  (
+        <SimpleEmpty/>
+      )}
     </>
   );
 });
