@@ -60,10 +60,10 @@ const fetchById = async (arg: { Id: number }): Promise<IDistributionListItem> =>
                     Field2: response.Row[0].Field2
                 } as IDistributionListItem;
             }
-        }).catch((e) => {
-            console.log(e);
-            return null;
-        });
+            else {
+                return {} as IDistributionListItem
+            }
+        })
         return item;
     } catch (err) {
         console.log(err);
@@ -133,10 +133,10 @@ const fetchBySender = async (arg: {
                         } as IDistributionListItem)
                     );
                 }
-            }).catch((e) => {
-                console.log(e);
-                return null;
-            });
+                else {
+                    return [] as IDistributionListItem[]
+                }
+            })
         return result;
     } catch (err) {
         console.log(err);
