@@ -14,7 +14,7 @@ export default memo(function App() {
         isFetching,
         type,
         fetchMyEntity,
-        fetchEntitiesByType,
+        ,
         myEntity,
         entities,
         errorMessage
@@ -38,7 +38,6 @@ export default memo(function App() {
     useEffect(() => {
         fetchDistributionListId();
         fetchMyEntity();
-        fetchEntitiesByType({ type: "Terminal" });
     }, []);
     const showDFTView = useCallback((): boolean => {
         return true
@@ -63,13 +62,6 @@ export default memo(function App() {
                 }
             }
         }
-        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-        // async function getData() {
-        //     await waitForData();
-        //     if (distributionListId?.length > 0) {
-        //         fetchDistributionsBySender(myEntity.Title);
-        //     }
-        // }
         waitForData().catch(console.error);
     }, [myEntity, distributionListId]);
     const isLoading =

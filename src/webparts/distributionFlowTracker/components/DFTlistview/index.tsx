@@ -14,6 +14,7 @@ import ResetAction from "./resetAction";
 import { formValidationSchema } from "./formValidation";
 import AllErrors from "./allErrors";
 import styles from "./DFTListView.module.scss"
+import SimpleEmpty from "../../../../common/components/Empty";
 
 
 
@@ -36,19 +37,19 @@ export default memo(function index() {
         [listviewItems]
     );
 
-    const isFreezed = useCallback(
-        (ID: string): boolean => {
-            const res = distributions.filter((i) => i.ID === ID);
-            if (res.length > 0) {
-                if (res[0].ConfirmationFromReceiver) {
-                    return true
-                }
-                return false
-            }
-            return false;
-        },
-        [distributions]
-    )
+    // const isFreezed = useCallback(
+    //     (ID: string): boolean => {
+    //         const res = distributions.filter((i) => i.ID === ID);
+    //         if (res.length > 0) {
+    //             if (res[0].ConfirmationFromReceiver) {
+    //                 return true
+    //             }
+    //             return false
+    //         }
+    //         return false;
+    //     },
+    //     [distributions]
+    // )
 
     //#region ==============Styles and Templates==============
     const textFieldStyles: Partial<ITextFieldStyles> = {
@@ -195,7 +196,8 @@ export default memo(function index() {
                                 rowitem.ID
                             )}].ConfirmationFromReceiver`}
                             component={FormikCheckbox}
-                            disabled={isFreezed(rowitem.ID)}
+                            disabled={false}
+                        //disabled={isFreezed(rowitem.ID)}
                         />
                     );
                 },
@@ -216,7 +218,8 @@ export default memo(function index() {
                             component={FormikTextField}
                             name={`formlvItems[${getIndexByID(rowitem.ID)}].Field1`}
                             styles={textFieldStyles}
-                            disabled={isFreezed(rowitem.ID)}
+                            disabled={false}
+                        //disabled={isFreezed(rowitem.ID)}
                         />
                     );
                 },
@@ -237,7 +240,8 @@ export default memo(function index() {
                             component={FormikTextField}
                             name={`formlvItems[${getIndexByID(rowitem.ID)}].Field2`}
                             styles={textFieldStyles}
-                            disabled={isFreezed(rowitem.ID)}
+                            disabled={false}
+                        //disabled={isFreezed(rowitem.ID)}
                         />
                     );
                 },
@@ -252,11 +256,13 @@ export default memo(function index() {
                 return (
                     <Stack horizontal tokens={stackTokens}>
                         <SubmitAction
-                            disabled={isFreezed(rowitem.ID)}
+                            //disabled={isFreezed(rowitem.ID)}
+                            disabled={false}
                             idx={getIndexByID(rowitem.ID)}
                         />
                         <ResetAction
-                            disabled={isFreezed(rowitem.ID)}
+                            //disabled={isFreezed(rowitem.ID)}
+                            disabled={false}
                             idx={getIndexByID(rowitem.ID)}
                         />
                     </Stack>
@@ -304,7 +310,9 @@ export default memo(function index() {
                         </Form>
                     )}
                 </Formik>
-            ) : null}
+            ) : (
+                <SimpleEmpty />
+            )}
         </>
     )
 });

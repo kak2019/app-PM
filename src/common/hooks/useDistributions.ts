@@ -110,5 +110,5 @@ export const useDistributions = (): Readonly<DistributionsOperators> => {
         changeDistributionId,
         changeDistributionListId,
         editDistribution
-    ]
+    ] as const;
 };
