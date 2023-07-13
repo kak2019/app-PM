@@ -47,9 +47,9 @@ export default function RequestView(): JSX.Element {
   const [buttonvisible, setbuttonVisible ] = React.useState<boolean>(true)
   const [dialogContentProps,setdialogContentProps] = React.useState( {
     type: DialogType.normal,
-    title: 'Part Info',
+    title: 'Alert',
     closeButtonAriaLabel: 'Close',
-    subText: 'Below parts would be included:',
+    subText: 'The following parts will be included:',
   })
   const today = useConst(new Date(Date.now()));
   const minDate = useConst(addDays(today, 10));
@@ -278,7 +278,7 @@ export default function RequestView(): JSX.Element {
     addRequest({ request }).then(promises=>{console.log("promiss",promises,typeof(promises));promiss=promises}).catch(err=>console.log("err",err));
    console.log("typeof promises==='string'",typeof promiss==="string")
    if(typeof promiss!=="string"){
-   setdialogContentProps((dialogContentProps)=>({...dialogContentProps,title: "Submitted Successfully",subText:"Click the OK button to return to the home page"}))
+   setdialogContentProps((dialogContentProps)=>({...dialogContentProps,title: "Alert",subText:"Submitted successfully! The request will be listed in some minutes."}))
    setbuttonVisible(false)
    
   }else{
@@ -387,7 +387,7 @@ export default function RequestView(): JSX.Element {
       </Stack>
       <hr />
       <Stack horizontal verticalAlign="center" style={stackClass}>
-        <Label style={{ textAlign: 'left', width: 200 }}>Filter by Emballage Number:</Label><TextField style={{ width: 400, height: 25 }} onChange={_onChangeText} />    {/* //label="Filter by Emballage Number:" */}
+        <Label style={{ textAlign: 'left', width: 200 }}>Filter:</Label><TextField style={{ width: 400, height: 25 }} onChange={_onChangeText} />    {/* //label="Filter by Emballage Number:" */}
       </Stack>
       <DetailsList
         items={items}// [{"Emballage Number":"123","Emballage Type":"456" ,"Count":"11"},]
@@ -414,7 +414,7 @@ export default function RequestView(): JSX.Element {
       {dialogvisible ?
         <Dialog 
           hidden={hideDialog}
-          onDismiss={toggleHideDialog}
+          onDismiss={()=>{document.location.href=`${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx`}}
           dialogContentProps={dialogContentProps}
           modalProps={modalProps}
         > {
