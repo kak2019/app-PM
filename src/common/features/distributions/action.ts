@@ -29,7 +29,7 @@ const fetchById = async (arg: { Id: number }): Promise<IDistributionListItem> =>
                         <FieldRef Name="PartDescription"/>
                         <FieldRef Name="Quantity"/>
                         <FieldRef Name="ReceivedByDate"/>
-                        <FieldRef Name="DeliveryLocationAndCountry"/>
+                        <FieldRef Name="DeliveryLocationandCountry"/>
                         <FieldRef Name="Status"/>
                         <FieldRef Name="StatusUpdatedBy"/>
                         <FieldRef Name="ConfirmationFromReceiver"/>
@@ -52,7 +52,7 @@ const fetchById = async (arg: { Id: number }): Promise<IDistributionListItem> =>
                     PartDescription: response.Row[0].PartDescription,
                     Quantity: response.Row[0].Quantity,
                     ReceivedByDate: response.Row[0].ReceivedByDate,
-                    DeliveryLocationAndCountry: response.Row[0].DeliveryLocationAndCountry,
+                    DeliveryLocationandCountry: response.Row[0].DeliveryLocationandCountry,
                     Status: response.Row[0].Status,
                     StatusUpdatedBy: JSON.stringify(response.Row[0].StatusUpdatedBy),
                     ConfirmationFromReceiver: response.Row[0].ConfirmationFromReceiver === "Yes",
@@ -98,7 +98,7 @@ const fetchBySender = async (arg: {
 		                        <FieldRef Name="PartDescription"/>
 		                        <FieldRef Name="Quantity"/>
 		                        <FieldRef Name="ReceivedByDate"/>
-		                        <FieldRef Name="DeliveryLocationAndCountry"/>
+		                        <FieldRef Name="DeliveryLocationandCountry"/>
 		                        <FieldRef Name="Status"/>
 		                        <FieldRef Name="StatusUpdatedBy"/>
 		                        <FieldRef Name="ConfirmationFromReceiver"/>
@@ -124,7 +124,7 @@ const fetchBySender = async (arg: {
                             PartDescription: item.PartDescription,
                             Quantity: item.Quantity,
                             ReceivedByDate: item.ReceivedByDate,
-                            DeliveryLocationAndCountry: item.DeliveryLocationAndCountry,
+                            DeliveryLocationandCountry: item.DeliveryLocationandCountry,
                             Status: item.Status,
                             StatusUpdatedBy: JSON.stringify(item.StatusUpdatedBy),
                             ConfirmationFromReceiver: item.ConfirmationFromReceiver === "Yes",

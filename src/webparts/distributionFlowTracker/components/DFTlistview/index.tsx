@@ -75,8 +75,8 @@ export default memo(function index() {
         {
             name: "DistributionNumber",
             displayName: "Distribution Number",
-            minWidth: 100,
-            maxWidth: 150,
+            minWidth: 150,
+            maxWidth: 200,
             isResizable: true,
             sorting: false
         },
@@ -129,7 +129,7 @@ export default memo(function index() {
             sorting: false,
         },
         {
-            name: "DeliveryLocationAndCountry",
+            name: "DeliveryLocationandCountry",
             displayName: "Delivery Location and Country",
             minWidth: 200,
             maxWidth: 250,

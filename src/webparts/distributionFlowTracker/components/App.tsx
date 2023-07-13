@@ -6,6 +6,7 @@ import { DistributionStatus } from "../../../common/features/distributions";
 import { MessageBar, MessageBarType } from "office-ui-fabric-react";
 import DFTlistview from "./DFTlistview";
 import * as React from "react";
+import "./App.css"
 import LoadingBox from "../../../common/components/Box/LoadingBox";
 
 export default memo(function App() {
