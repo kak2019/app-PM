@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useEntities } from "../../../common/hooks";
 import AppContext from "../../../common/AppContext";
-import { useControlledState } from "office-ui-fabric-react/lib/Foundation";
+//import { useControlledState } from "office-ui-fabric-react/lib/Foundation";
 import { useConst } from '@fluentui/react-hooks';
 import { Stack } from '@fluentui/react/lib/Stack';
 import { Text } from '@fluentui/react/lib/Text';
@@ -9,7 +9,7 @@ import { Label } from '@fluentui/react/lib/Label';
 import { TextField } from 'office-ui-fabric-react';
 import { REQUESTSCONST } from '../../../common/features/requests';
 import { useContext, useEffect, useState } from "react";
-import { DetailsList, DetailsListLayoutMode, SelectionMode, IColumn } from '@fluentui/react/lib/DetailsList';
+import { DetailsList,  IColumn } from '@fluentui/react/lib/DetailsList';
 import { getSP } from "../../../common/pnpjsConfig";
 import { spfi } from "@pnp/sp";
 import { Dropdown, IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
@@ -36,7 +36,7 @@ export default function DistributionFlowView(): JSX.Element {
     const minDate = useConst(addDays(today, 0));
     const ctx = useContext(AppContext);
     const [DateValue, setDateValue] = React.useState<Date>(minDate);
-    const CurrentUserEmail = ctx.context._pageContext._user.email;
+    //const CurrentUserEmail = ctx.context._pageContext._user.email;
     const [selectedReceiverType, setSelectedReceiverType] = React.useState<IDropdownOption>();
     const [selectedReceiverName, setSelectedReceiverName] = React.useState<IDropdownOption>();
     const sp = spfi(getSP());
@@ -56,6 +56,7 @@ export default function DistributionFlowView(): JSX.Element {
     const tentativeOption: IDistributionMapping[] = []
     const [address, setAddress] = React.useState<string>('')
     const [items, setItems] = React.useState<Iitem[]>(REQUESTSCONST.PART_LIST)
+    const [allItems, setallItems] = React.useState<Iitem[]>(REQUESTSCONST.PART_LIST)
 
 
     interface Iops {
@@ -158,8 +159,8 @@ export default function DistributionFlowView(): JSX.Element {
             name: 'Part ID',
             isIconOnly: false,
             fieldName: 'name',
-            minWidth: 100,
-            maxWidth: 100,
+            minWidth: 80,
+            maxWidth: 80,
             onRender: (item: Iitem) => (
                 <Text>{item.PartID}</Text>
             ),
@@ -169,8 +170,8 @@ export default function DistributionFlowView(): JSX.Element {
             name: 'Part Description',
             isIconOnly: false,
             fieldName: 'name',
-            minWidth: 200,
-            maxWidth: 200,
+            minWidth: 260,
+            maxWidth: 260,
             onRender: (item: Iitem) => (
                 <Text>{item.PartDescription}</Text>
                 // console.log(item.PartDescription)
@@ -199,10 +200,14 @@ export default function DistributionFlowView(): JSX.Element {
         }
     }, [myEntity]);
 
-
+const filterPartList = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue: string) : void =>{
+    setItems(
+        newValue ? allItems.filter(i => (i.PartID.toLowerCase().indexOf(newValue) > -1) || (i.PartDescription.toLowerCase().indexOf(newValue.toLowerCase()) > -1)) : allItems,
+    );
+};
     return (
         <section>
-            <Stack>
+            <Stack verticalAlign="center" horizontal>
                 <Label> Request By:</Label>
                 <Label> {myEntity?.Name}</Label>
             </Stack>
@@ -243,8 +248,11 @@ export default function DistributionFlowView(): JSX.Element {
                 </Label>
             </Stack>
             <Stack  >
-                <Label style={{ textAlign: 'left', width: 200 }}>Filter by Emballage Number:</Label><TextField  />
+                <Label style={{ textAlign: 'left', width: 200 }}>Filter by Emballage Number:</Label><TextField 
+                onChange={filterPartList}
+                />
             </Stack>
+
             <DetailsList items={items} columns={columns}
             />
 
