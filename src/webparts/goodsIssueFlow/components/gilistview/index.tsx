@@ -19,7 +19,7 @@ import {
   mergeStyleSets,
   Stack,
 } from "office-ui-fabric-react";
-import { REQUESTSCONST } from "../../../../common/features/requests";
+import { REQUESTSCONST, RequestStatus } from "../../../../common/features/requests";
 import {
   FormikDropdown,
   FormikDatePicker,
@@ -34,7 +34,7 @@ import SimpleEmpty from "../../../../common/components/Empty";
 
 export default memo(function index() {
   const ctx = useContext(AppContext);
-  const [, , , requests, , , , , , , , , , ,] = useRequests();
+  const [isFetchingRequest, , , requests, , , , , , , , , , ,] = useRequests();
   const [listviewItems, setListViewItems] =
     useState<IRequestListItem[]>(undefined);
 
@@ -447,7 +447,7 @@ export default memo(function index() {
           )}
         </Formik>
       ) :  (
-        <SimpleEmpty/>
+        (isFetchingRequest===RequestStatus.Idle)?<SimpleEmpty/>:null
       )}
     </>
   );
