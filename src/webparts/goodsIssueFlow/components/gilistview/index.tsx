@@ -1,7 +1,8 @@
 import * as React from "react";
 import { memo, useEffect, useContext, useState, useCallback } from "react";
 import { Field, FieldArray, Form, Formik } from "formik";
-
+import * as dayjs from "dayjs";
+import * as relativeTime from "dayjs/plugin/relativeTime";
 import {
   ListView,
   IViewField,
@@ -34,6 +35,7 @@ import SimpleEmpty from "../../../../common/components/Empty";
 
 export default memo(function index() {
   const ctx = useContext(AppContext);
+  dayjs.extend(relativeTime);
   const [isFetchingRequest, , , requests, , , , , , , , , , ,] = useRequests();
   const [listviewItems, setListViewItems] =
     useState<IRequestListItem[]>(undefined);
@@ -134,14 +136,14 @@ export default memo(function index() {
       isResizable: true,
       sorting: false,
     },
-    {
-      name: "TerminalId_x003a_Name",
-      displayName: "Terminal",
-      minWidth: 80,
-      maxWidth: 100,
-      isResizable: true,
-      sorting: false,
-    },
+    // {
+    //   name: "TerminalId_x003a_Name",
+    //   displayName: "Terminal",
+    //   minWidth: 80,
+    //   maxWidth: 100,
+    //   isResizable: true,
+    //   sorting: false,
+    // },
     {
       name: "PartID",
       displayName: "Part ID",
@@ -173,6 +175,9 @@ export default memo(function index() {
       maxWidth: 120,
       isResizable: true,
       sorting: false,
+      render: useCallback((rowitem:IRequestListItem)=>{
+        return dayjs(rowitem.DateNeeded).fromNow();
+      },[listviewItems]),
     },
     {
       name: "DeliveryLocationAndCountry",

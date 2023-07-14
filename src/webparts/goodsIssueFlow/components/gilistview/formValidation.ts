@@ -21,12 +21,15 @@ export const formValidationSchema = Yup.object().shape({
         )
         .positive("Qty sent must be a positive number")
         .integer("Qty sent must be an integer")
-        .oneOf(
-          [Yup.ref("HowMuchCanBeFullfilled"), null],
-          "How much can be full filled should always be equal to Qty sent"
-        )
-        .when("Status", ([value]:string[],schema:Yup.Schema)=>
-          value==="GI / In Transit"?schema.required("Qty sent is required when set GI status"):schema
+        .when("Status", ([value]: string[], schema: Yup.Schema) =>
+          value === "GI / In Transit"
+            ? schema
+                .required("Qty sent is required when set GI status")
+                .oneOf(
+                  [Yup.ref("HowMuchCanBeFullfilled"), null],
+                  "How much can be full filled should always be equal to Qty sent"
+                )
+            : schema
         ),
     })
   ),
