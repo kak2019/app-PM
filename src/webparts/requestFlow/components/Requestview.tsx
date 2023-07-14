@@ -414,7 +414,8 @@ export default function RequestView(): JSX.Element {
       {dialogvisible ?
         <Dialog 
           hidden={hideDialog}
-          onDismiss={()=>{document.location.href=`${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx`}}
+          onDismiss={()=>{if(!buttonvisible){document.location.href=`${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx`}else{toggleHideDialog()}
+        }}
           dialogContentProps={dialogContentProps}
           modalProps={modalProps}
         > {

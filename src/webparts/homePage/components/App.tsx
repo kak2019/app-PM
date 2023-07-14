@@ -63,6 +63,7 @@ export default memo(function App() {
               ...userRoleobj,
               CreateFlowV: true,
               RequestFlowV: true,
+              ReciecedDistributionV: false,
             });
             break;
           case USER_ROLE.terminal:
