@@ -95,7 +95,7 @@ export default function SubmitAction({
                 isOpen={hideConfirmDialog}
                 onDismiss={toggleHideConfirmDialog}
                 confirmationDetails={{
-                    title: "Warning - Confirmation will be saved",
+                    title: "Confirmation will be saved",
                     subTitle:
                         "After Confirmation data will be saved, Do you want to continue?"
                 }}
