@@ -19,11 +19,9 @@ import "@pnp/sp/lists";
 import "@pnp/sp/items";
 import "@pnp/sp/items/get-all";
 import { DatePicker, addDays, IDatePickerStyles } from "office-ui-fabric-react";
-import { IWebEnsureUserResult } from "@pnp/sp/site-users/types";
 import { addRequest } from "./distributionFlowUtil/distributionFlow";
 import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
 import { useId, useBoolean } from '@fluentui/react-hooks';
-
 interface Iitem {
     "PartID": string,
     "PartDescription": string,
@@ -247,8 +245,8 @@ export default function DistributionFlowView(): JSX.Element {
             fieldName: 'name',
             minWidth: 200,
             maxWidth: 200,
-            onRender: (item: Iitem) => (
-                <TextField key={item.PartID} value={item.PartQty} onChange={(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => onChangePartQty(event, newValue, item.PartID)}></TextField>
+            onRender: (item: Iitem, i: number) => (
+                <TextField key={item.PartID} value={item.PartQty} onChange={(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => onChangePartQty(event, newValue, item.PartID)} />
             )
         }
     ];
