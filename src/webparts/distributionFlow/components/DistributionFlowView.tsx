@@ -6,18 +6,24 @@ import { useConst } from '@fluentui/react-hooks';
 import { Stack } from '@fluentui/react/lib/Stack';
 import { Text } from '@fluentui/react/lib/Text';
 import { Label } from '@fluentui/react/lib/Label';
-import { TextField } from 'office-ui-fabric-react';
+import { DefaultButton, PrimaryButton, TextField } from 'office-ui-fabric-react';
 import { REQUESTSCONST } from '../../../common/features/requests';
 import { useContext, useEffect, useState } from "react";
-import { DetailsList,  IColumn } from '@fluentui/react/lib/DetailsList';
+import { DetailsList, IColumn, SelectionMode } from '@fluentui/react/lib/DetailsList';
 import { getSP } from "../../../common/pnpjsConfig";
 import { spfi } from "@pnp/sp";
-import { Dropdown, IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
+import { Dropdown, IDropdownOption, IDropdownStyles } from "office-ui-fabric-react/lib/Dropdown";
+
 import "@pnp/sp/webs";
 import "@pnp/sp/lists";
 import "@pnp/sp/items";
 import "@pnp/sp/items/get-all";
-import { DatePicker, addDays } from "office-ui-fabric-react";
+import { DatePicker, addDays, IDatePickerStyles } from "office-ui-fabric-react";
+import { IWebEnsureUserResult } from "@pnp/sp/site-users/types";
+import { addRequest } from "./distributionFlowUtil/distributionFlow";
+import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
+import { useId, useBoolean } from '@fluentui/react-hooks';
+
 interface Iitem {
     "PartID": string,
     "PartDescription": string,
@@ -31,7 +37,10 @@ interface IDistributionMapping {
 }
 
 export default function DistributionFlowView(): JSX.Element {
+
+
     const [receiver, setReceiver] = useState([]);
+    const [selectedReceiverID, setSelectedReceiverID] = React.useState<string>();
     const today = useConst(new Date(Date.now()));
     const minDate = useConst(addDays(today, 0));
     const ctx = useContext(AppContext);
@@ -39,8 +48,10 @@ export default function DistributionFlowView(): JSX.Element {
     //const CurrentUserEmail = ctx.context._pageContext._user.email;
     const [selectedReceiverType, setSelectedReceiverType] = React.useState<IDropdownOption>();
     const [selectedReceiverName, setSelectedReceiverName] = React.useState<IDropdownOption>();
+    const [hinterrormessage, sethinterrormessage] = React.useState<string>(null);
     const sp = spfi(getSP());
     const MappingterminalArray: string[] = []
+    //const userEmail = ctx.context._pageContext._user.email;
     const [
         ,
         ,
@@ -57,12 +68,46 @@ export default function DistributionFlowView(): JSX.Element {
     const [address, setAddress] = React.useState<string>('')
     const [items, setItems] = React.useState<Iitem[]>(REQUESTSCONST.PART_LIST)
     const [allItems, setallItems] = React.useState<Iitem[]>(REQUESTSCONST.PART_LIST)
+    const [dialogitems, setdialogitems] = React.useState<Iitem[]>([])
+    //Dialog
+    const dialogStyles = { main: { maxWidth: 450 } };
+    const labelId: string = useId('dialogLabel');
+    const subTextId: string = useId('subTextLabel');
+    const modalProps = React.useMemo(
+        () => ({
+            titleAriaId: labelId,
+            subtitleAriaId: subTextId,
+            isBlocking: false,
+            styles: dialogStyles,
+
+        }),
+        [labelId, subTextId],
+    );
+    const [dialogContent, setDialogContent] = React.useState({
+        type: DialogType.normal,
+        title: 'Please confirm',
+        closeButtonAriaLabel: 'Close',
+        subText: 'confirmation of the request content',
+    });
+    const [dialogButtonVisible, setDialogButtonVisible] = React.useState<boolean>(true);
+    const [dialogVisible, setDialogVisible] = React.useState<boolean>(false);
+    const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
 
 
     interface Iops {
         "text": string,
         "key": string
     }
+    //styles
+    const dropdownStyles: Partial<IDropdownStyles> = {
+        dropdown: { width: 200 },
+    };
+    const datepickerStyles: Partial<IDatePickerStyles> = {
+        root: { width: 400 }
+    };
+    const stackClass = {
+        marginTop: '10px'
+    };
     //name is undefined, if response is not a array, set it as array and return.
     const getMapping = (myterminalID: string): void => {
         sp.web.lists.getByTitle("Distribution Mapping").items.select("PMSender/Name", "PMReceiver/Name", "PMReceiver/ID", "PMReceiverType/Type").filter(`PMSender/Title eq ${myterminalID}`).expand("PMSender,PMReceiver").getAll().then((response1) => {
@@ -134,24 +179,42 @@ export default function DistributionFlowView(): JSX.Element {
 
     };
     const getTargetAddress = (targetID: string): void => {
-        sp.web.lists.getByTitle("Entities").items.select("Name", "Country", "Address").filter("Name eq '" + targetID + "'").getAll().then(temp_Address => {
+        sp.web.lists.getByTitle("Entities").items.select("Name", "Country", "Address", "ID").filter("Name eq '" + targetID + "'").getAll().then(temp_Address => {
             setAddress(temp_Address[0].Name + ' ' + temp_Address[0].Country + ' ' + temp_Address[0].Address)
             console.log(temp_Address)
+            setSelectedReceiverID(temp_Address[0].ID)
+            console.log("temp_Address[0].ID", temp_Address[0].ID)
 
         }).catch(err => {
             console.log(err)
         })
     }
-
     const receiverNameonChange = (event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void => {
         setSelectedReceiverName(item);
 
         console.log("key", item.key.toString())
 
         getTargetAddress(item.text.toString())
+        console.log("setSelectedReceiverName", selectedReceiverName)
 
 
     }
+    const filterPartList = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue: string): void => {
+        setItems(
+            newValue ? allItems.filter(i => (i.PartID.toLowerCase().indexOf(newValue) > -1) || (i.PartDescription.toLowerCase().indexOf(newValue.toLowerCase()) > -1)) : allItems,
+        );
+    };
+    const onChangePartQty = React.useCallback(
+        (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string, id?: string) => {
+            allItems.forEach((val: Iitem) => {
+                if (val.PartID === id) {
+                    val.PartQty = newValue
+                }
+            })
+            setallItems([...allItems])
+        },
+        [],
+    );
 
     const columns: IColumn[] = [
         {
@@ -185,10 +248,11 @@ export default function DistributionFlowView(): JSX.Element {
             minWidth: 200,
             maxWidth: 200,
             onRender: (item: Iitem) => (
-                <TextField key={item.PartID} value={item.PartQty}></TextField>
+                <TextField key={item.PartID} value={item.PartQty} onChange={(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => onChangePartQty(event, newValue, item.PartID)}></TextField>
             )
         }
     ];
+
     React.useEffect(() => {
         fetchMyEntity();
         //getTargetAddress("1")
@@ -199,64 +263,191 @@ export default function DistributionFlowView(): JSX.Element {
             getMapping(myEntity?.Title)
         }
     }, [myEntity]);
+    const filterPartInfo = (): void => {
+        const list = allItems.filter(i => i.PartQty !== undefined && i.PartQty !== "")
+        console.log(list)
+        setdialogitems(list)
+        console.log("dialogitems", dialogitems, dialogitems.length)
 
-const filterPartList = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue: string) : void =>{
-    setItems(
-        newValue ? allItems.filter(i => (i.PartID.toLowerCase().indexOf(newValue) > -1) || (i.PartDescription.toLowerCase().indexOf(newValue.toLowerCase()) > -1)) : allItems,
-    );
-};
+    }
+
+    useEffect(() => {
+        filterPartInfo()
+    }, [allItems])
+    const submitFunction = async (): Promise<void> => {
+
+        //const resultRequestor: IWebEnsureUserResult = await sp.web.ensureUser("i:0#.f|membership|" + userEmail);
+        const jsonData: { [key: string]: object } = {};
+        const templist = [];
+        for (let i = 0; i < dialogitems.length; i++) {
+            templist[i] = dialogitems[i];
+            jsonData[i + 1] = dialogitems[i];
+        }
+        console.log("temp", jsonData)
+        console.log("selectedReceiverID", selectedReceiverID)
+        console.log("myEntity?.ID", myEntity?.ID)
+        const request = {
+            SenderId: myEntity?.ID,
+            ReceivedByDate: DateValue,
+            ReceiverId: selectedReceiverID,
+            PartJSON: JSON.stringify(jsonData),
+            DeliveryLocationandCountry: address
+
+        }
+        let promiss
+        addRequest({ request }).then(promises => { console.log("promiss", promises, typeof (promises)); promiss = promises }).catch(err => console.log("err", err));
+        console.log("typeof promises==='string'", typeof promiss === "string")
+        if (typeof promiss !== "string") {
+            setDialogContent((dialogContent) => ({ ...dialogContent, title: "Submit successfully", subText: "The request will be listed in some minutes." }))
+            setDialogButtonVisible(false)
+        } else {
+            setDialogContent((dialogContent) => ({ ...dialogContent, title: "Submit Failuer" }))
+        }
+
+
+
+    };
+
+    const validateRequest = (): void => {
+        const templist = [];
+        let flag = true;
+        setDialogVisible(false)
+        for (let i = 0; i < dialogitems.length; i++) {
+            if (/^\d+$/.test(dialogitems[i].PartQty) && dialogitems[i].PartQty !== "") {
+                templist.push(dialogitems[i])
+            }
+            setdialogitems(templist)
+        }
+        sethinterrormessage(null);
+        // console.log("listtemp1",templist)
+
+        for (let i = 0; i < dialogitems.length; i++) {
+            // console.log("会执行吗", !(/^\d+$/.test(dialogitems[i].Count)))
+            if (!(/^\d+$/.test(dialogitems[i].PartQty)) && dialogitems[i].PartQty !== "") {
+                sethinterrormessage("Please checked for non-numeric values in the part count")
+                flag = false
+                toggleHideDialog();
+                break;
+
+            }
+
+
+        }
+        console.log("error", hinterrormessage)
+        console.log("flag", flag)
+        //console.log("listtemp",templist)
+        if (flag) {
+            if (selectedReceiverType === null || selectedReceiverType === undefined) {
+                sethinterrormessage("Please check if Receiver is selected");
+                setDialogVisible(false)
+                toggleHideDialog();
+                return
+            } else if (dialogitems.length === 0) {
+                sethinterrormessage("Please fill in at least one part of the information");
+                setDialogVisible(false)
+                toggleHideDialog();
+                return
+            } else {
+                sethinterrormessage(null);
+                setDialogVisible(true)
+                toggleHideDialog();
+            }
+        }
+    }
+
     return (
         <section>
             <Stack verticalAlign="center" horizontal>
-                <Label> Request By:</Label>
-                <Label> {myEntity?.Name}</Label>
+                <Label style={{ textAlign: 'left', width: 200 }}> Request By:</Label>
+                <Label style={{ fontFamily: '"Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif' }}> {myEntity?.Name}</Label>
             </Stack>
-            <Stack><Label> Receiver:</Label>
+            <Stack verticalAlign="center" horizontal style={stackClass}>
+                <Label style={{ textAlign: 'left', width: 200 }}> Receiver:</Label>
                 <Dropdown options={receiverTypeOptions}
-                    placeholder="Select type"
+                    placeholder="Select "
                     onChange={onChange}
+                    styles={dropdownStyles}
                     selectedKey={selectedReceiverType ? selectedReceiverType.key : undefined}
 
                 />
                 <Dropdown
                     options={options}
-                    placeholder="Select type"
+                    styles={dropdownStyles}
+                    placeholder="Select "
                     onChange={receiverNameonChange}
 
                 />
             </Stack>
-            <Stack>
-                <Label>
+            <Stack verticalAlign="center" horizontal style={stackClass}>
+                <Label style={{ textAlign: 'left', width: 200 }}>
                     Date Needed:
                 </Label>
                 <DatePicker
                     placeholder="Select date"
                     minDate={minDate}
                     value={minDate}
+                    styles={datepickerStyles}
                     onSelectDate={(date) => {
                         console.log(date)
                         setDateValue(date);
                     }}
                 />
             </Stack>
-            <Stack>
-                <Label>
+            <Stack verticalAlign="center" horizontal style={stackClass}>
+                <Label style={{ textAlign: 'left', width: 200 }}>
                     Delevery Address:
                 </Label>
                 <Label>
                     {address}
                 </Label>
             </Stack>
-            <Stack  >
-                <Label style={{ textAlign: 'left', width: 200 }}>Filter by Emballage Number:</Label><TextField 
-                onChange={filterPartList}
-                />
+            <Stack verticalAlign="center" horizontal style={stackClass}>
+                <Label style={{ textAlign: 'left', width: 200 }}>Filter by Emballage Number:</Label>
+                <TextField style={{ width: 400, height: 25 }} onChange={filterPartList} />
             </Stack>
 
-            <DetailsList items={items} columns={columns}
-            />
+            <DetailsList
+                items={items}
+                columns={columns}
+                selectionMode={SelectionMode.none} />
 
+            <Stack horizontal style={{ float: 'right', marginRight: 10 }}>
+                <PrimaryButton secondaryText="Opens the Sample Dialog" onClick={validateRequest} text="Submit" style={{ marginRight: 10 }} />
+                <DefaultButton onClick={() => {
+                    //const returnUrl = window.location.href;
+                    //`${ctx.context._pageContext._web.absoluteUrl}/sitepages/GI.aspx`;
+                    //document.location.href = returnUrl.slice(0, returnUrl.indexOf("SitePage")) + "SitePage/Home.aspx"
+                    document.location.href = `${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx`;
+                }} text="Cancel" />
+            </Stack>
+            {dialogVisible ?
+                <Dialog
+                    hidden={hideDialog}
+                    onDismiss={() => { document.location.href = `${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx` }}
+                    dialogContentProps={dialogContent}
+                    modalProps={modalProps}>
+                    {dialogButtonVisible && dialogitems.map((item: Iitem) =>
+                        <div key={item.PartID}>
+                            <ul style={{ paddingInlineStart: 0 }}>{item.PartID}{","} {item.PartDescription}{","} {item.PartQty}</ul>
+                        </div>
+                    )}
+                    <DialogFooter>
+                        <DefaultButton onClick={() => { document.location.href = `${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx` }} text="OK" style={{ display: !dialogButtonVisible ? 'block' : 'none' }} />
+                        <PrimaryButton onClick={submitFunction} text="Yes" style={{ display: dialogButtonVisible ? 'block' : 'none' }} />
+                        <DefaultButton onClick={toggleHideDialog} text="Cancel" style={{ display: dialogButtonVisible ? 'block' : 'none' }} />
+                    </DialogFooter>
+                </Dialog>
+                : <Dialog
+                    dialogContentProps={dialogContent}
+                    modalProps={modalProps}
+                    hidden={hideDialog}
+                    onDismiss={toggleHideDialog}>
+                    <div>
+                        {hinterrormessage}
+                    </div>
+                </Dialog>
 
+            }
         </section>
     )
 }
