@@ -196,7 +196,7 @@ export default memo(function index() {
                                 rowitem.ID
                             )}].ConfirmationFromReceiver`}
                             component={FormikCheckbox}
-                            disabled={false}
+                            disabled={true}
                         //disabled={isFreezed(rowitem.ID)}
                         />
                     );

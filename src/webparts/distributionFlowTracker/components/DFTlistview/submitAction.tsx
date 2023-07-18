@@ -95,9 +95,9 @@ export default function SubmitAction({
                 isOpen={hideConfirmDialog}
                 onDismiss={toggleHideConfirmDialog}
                 confirmationDetails={{
-                    title: "Confirmation will be saved",
+                    title: "Data will be saved",
                     subTitle:
-                        "After Confirmation data will be saved, Do you want to continue?"
+                        "Do you want to continue?"
                 }}
                 confirmationYesCallback={() => {
                     saveData().catch(console.log);

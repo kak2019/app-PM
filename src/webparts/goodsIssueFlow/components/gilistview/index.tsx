@@ -175,9 +175,9 @@ export default memo(function index() {
       maxWidth: 120,
       isResizable: true,
       sorting: false,
-      render: useCallback((rowitem:IRequestListItem)=>{
+      render: useCallback((rowitem: IRequestListItem) => {
         return dayjs(rowitem.DateNeeded).fromNow();
-      },[listviewItems]),
+      }, [listviewItems]),
     },
     {
       name: "DeliveryLocationAndCountry",
@@ -341,7 +341,8 @@ export default memo(function index() {
                 rowitem.ID
               )}].ConfirmationFromSupplier`}
               component={FormikCheckbox}
-              disabled={isFreezed(rowitem.ID)}
+              disabled={true}
+            //disabled={isFreezed(rowitem.ID)}
             />
           );
         },
@@ -432,7 +433,7 @@ export default memo(function index() {
                 render={(arrayHelpers) => (
                   <div>
                     {props.values.formlvItems &&
-                    props.values.formlvItems.length > 0 ? (
+                      props.values.formlvItems.length > 0 ? (
                       <ListView
                         items={listviewItems}
                         viewFields={listviewFields}
@@ -443,7 +444,7 @@ export default memo(function index() {
                         className={styles.listWrapper}
                         listClassName={styles.list}
                       />
-                    ) :null}
+                    ) : null}
                     {props.errors && <AllErrors errors={props.errors} />}
                   </div>
                 )}
@@ -451,8 +452,8 @@ export default memo(function index() {
             </Form>
           )}
         </Formik>
-      ) :  (
-        (isFetchingRequest===RequestStatus.Idle)?<SimpleEmpty/>:null
+      ) : (
+        (isFetchingRequest === RequestStatus.Idle) ? <SimpleEmpty /> : null
       )}
     </>
   );
