@@ -6,7 +6,7 @@ import { useConst } from '@fluentui/react-hooks';
 import { Stack } from '@fluentui/react/lib/Stack';
 import { Text } from '@fluentui/react/lib/Text';
 import { Label } from '@fluentui/react/lib/Label';
-import { DefaultButton,  DetailsListLayoutMode,  PrimaryButton, TextField } from 'office-ui-fabric-react';
+import { DefaultButton, DetailsListLayoutMode, PrimaryButton, TextField } from 'office-ui-fabric-react';
 import { REQUESTSCONST } from '../../../common/features/requests';
 import { useContext, useEffect, useState } from "react";
 import { DetailsList, IColumn, SelectionMode } from '@fluentui/react/lib/DetailsList';
@@ -273,7 +273,7 @@ export default function DistributionFlowView(): JSX.Element {
         filterPartInfo()
     }, [allItems])
 
-    
+
     const submitFunction = async (): Promise<void> => {
 
         //const resultRequestor: IWebEnsureUserResult = await sp.web.ensureUser("i:0#.f|membership|" + userEmail);
@@ -410,7 +410,9 @@ export default function DistributionFlowView(): JSX.Element {
                 items={items}
                 columns={columns}
                 selectionMode={SelectionMode.none}
-                layoutMode={DetailsListLayoutMode.justified} />
+                layoutMode={DetailsListLayoutMode.justified}
+                isHeaderVisible={true}
+                onShouldVirtualize={() => false} />
 
             <Stack horizontal style={{ float: 'right', marginRight: 10 }}>
                 <PrimaryButton secondaryText="Opens the Sample Dialog" onClick={validateRequest} text="Submit" style={{ marginRight: 10 }} />
