@@ -47,7 +47,7 @@ export default function RequestView(): JSX.Element {
   const [buttonvisible, setbuttonVisible ] = React.useState<boolean>(true)
   const [dialogContentProps,setdialogContentProps] = React.useState( {
     type: DialogType.normal,
-    title: 'Alert',
+    title: 'Confirmation',
     closeButtonAriaLabel: 'Close',
     subText: 'The following parts will be included:',
   })
@@ -278,7 +278,7 @@ export default function RequestView(): JSX.Element {
     addRequest({ request }).then(promises=>{console.log("promiss",promises,typeof(promises));promiss=promises}).catch(err=>console.log("err",err));
    console.log("typeof promises==='string'",typeof promiss==="string")
    if(typeof promiss!=="string"){
-   setdialogContentProps((dialogContentProps)=>({...dialogContentProps,title: "Alert",subText:"Submitted successfully! The request will be listed in some minutes."}))
+   setdialogContentProps((dialogContentProps)=>({...dialogContentProps,title: "Confirmation",subText:"Submitted successfully! The request will be listed in some minutes."}))
    setbuttonVisible(false)
    
   }else{
