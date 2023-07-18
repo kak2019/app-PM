@@ -104,6 +104,7 @@ const fetchBySender = async (arg: {
 		                        <FieldRef Name="ConfirmationFromReceiver"/>
 		                        <FieldRef Name="Field1"/>
 		                        <FieldRef Name="Field2"/>
+                                <FieldRef Name="Created"/>
 	                        </ViewFields>
 	                        <RowLimit>5000</RowLimit>
                         </View>`
