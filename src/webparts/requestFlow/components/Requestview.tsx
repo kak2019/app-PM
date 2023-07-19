@@ -10,7 +10,7 @@ import {
 } from '@fluentui/react';
 import { useConst } from '@fluentui/react-hooks';
 import { DetailsList, DetailsListLayoutMode, SelectionMode, IColumn } from '@fluentui/react/lib/DetailsList';
-import { IDetailsListStyles, TextField } from 'office-ui-fabric-react';
+import { IDetailsColumnStyles, IDetailsListStyles, TextField } from 'office-ui-fabric-react';
 import { REQUESTSCONST } from '../../../common/features/requests';
 import { useEntities } from '../../../common/hooks';
 import { useContext, useEffect } from "react";
@@ -25,6 +25,7 @@ import { IWebEnsureUserResult } from '@pnp/sp/site-users/types';
 import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
 import { useId, useBoolean } from '@fluentui/react-hooks';
 import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
+import styles from './RequestFlow.module.scss'
 // interface IPartJson {
 //   [ID:number]: {
 //     "PartID": string,
@@ -184,6 +185,13 @@ export default function RequestView(): JSX.Element {
     },
     [],
   );
+  const headerStyle: Partial<IDetailsColumnStyles> = {
+    cellTitle: {
+      color:"red",
+      fontSize:"12px"
+      //红的好使, 字体大小不好使
+    }
+  }
   const dialogcolumns: IColumn[] = [
     {
       key: 'column1',
@@ -194,9 +202,11 @@ export default function RequestView(): JSX.Element {
       fieldName: 'name',
       minWidth: 45,
       maxWidth: 45,
+      //styles:headerStyle,
       //onColumnClick: this._onColumnClick,
+      headerClassName:styles.temp,
       onRender: (item: Iitem) => (
-        <Text>{item.PartID}</Text>
+        <Text style={{fontSize:12}}>{item.PartID}</Text>
       ),
     },
     {
@@ -208,9 +218,10 @@ export default function RequestView(): JSX.Element {
       fieldName: 'name',
       minWidth: 251,
       maxWidth: 251,
+      styles:headerStyle,
       //onColumnClick: this._onColumnClick,
       onRender: (item: Iitem) => (
-        <Text>{item.PartDescription}</Text>
+        <Text style={{fontSize:12}}>{item.PartDescription}</Text>
       ),
     }, {
       key: 'column3',
@@ -221,13 +232,14 @@ export default function RequestView(): JSX.Element {
       fieldName: 'name',
       minWidth: 71,
       maxWidth: 71,
+      styles:headerStyle,
       //onColumnClick: this._onColumnClick,
       onRender: (item: Iitem, i: number) => (
         //<TextField key={item.PartID} value={item.Count} errorMessage={item.ErrorMessage} onChange={(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => onChangeSecondTextFieldValue(event, newValue, item.PartID)} />
-        <Text>{item.Count}</Text>
+        <Text style={{fontSize:12}}>{item.Count}</Text>
       ),
     }]
-
+   
   const columns: IColumn[] = [
     {
       key: 'column1',
@@ -252,6 +264,7 @@ export default function RequestView(): JSX.Element {
       fieldName: 'name',
       minWidth: 251,
       maxWidth: 251,
+      
       //onColumnClick: this._onColumnClick,
       onRender: (item: Iitem) => (
         <Text>{item.PartDescription}</Text>
@@ -406,7 +419,7 @@ export default function RequestView(): JSX.Element {
     for (let i = 0; i < dialogitems.length; i++) {
       // console.log("会执行吗", !(/^\d+$/.test(dialogitems[i].Count)))
       if (!(/^\d+$/.test(dialogitems[i].Count)) && dialogitems[i].Count !== "") {
-        sethinterrormessage("Please checked for non-numeric values in the part count")
+        sethinterrormessage("Please update the non-numeric values in the part Qty")
         flag = false
         toggleHideDialog();
         break;
