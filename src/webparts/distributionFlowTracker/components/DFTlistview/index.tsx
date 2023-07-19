@@ -2,7 +2,7 @@ import { memo, useCallback, useContext, useEffect, useState } from "react"
 import AppContext from "../../../../common/AppContext"
 import { useDistributions } from "../../../../common/hooks/useDistributions";
 import { IDistributionListItem } from "../../../../common/model";
-import { IDropdownStyles, IStackTokens, ITextFieldStyles, SelectionMode, Stack, mergeStyleSets } from "office-ui-fabric-react";
+import { IDropdownStyles, IStackTokens, ITextFieldStyles, SelectionMode, Stack } from "office-ui-fabric-react";
 import { IViewField, ListView } from "@pnp/spfx-controls-react/lib/ListView";
 import { Field, FieldArray, Form, Formik } from "formik";
 import * as React from "react";
@@ -79,39 +79,6 @@ export default memo(function index() {
     };
     const stackTokens: IStackTokens = { childrenGap: 8 };
     const listviewFields: IViewField[] = [
-        // {
-        //     name: "Created",
-        //     displayName: "Create Time",
-        //     minWidth: 165,
-        //     maxWidth: 300,
-        //     isResizable: true,
-        //     sorting: false,
-        //     render: useCallback(
-        //         (rowitem: IDistributionListItem) => {
-        //             return (
-        //                 <Field
-        //                     name={`formlvItems[${getIndexByID(
-        //                         rowitem.ID
-        //                     )}].Created`}
-        //                     component={FormikDatePicker}
-        //                     className={dataPickerClass.control}
-        //                     placeholder="Select a date..."
-        //                     ariaLabel="Select a date"
-        //                     disabled={true}
-        //                 />
-        //             );
-        //         },
-        //         [listviewItems]
-        //     ),
-        // },
-        {
-            name: "Created",
-            displayName: "Create Time",
-            minWidth: 100,
-            maxWidth: 120,
-            isResizable: true,
-            sorting: true,
-        },
         {
             name: "DistributionNumber",
             displayName: "Distribution Number",
@@ -286,6 +253,14 @@ export default memo(function index() {
                 },
                 [listviewItems]
             ),
+        },
+        {
+            name: "Created",
+            displayName: "Create Time",
+            minWidth: 100,
+            maxWidth: 120,
+            isResizable: true,
+            sorting: true,
         },
         {
             name: "Actions",

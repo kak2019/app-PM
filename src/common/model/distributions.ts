@@ -16,7 +16,7 @@ export interface IDistributionListItem {
     ConfirmationFromReceiver?: boolean;
     Field1?: string;
     Field2?: string;
-    Created?: Date;
+    Created?: string;
 }
 
 export interface IDistributionFlowTrackerError {

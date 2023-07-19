@@ -20,6 +20,7 @@
     "@pnp/sp": "^3.16.0",
     "@pnp/spfx-controls-react": "^3.11.0",
     "@reduxjs/toolkit": "^1.9.5",
+    "dayjs": "^1.11.9",
     "formik": "^2.4.2",
     "office-ui-fabric-react": "7.185.7",
     "react": "16.13.1",

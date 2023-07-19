@@ -392,6 +392,14 @@ export default memo(function index() {
       ),
     },
     {
+      name: "Created",
+      displayName: "Create Time",
+      minWidth: 100,
+      maxWidth: 120,
+      isResizable: true,
+      sorting: true,
+    },
+    {
       name: "Actions",
       minWidth: 250,
       isResizable: false,

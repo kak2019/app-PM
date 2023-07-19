@@ -4,6 +4,7 @@ import { getSP } from "../../pnpjsConfig";
 import { DISTRIBUTIONCONST } from "./distributionsSlice";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { FeatureKey } from "../../featureKey";
+import * as dayjs from "dayjs";
 
 const fetchById = async (arg: { Id: number }): Promise<IDistributionListItem> => {
     const sp = spfi(getSP());
@@ -35,6 +36,7 @@ const fetchById = async (arg: { Id: number }): Promise<IDistributionListItem> =>
                         <FieldRef Name="ConfirmationFromReceiver"/>
                         <FieldRef Name="Field1"/>
                         <FieldRef Name="Field2"/>
+                        <FieldRef Name="Created"/>
                       </ViewFields>
                       <RowLimit>1</RowLimit>
                     </View>`
@@ -57,7 +59,8 @@ const fetchById = async (arg: { Id: number }): Promise<IDistributionListItem> =>
                     StatusUpdatedBy: JSON.stringify(response.Row[0].StatusUpdatedBy),
                     ConfirmationFromReceiver: response.Row[0].ConfirmationFromReceiver === "Yes",
                     Field1: response.Row[0].Field1,
-                    Field2: response.Row[0].Field2
+                    Field2: response.Row[0].Field2,
+                    Created: dayjs(response.Row[0].Created).format("YYYY/MM/DD HH:mm:ss A")
                 } as IDistributionListItem;
             }
             else {
@@ -130,9 +133,10 @@ const fetchBySender = async (arg: {
                             StatusUpdatedBy: JSON.stringify(item.StatusUpdatedBy),
                             ConfirmationFromReceiver: item.ConfirmationFromReceiver === "Yes",
                             Field1: item.Field1,
-                            Field2: item.Field2
+                            Field2: item.Field2,
+                            Created: dayjs(item.Created).format("YYYY/MM/DD HH:mm:ss A")
                         } as IDistributionListItem)
-                    );
+                    ).sort((a, b) => a.Created > b.Created ? -1 : 1);
                 }
                 else {
                     return [] as IDistributionListItem[]

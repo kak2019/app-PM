@@ -4,6 +4,7 @@ import { getSP } from "../../pnpjsConfig";
 import { REQUESTSCONST } from "./requestsSlice";
 import { FeatureKey } from "../../featureKey";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import * as dayjs from "dayjs";
 
 const fetchById = async (arg: { Id: number }): Promise<IRequestListItem> => {
   const sp = spfi(getSP());
@@ -42,6 +43,7 @@ const fetchById = async (arg: { Id: number }): Promise<IRequestListItem> => {
                         <FieldRef Name="ConfirmationFromSupplier"/>
                         <FieldRef Name="Field1"/>
                         <FieldRef Name="Field2"/>
+                        <FieldRef Name="Created"/>
                       </ViewFields>
                       <RowLimit>1</RowLimit>
                     </View>`,
@@ -69,13 +71,14 @@ const fetchById = async (arg: { Id: number }): Promise<IRequestListItem> => {
             StatusUpdateBy: JSON.stringify(response.Row[0].StatusUpdateBy),
             QtySent: response.Row[0].QtySent,
             DateByWhenItWillReach: response.Row[0].DateByWhenItWillReach,
-            ConfirmationFromSupplier: response.Row[0].ConfirmationFromSupplier==="Yes",
+            ConfirmationFromSupplier: response.Row[0].ConfirmationFromSupplier === "Yes",
             Field1: response.Row[0].Field1,
             Field2: response.Row[0].Field2,
+            Created: dayjs(response.Row[0].Created).format("YYYY/MM/DD HH:mm:ss A")
           } as IRequestListItem;
         }
         else
-        return {} as IRequestListItem;
+          return {} as IRequestListItem;
       })
     return item;
   } catch (err) {
@@ -122,6 +125,7 @@ const fetchByTerminalId = async (arg: {
                           <FieldRef Name="ConfirmationFromSupplier"/>
                           <FieldRef Name="Field1"/>
                           <FieldRef Name="Field2"/>
+                          <FieldRef Name="Created"/>
                         </ViewFields>
                         <RowLimit>5000</RowLimit>
                       </View>`,
@@ -130,32 +134,33 @@ const fetchByTerminalId = async (arg: {
         if (response.Row.length > 0) {
           return response.Row.map(
             (item) =>
-              ({
-                ID: item.ID,
-                Title: item.Title,
-                RequestNumber: item.RequestNumber,
-                RequesterId: JSON.stringify(item.RequesterId),
-                RequesterId_x003a_Name: item.RequesterId_x003a_Name,
-                Requestor: JSON.stringify(item.Requestor),
-                TerminalId: JSON.stringify(item.TerminalId),
-                TerminalId_x003a_Name: item.TerminalId_x003a_Name,
-                PartID: item.PartID,
-                PartDescription: item.PartDescription,
-                Quantity: item.Quantity,
-                DateNeeded: item.DateNeeded,
-                DeliveryLocationAndCountry: item.DeliveryLocationAndCountry,
-                HowMuchCanBeFullfilled: item.HowMuchCanBeFullfilled,
-                Status: item.Status,
-                FullOrPartialFilled: item.FullOrPartialFilled,
-                StatusUpdateBy: JSON.stringify(item.StatusUpdateBy),
-                QtySent: item.QtySent,
-                DateByWhenItWillReach: item.DateByWhenItWillReach,
-                ConfirmationFromSupplier: item.ConfirmationFromSupplier==="Yes",
-                Field1: item.Field1,
-                Field2: item.Field2,
-              } as IRequestListItem)
-          );
-        }else{
+            ({
+              ID: item.ID,
+              Title: item.Title,
+              RequestNumber: item.RequestNumber,
+              RequesterId: JSON.stringify(item.RequesterId),
+              RequesterId_x003a_Name: item.RequesterId_x003a_Name,
+              Requestor: JSON.stringify(item.Requestor),
+              TerminalId: JSON.stringify(item.TerminalId),
+              TerminalId_x003a_Name: item.TerminalId_x003a_Name,
+              PartID: item.PartID,
+              PartDescription: item.PartDescription,
+              Quantity: item.Quantity,
+              DateNeeded: item.DateNeeded,
+              DeliveryLocationAndCountry: item.DeliveryLocationAndCountry,
+              HowMuchCanBeFullfilled: item.HowMuchCanBeFullfilled,
+              Status: item.Status,
+              FullOrPartialFilled: item.FullOrPartialFilled,
+              StatusUpdateBy: JSON.stringify(item.StatusUpdateBy),
+              QtySent: item.QtySent,
+              DateByWhenItWillReach: item.DateByWhenItWillReach,
+              ConfirmationFromSupplier: item.ConfirmationFromSupplier === "Yes",
+              Field1: item.Field1,
+              Field2: item.Field2,
+              Created: dayjs(item.Created).format("YYYY/MM/DD HH:mm:ss A")
+            } as IRequestListItem)
+          ).sort((a, b) => a.Created > b.Created ? -1 : 1);
+        } else {
           return [] as IRequestListItem[];
         }
       })
