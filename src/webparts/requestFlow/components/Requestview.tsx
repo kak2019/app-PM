@@ -67,7 +67,12 @@ export default function RequestView(): JSX.Element {
     type: DialogType.normal,
     title: 'Confirmation',
     closeButtonAriaLabel: 'Close',
-    subText: 'The following parts will be included:',
+    subText: 'The following parts will be included:',    
+    styles: {
+      subText: {
+        marginBottom: '0 0 10px'
+      }
+    }
   })
   const today = useConst(new Date(Date.now()));
   const minDate = useConst(addDays(today, 10));
@@ -105,7 +110,6 @@ export default function RequestView(): JSX.Element {
         }
       },
     }
-
     //main: { maxWidth: 1200 }
   };// main: { maxWidth: 800 }
   const labelId: string = useId('dialogLabel');
@@ -186,8 +190,8 @@ export default function RequestView(): JSX.Element {
     [],
   );
   const headerStyle: Partial<IDetailsColumnStyles> = {
-    cellTitle: {
-      color:"red",
+    cellName: {
+      color:"black",
       fontSize:"12px"
       //红的好使, 字体大小不好使
     }
@@ -202,7 +206,7 @@ export default function RequestView(): JSX.Element {
       fieldName: 'name',
       minWidth: 45,
       maxWidth: 45,
-      //styles:headerStyle,
+      styles:headerStyle,
       //onColumnClick: this._onColumnClick,
       headerClassName:styles.temp,
       onRender: (item: Iitem) => (
@@ -284,7 +288,7 @@ export default function RequestView(): JSX.Element {
       ),
     }]
   const dropdownStyles: Partial<IDropdownStyles> = {
-    dropdown: { width: 400 },
+    root: { width: 400 } 
   };
   // Get Mapping Relationship according Own Terminal ID
   const getMapping = (myterminalID: string): void => {
@@ -500,7 +504,7 @@ export default function RequestView(): JSX.Element {
       </Stack>
       <hr />
       <Stack horizontal verticalAlign="center" style={stackClass}>
-        <Label style={{ textAlign: 'left', width: 200 }}>Filter:</Label><TextField style={{ width: 400, height: 25 }} onChange={_onChangeText} />    {/* //label="Filter by Emballage Number:" */}
+        <Label style={{ textAlign: 'left', width: 200 }}>Filter:</Label><TextField styles={{root: { width: 400 }}} style={{height: 25}} onChange={_onChangeText} />    {/* //label="Filter by Emballage Number:" */}
       </Stack>
       <DetailsList
         items={items}// [{"Emballage Number":"123","Emballage Type":"456" ,"Count":"11"},]
