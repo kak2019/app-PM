@@ -522,7 +522,7 @@ export default function RequestView(): JSX.Element {
           modalProps={dialogmodalProps}
           
         > {
-            <DetailsList
+          buttonvisible && <DetailsList
               items={dialogitems}// [{"Emballage Number":"123","Emballage Type":"456" ,"Count":"11"},]
               //compact={isCompactMode}
               columns={dialogcolumns}
