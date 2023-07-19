@@ -11,10 +11,10 @@ import { DISTRIBUTIONCONST, DistributionStatus } from "../../../../common/featur
 import { FieldUserRenderer } from "@pnp/spfx-controls-react";
 import SubmitAction from "./submitAction";
 import ResetAction from "./resetAction";
-import { formValidationSchema } from "./formValidation";
 import AllErrors from "./allErrors";
 import styles from "./DFTListView.module.scss"
 import SimpleEmpty from "../../../../common/components/Empty";
+//import { formValidationSchema } from "./formValidation";
 
 
 
@@ -297,7 +297,7 @@ export default memo(function index() {
                             actions.setSubmitting(false);
                         }, 1000);
                     }}
-                    validationSchema={formValidationSchema}
+                //validationSchema={formValidationSchema}
                 >
                     {(props) => (
                         <Form>
