@@ -10,7 +10,7 @@ import {
 } from '@fluentui/react';
 import { useConst } from '@fluentui/react-hooks';
 import { DetailsList, DetailsListLayoutMode, SelectionMode, IColumn } from '@fluentui/react/lib/DetailsList';
-import { TextField } from 'office-ui-fabric-react';
+import { IDetailsListStyles, TextField } from 'office-ui-fabric-react';
 import { REQUESTSCONST } from '../../../common/features/requests';
 import { useEntities } from '../../../common/hooks';
 import { useContext, useEffect } from "react";
@@ -38,14 +38,31 @@ interface Iitem {
   "PartID": string,
   "PartDescription": string,
   "Count"?: string,
+  "ErrorMessage"?: string,
 }
 interface IMappingOBJ {
   "Requester": { "Name": string },
   "Terminal": [{ "Name": string, "ID": string }]
 }
 export default function RequestView(): JSX.Element {
-  const [buttonvisible, setbuttonVisible ] = React.useState<boolean>(true)
-  const [dialogContentProps,setdialogContentProps] = React.useState( {
+  const gridStyles: Partial<IDetailsListStyles> = {
+    root: {
+      overflowY: 'scroll',
+      overflowX: 'hidden',
+      selectors: {
+        '& [role=grid]': {
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'start',
+          height: '20vh',
+          minWidth: 500
+        },
+      },
+    },
+
+  };
+  const [buttonvisible, setbuttonVisible] = React.useState<boolean>(true)
+  const [dialogContentProps, setdialogContentProps] = React.useState({
     type: DialogType.normal,
     title: 'Confirmation',
     closeButtonAriaLabel: 'Close',
@@ -61,20 +78,40 @@ export default function RequestView(): JSX.Element {
   const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
   const [isDraggable] = useBoolean(false);
 
-  const dialogStyles = { main: { selectors: {
-    '@media (min-width: 0px)': {
-      height: 220,
-      maxHeight: 500,
-      maxWidth: 650,
-      width: 350
+  const dialogStyles = {
+    main: {
+      selectors: {
+        '@media (min-width: 0px)': {
+          //height: 220,
+          maxHeight: 500,
+          maxWidth: 650,
+          minwidth: 362,
+          width: 600,
+        }
+      }
     }
-  }
-} } ;// main: { maxWidth: 800 }
+    //main: { maxWidth: 1200 }
+  };// main: { maxWidth: 800 }
+  const tempdialogStyles = {
+    main: {
+      selectors: {
+        '@media (min-width: 0px)': {
+          //height: 220,
+          maxHeight: 500,
+          maxWidth: 650,
+          minwidth: 362,
+          width: 600,
+        }
+      },
+    }
+
+    //main: { maxWidth: 1200 }
+  };// main: { maxWidth: 800 }
   const labelId: string = useId('dialogLabel');
   const subTextId: string = useId('subTextLabel');
   const modalProps = React.useMemo(
     () => ({
-      
+
       titleAriaId: labelId,
       subtitleAriaId: subTextId,
       isBlocking: true,
@@ -83,7 +120,21 @@ export default function RequestView(): JSX.Element {
     }),
     [isDraggable, labelId, subTextId],
   );
-  
+  const dialogmodalProps = React.useMemo(
+    () => ({
+
+      titleAriaId: labelId,
+      subtitleAriaId: subTextId,
+      isBlocking: true,
+      styles: tempdialogStyles,
+      //className:styles.dialogSubText
+      //styles: {main:{margin:0}},
+
+
+    }),
+    [isDraggable, labelId, subTextId],
+  );
+
   const dialogContentProps1 = {
     type: DialogType.normal,
     title: 'Error Message',
@@ -122,15 +173,60 @@ export default function RequestView(): JSX.Element {
   const onChangeSecondTextFieldValue = React.useCallback(
     (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string, id?: string) => {
       allItems.forEach((val: Iitem) => {
-        if(val.PartID === id) {
+        if (val.PartID === id) {
           val.Count = newValue || ''
+          if ((/^\d+$/.test(newValue)) || newValue === "") {
+            val.ErrorMessage = ""
+          } else { val.ErrorMessage = "Invaild Value" }
         }
       })
       setAllItems([...allItems])
     },
     [],
   );
-
+  const dialogcolumns: IColumn[] = [
+    {
+      key: 'column1',
+      name: 'Part ID',
+      ariaLabel: 'Column operations for File type, Press to sort on File type',
+      //iconName: 'Page',
+      isIconOnly: false,
+      fieldName: 'name',
+      minWidth: 45,
+      maxWidth: 45,
+      //onColumnClick: this._onColumnClick,
+      onRender: (item: Iitem) => (
+        <Text>{item.PartID}</Text>
+      ),
+    },
+    {
+      key: 'column2',
+      name: 'Part Description',
+      ariaLabel: 'Column operations for File type, Press to sort on File type',
+      //iconName: 'Page',
+      isIconOnly: false,
+      fieldName: 'name',
+      minWidth: 251,
+      maxWidth: 251,
+      //onColumnClick: this._onColumnClick,
+      onRender: (item: Iitem) => (
+        <Text>{item.PartDescription}</Text>
+      ),
+    }, {
+      key: 'column3',
+      name: 'Qty',
+      ariaLabel: 'Column operations for File type, Press to sort on File type',
+      //iconName: 'Page',
+      isIconOnly: false,
+      fieldName: 'name',
+      minWidth: 71,
+      maxWidth: 71,
+      //onColumnClick: this._onColumnClick,
+      onRender: (item: Iitem, i: number) => (
+        //<TextField key={item.PartID} value={item.Count} errorMessage={item.ErrorMessage} onChange={(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => onChangeSecondTextFieldValue(event, newValue, item.PartID)} />
+        <Text>{item.Count}</Text>
+      ),
+    }]
 
   const columns: IColumn[] = [
     {
@@ -171,7 +267,7 @@ export default function RequestView(): JSX.Element {
       maxWidth: 201,
       //onColumnClick: this._onColumnClick,
       onRender: (item: Iitem, i: number) => (
-        <TextField key={item.PartID} value={item.Count} onChange={(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => onChangeSecondTextFieldValue(event, newValue, item.PartID)} />
+        <TextField key={item.PartID} value={item.Count} errorMessage={item.ErrorMessage} onChange={(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => onChangeSecondTextFieldValue(event, newValue, item.PartID)} />
       ),
     }]
   const dropdownStyles: Partial<IDropdownStyles> = {
@@ -246,7 +342,7 @@ export default function RequestView(): JSX.Element {
   //   }
   // },[dialogitems])
   useEffect(() => {
-    filterPartInfo()
+    filterPartInfo();
   }, [allItems])
   const submitFunction = async (): Promise<void> => {
     const resultRequestor: IWebEnsureUserResult = await sp.web.ensureUser("i:0#.f|membership|" + userEmail);
@@ -274,26 +370,26 @@ export default function RequestView(): JSX.Element {
       Delivery_x0020_Address: address
     }
     ////console.log("result",result.)
-    let promiss 
-    addRequest({ request }).then(promises=>{console.log("promiss",promises,typeof(promises));promiss=promises}).catch(err=>console.log("err",err));
-   console.log("typeof promises==='string'",typeof promiss==="string")
-   if(typeof promiss!=="string"){
-   setdialogContentProps((dialogContentProps)=>({...dialogContentProps,title: "Confirmation",subText:"Submitted successfully! The request will be listed in some minutes."}))
-   setbuttonVisible(false)
-   
-  }else{
-    setdialogContentProps((dialogContentProps)=>({...dialogContentProps,title: "Submission Failure"}))
-  }
-  
-  //  a.then((response) => {
-    
-  //     //const returnUrl = window.location.href
-  //     setdialogContentProps((dialogContentProps)=>({...dialogContentProps,title: "Submission Successful"}))
-  //     //document.location.href = returnUrl.slice(0, returnUrl.indexOf("SitePage")) + "SitePages/Home.aspx"
-  //     //document.location.href=`${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx`;
-  //   }).catch((error) => {console.log(error);
-  //     setdialogContentProps((dialogContentProps)=>({...dialogContentProps,title: "Submission Failure"}))})
-    
+    let promiss
+    addRequest({ request }).then(promises => { console.log("promiss", promises, typeof (promises)); promiss = promises }).catch(err => console.log("err", err));
+    console.log("typeof promises==='string'", typeof promiss === "string")
+    if (typeof promiss !== "string") {
+      setdialogContentProps((dialogContentProps) => ({ ...dialogContentProps, title: "Confirmation", subText: "Submitted successfully! The request will be listed in some minutes." }))
+      setbuttonVisible(false)
+
+    } else {
+      setdialogContentProps((dialogContentProps) => ({ ...dialogContentProps, title: "Submission Failure" }))
+    }
+
+    //  a.then((response) => {
+
+    //     //const returnUrl = window.location.href
+    //     setdialogContentProps((dialogContentProps)=>({...dialogContentProps,title: "Submission Successful"}))
+    //     //document.location.href = returnUrl.slice(0, returnUrl.indexOf("SitePage")) + "SitePages/Home.aspx"
+    //     //document.location.href=`${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx`;
+    //   }).catch((error) => {console.log(error);
+    //     setdialogContentProps((dialogContentProps)=>({...dialogContentProps,title: "Submission Failure"}))})
+
   }
 
   const stackClass = {
@@ -303,12 +399,7 @@ export default function RequestView(): JSX.Element {
     const templist = [];
     let flag = true;
     setdialogvisible(false)
-    for (let i = 0; i < dialogitems.length; i++) {
-      if (/^\d+$/.test(dialogitems[i].Count) && dialogitems[i].Count !== "") {
-        templist.push(dialogitems[i])
-      }
-      setdialogitems(templist)
-    }
+    
     sethinterrormessage(null);
     // console.log("listtemp1",templist)
 
@@ -319,15 +410,23 @@ export default function RequestView(): JSX.Element {
         flag = false
         toggleHideDialog();
         break;
-
+        
       }
-
-
+      
+  }
+  if(flag){
+    for (let i = 0; i < dialogitems.length; i++) {
+      if (/^\d+$/.test(dialogitems[i].Count) && dialogitems[i].Count !== "") {
+        templist.push(dialogitems[i])
+      }
+      setdialogitems(templist)
     }
+    
+  }
     console.log("error", hinterrormessage)
     console.log("flag", flag)
     //console.log("listtemp",templist)
-    if (flag) {
+    if (flag ) {
       if (selectedItem === null || selectedItem === undefined) {
         sethinterrormessage("Please check if Terminal is selected");
         setdialogvisible(false)
@@ -342,6 +441,7 @@ export default function RequestView(): JSX.Element {
         sethinterrormessage(null);
         setdialogvisible(true)
         toggleHideDialog();
+        setdialogContentProps((dialogContentProps)=>({...dialogContentProps,subText : `The following ${dialogitems.length} ${dialogitems.length===1?"part":"parts"} will be included:`}))
       }
     }
 
@@ -399,6 +499,7 @@ export default function RequestView(): JSX.Element {
         layoutMode={DetailsListLayoutMode.justified}
         isHeaderVisible={true}
         onShouldVirtualize={() => false}
+
       //onItemInvoked={this._onItemInvoked}
       />
       <Stack horizontal style={{ float: 'right', marginRight: 10 }}>
@@ -407,35 +508,52 @@ export default function RequestView(): JSX.Element {
           //const returnUrl = window.location.href;
           //`${ctx.context._pageContext._web.absoluteUrl}/sitepages/GI.aspx`;
           //document.location.href = returnUrl.slice(0, returnUrl.indexOf("SitePage")) + "SitePage/Home.aspx"
-          document.location.href=`${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx`;
+          document.location.href = `${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx`;
         }} text="Cancel" />
       </Stack>
-      
-      {dialogvisible ?
-        <Dialog 
-          hidden={hideDialog}
-          onDismiss={()=>{if(!buttonvisible){document.location.href=`${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx`}else{toggleHideDialog()}
-        }}
-          dialogContentProps={dialogContentProps}
-          modalProps={modalProps}
-        > {
 
-          buttonvisible&&dialogitems.map((item: Iitem) =>
-              <div key={item.PartID}>
-                <ul style={{paddingInlineStart:0}}>{item.PartID}{","} {item.PartDescription}{","} {item.Count}</ul>
-              </div>
-            )
+      {dialogvisible ?
+        <Dialog
+          hidden={hideDialog}
+          onDismiss={() => {
+            if (!buttonvisible) { document.location.href = `${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx` } else { toggleHideDialog() }
+          }}
+          dialogContentProps={dialogContentProps}
+          modalProps={dialogmodalProps}
+          
+        > {
+            <DetailsList
+              items={dialogitems}// [{"Emballage Number":"123","Emballage Type":"456" ,"Count":"11"},]
+              //compact={isCompactMode}
+              columns={dialogcolumns}
+              selectionMode={SelectionMode.none}
+              getKey={_getKey}
+              setKey="PartID"
+              layoutMode={DetailsListLayoutMode.justified}
+              isHeaderVisible={true}
+              onShouldVirtualize={() => false}
+              styles={gridStyles}
+
+            //onItemInvoked={this._onItemInvoked}
+            />
+
+            // buttonvisible && dialogitems.map((item: Iitem) =>
+            //   <div key={item.PartID}>
+            //     <ul style={{ paddingInlineStart: 0 }}>{item.PartID}{","} {item.PartDescription}{","} {item.Count}</ul>
+            //   </div>
+            // )
+
           }
 
 
           <DialogFooter>
-          <DefaultButton onClick={()=>{document.location.href=`${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx`}} text="OK" style={{display:!buttonvisible?'block':'none'}}/>
-            <PrimaryButton onClick={submitFunction} text="Yes"  style={{display:buttonvisible?'block':'none'}}/>
-            <DefaultButton onClick={toggleHideDialog} text="Cancel" style={{display:buttonvisible?'block':'none'}}/>
-            
+            <DefaultButton onClick={() => { document.location.href = `${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx` }} text="OK" style={{ display: !buttonvisible ? 'block' : 'none' }} />
+            <PrimaryButton onClick={submitFunction} text="Yes" style={{ display: buttonvisible ? 'block' : 'none' }} />
+            <DefaultButton onClick={toggleHideDialog} text="Cancel" style={{ display: buttonvisible ? 'block' : 'none' }} />
+
           </DialogFooter>
         </Dialog>
-       
+
         : <Dialog
           dialogContentProps={dialogContentProps1}
           modalProps={modalProps}
@@ -445,13 +563,12 @@ export default function RequestView(): JSX.Element {
             {hinterrormessage}
           </div>
         </Dialog>
-         
+
       }
-       
+
     </section>
   )
 
 }
 
 
- 
