@@ -92,7 +92,7 @@ export default function RequestView(): JSX.Element {
           maxHeight: 500,
           maxWidth: 650,
           minwidth: 362,
-          width: 600,
+          width: 400,
         }
       }
     }
@@ -142,7 +142,7 @@ export default function RequestView(): JSX.Element {
 
   const dialogContentProps1 = {
     type: DialogType.normal,
-    title: 'Error Message',
+    title: 'Error ',
     closeButtonAriaLabel: 'Close',
     subText: '',
   };
@@ -182,7 +182,7 @@ export default function RequestView(): JSX.Element {
           val.Count = newValue || ''
           if ((/^\d+$/.test(newValue)) || newValue === "") {
             val.ErrorMessage = ""
-          } else { val.ErrorMessage = "Invaild Value" }
+          } else { val.ErrorMessage = "Only integer is allowed" }
         }
       })
       setAllItems([...allItems])
@@ -229,7 +229,7 @@ export default function RequestView(): JSX.Element {
       ),
     }, {
       key: 'column3',
-      name: 'Qty',
+      name: 'Quantity',
       ariaLabel: 'Column operations for File type, Press to sort on File type',
       //iconName: 'Page',
       isIconOnly: false,
@@ -275,7 +275,7 @@ export default function RequestView(): JSX.Element {
       ),
     }, {
       key: 'column3',
-      name: 'Qty',
+      name: 'Quantity',
       ariaLabel: 'Column operations for File type, Press to sort on File type',
       //iconName: 'Page',
       isIconOnly: false,
@@ -423,7 +423,7 @@ export default function RequestView(): JSX.Element {
     for (let i = 0; i < dialogitems.length; i++) {
       // console.log("会执行吗", !(/^\d+$/.test(dialogitems[i].Count)))
       if (!(/^\d+$/.test(dialogitems[i].Count)) && dialogitems[i].Count !== "") {
-        sethinterrormessage("Please update the non-numeric values in the part Qty")
+        sethinterrormessage("Only integer is allowed in Quantity field.")
         flag = false
         toggleHideDialog();
         break;
@@ -579,6 +579,9 @@ export default function RequestView(): JSX.Element {
           <div>
             {hinterrormessage}
           </div>
+          <DialogFooter>
+            <PrimaryButton onClick={toggleHideDialog} text='OK'/>
+          </DialogFooter>
         </Dialog>
 
       }
