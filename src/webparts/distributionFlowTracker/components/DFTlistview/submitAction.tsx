@@ -8,6 +8,7 @@ import * as React from "react";
 import { PrimaryButton } from "office-ui-fabric-react";
 import ConfirmationBox from "../../../../common/components/Box/ConfirmationBox";
 import SuccessConfirmationBox from "../../../../common/components/Box/SuccessConfirmationBox";
+import { memo } from "react";
 
 interface ISubmitAction {
     disabled: boolean;
@@ -20,7 +21,7 @@ interface IFormErrors {
     formlvItems?: IDistributionFlowTrackerError[];
 }
 
-export default function SubmitAction({
+export default memo(function SubmitAction({
     disabled,
     idx
 }: ISubmitAction): JSX.Element {
@@ -49,8 +50,6 @@ export default function SubmitAction({
 
     const saveData = async (): Promise<void> => {
         toggleIsSubmitting();
-        console.log("Submit part")
-        console.log(values);
         const rowValues = { ...(values as IFormValues).formlvItems[idx] };
         const distribution = {
             ID: rowValues.ID,
@@ -76,11 +75,13 @@ export default function SubmitAction({
 
         const rowValues = { ...(values as IFormValues).formlvItems[idx] };
         changeDistributionId(rowValues.ID);
-        if (rowValues.ConfirmationFromReceiver) {
-            toggleHideConfirmDialog();
-            return;
-        }
-        saveData().catch(console.log);
+        toggleHideConfirmDialog();
+        return;
+        // if (rowValues.ConfirmationFromReceiver || !rowValues.ConfirmationFromReceiver) {
+        //     toggleHideConfirmDialog();
+        //     return;
+        // }
+        // saveData().catch(console.log);
     };
     return (
         <div style={{ width: 120 }}>
@@ -112,4 +113,4 @@ export default function SubmitAction({
             />
         </div>
     );
-}
+});
