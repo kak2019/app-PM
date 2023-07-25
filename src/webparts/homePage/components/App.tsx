@@ -7,6 +7,7 @@ import { DefaultPalette } from "@fluentui/react/lib/Styling";
 import AppContext from "../../../common/AppContext";
 import { Spinner, SpinnerSize } from "@fluentui/react/lib/Spinner";
 import { useEntities } from "../../../common/hooks";
+import { IIconProps } from "office-ui-fabric-react";
 
 interface IuserRoleobj {
   CreateFlowV: boolean;
@@ -24,6 +25,8 @@ const USER_ROLE = {
   kdfc: "KDFactory",
   wh: "WareHouse",
 };
+const addIcon: IIconProps = {iconName: 'Add' };
+
 export default memo(function App() {
   const ctx = useContext(AppContext);
   const userEmail = ctx.context?._pageContext?._user?.email;
@@ -106,6 +109,8 @@ export default memo(function App() {
     <section>
       {viewVisible ? (
         <Stack enableScopedSelectors styles={stackStyles}>
+          <Stack>
+          Request
           <DefaultButton
             text="Create New Request"
             className={
@@ -115,6 +120,7 @@ export default memo(function App() {
             }
             disabled={!userRoleobj.CreateFlowV}
             href={`${webURL ? webURL + "/" : ""}sitepages/request.aspx`}
+            iconProps={addIcon}
           />
 
           <DefaultButton
@@ -138,7 +144,7 @@ export default memo(function App() {
             disabled={!userRoleobj.GoodIssueV}
             href={`${webURL ? webURL + "/" : ""}sitepages/GI.aspx`}
           />
-
+  </Stack>
           <DefaultButton
             text="Create New Distribution Request"
             className={
