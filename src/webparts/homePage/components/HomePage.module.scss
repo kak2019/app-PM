@@ -35,16 +35,16 @@
 
 .homePageButton{
   background-color:white;
-  color: gray;
+  color: Black;
   margin-bottom: 8px;
   display: block;
   width: 240px;
   height: 45px;
-  font-size: 14px;
+  font-size: 12px;
   border-radius: 4px;
   border-color: rgb(214, 214, 214);
   margin-right: 10px;
-  // box-shadow: rgba(189, 190, 190, 0.3) 0px 1px 1px 0px, rgba(60, 64, 67, 0.15) 0px 2px 3px 2px;
+  box-shadow: rgba(189, 190, 190, 0.3) 0px 1px 1px 0px, rgba(60, 64, 67, 0.15) 0px 2px 3px 2px;
   svg {
     width: 24px;
     height: 24px;
@@ -58,5 +58,10 @@
 }
 
 .section {
-  margin-bottom: 20px;
+  margin-bottom: 35px;
+}
+
+.parttitle{
+  font-Weight: bold;
+  margin-bottom:10px;
 }

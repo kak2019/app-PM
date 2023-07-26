@@ -111,16 +111,14 @@ export default memo(function App() {
       margin: 0,
     },
   };
-  const titleStyles = {
-    fontWeight: 'bold'
-  }
+  
 
   return (
     <section>
       {viewVisible ? (
         <Stack enableScopedSelectors styles={stackStyles}>
-          <div className={styles.section}>
-            <div style={titleStyles}>Request</div>
+          <div className={styles.section} style={{display:(userRoleobj.CreateFlowV||userRoleobj.RequestFlowV||userRoleobj.GoodIssueV)?"block":"none"}}>
+            <div className={styles.parttitle} style={{display:(userRoleobj.CreateFlowV||userRoleobj.RequestFlowV||userRoleobj.GoodIssueV)?"block":"none"}}>Request</div>
             <Stack enableScopedSelectors horizontal horizontalAlign="start">
             
             <DefaultButton
@@ -168,7 +166,7 @@ export default memo(function App() {
           </div>
 
           <div className={styles.section}>
-            <div style={titleStyles}>Distribution</div>
+            <div className={styles.parttitle}>Distribution</div>
               <Stack enableScopedSelectors horizontal horizontalAlign="start">
               <DefaultButton
                 text="New Distribution Request"
@@ -215,7 +213,7 @@ export default memo(function App() {
           </div>
 
           <div className={styles.section}>
-            <div style={titleStyles}>Others</div>
+            <div className={styles.parttitle}>Others</div>
             <Stack enableScopedSelectors horizontal horizontalAlign="start">
               <DefaultButton
                 text="Inventory Management"
