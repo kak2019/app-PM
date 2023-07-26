@@ -9,7 +9,7 @@ import { Label } from '@fluentui/react/lib/Label';
 import { DefaultButton, DetailsListLayoutMode, IDetailsListStyles, PrimaryButton, TextField } from 'office-ui-fabric-react';
 import { REQUESTSCONST } from '../../../common/features/requests';
 import { useContext, useEffect, useState } from "react";
-import { DetailsList, IColumn, SelectionMode,  } from '@fluentui/react/lib/DetailsList';
+import { DetailsList, IColumn, SelectionMode, } from '@fluentui/react/lib/DetailsList';
 import { getSP } from "../../../common/pnpjsConfig";
 import { spfi } from "@pnp/sp";
 import { Dropdown, IDropdownOption, IDropdownStyles } from "office-ui-fabric-react/lib/Dropdown";
@@ -73,7 +73,18 @@ export default function DistributionFlowView(): JSX.Element {
     const [allItems, setallItems] = React.useState<Iitem[]>(REQUESTSCONST.PART_LIST)
     const [dialogitems, setdialogitems] = React.useState<Iitem[]>([])
     //Dialog
-    const dialogStyles = { main: { maxWidth: 450 } };
+    const dialogStyles = { main: {
+        selectors: {
+          '@media (min-width: 0px)': {
+            //height: 220,
+            maxHeight: 500,
+            maxWidth: 650,
+            minwidth: 362,
+            width: 400,
+          }
+        }
+      }};
+      //main: { maxWidth: 1200 } };
     const labelId: string = useId('dialogLabel');
     const subTextId: string = useId('subTextLabel');
     const [isDraggable] = useBoolean(false);
@@ -89,35 +100,35 @@ export default function DistributionFlowView(): JSX.Element {
     );
     const tempdialogStyles = {
         main: {
-          selectors: {
-            '@media (min-width: 0px)': {
-              //height: 220,
-              maxHeight: 500,
-              maxWidth: 650,
-              minwidth: 362,
-              width: 600,
-            }
-          },
+            selectors: {
+                '@media (min-width: 0px)': {
+                    //height: 220,
+                    maxHeight: 500,
+                    maxWidth: 650,
+                    minwidth: 362,
+                    width: 600,
+                }
+            },
         }
         //main: { maxWidth: 1200 }
-      };// main: { maxWidth: 800 }
-      const dialogmodalProps = React.useMemo(
+    };// main: { maxWidth: 800 }
+    const dialogmodalProps = React.useMemo(
         () => ({
-    
-          titleAriaId: labelId,
-          subtitleAriaId: subTextId,
-          isBlocking: true,
-          styles: tempdialogStyles,
-          //className:styles.dialogSubText
-          //styles: {main:{margin:0}},
-    
-    
+
+            titleAriaId: labelId,
+            subtitleAriaId: subTextId,
+            isBlocking: true,
+            styles: tempdialogStyles,
+            //className:styles.dialogSubText
+            //styles: {main:{margin:0}},
+
+
         }),
         [isDraggable, labelId, subTextId],
-      );
+    );
     const [dialogContent, setDialogContent] = React.useState({
         type: DialogType.normal,
-        title: 'Please confirm',
+        title: 'Error',
         closeButtonAriaLabel: 'Close',
         subText: '',
     });
@@ -349,27 +360,27 @@ export default function DistributionFlowView(): JSX.Element {
             maxWidth: 200,
             onRender: (item: Iitem, i: number) => (
                 //<TextField errorMessage={item.Errormessage} key={item.PartID} value={item.PartQty} onChange={(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => onChangePartQty(event, newValue, item.PartID)} />
-            <Text>{item.PartQty}</Text>
-                )
+                <Text>{item.PartQty}</Text>
+            )
         }
     ];
     //set style for dialoglists
     const gridStyles: Partial<IDetailsListStyles> = {
         root: {
-          overflowY: 'scroll',
-          overflowX: 'hidden',
-          selectors: {
-            '& [role=grid]': {
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'start',
-              height: '20vh',
-              minWidth: 500
+            overflowY: 'scroll',
+            overflowX: 'hidden',
+            selectors: {
+                '& [role=grid]': {
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'start',
+                    height: '20vh',
+                    minWidth: 500
+                },
             },
-          },
         },
-    
-      };
+
+    };
 
     const submitFunction = async (): Promise<void> => {
 
@@ -537,7 +548,7 @@ export default function DistributionFlowView(): JSX.Element {
                     />
 
 
-                        }
+                    }
                     <DialogFooter>
                         <DefaultButton onClick={() => { document.location.href = `${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx` }} text="OK" style={{ display: !dialogButtonVisible ? 'block' : 'none' }} />
                         <PrimaryButton onClick={submitFunction} text="Yes" style={{ display: dialogButtonVisible ? 'block' : 'none' }} />
@@ -552,6 +563,9 @@ export default function DistributionFlowView(): JSX.Element {
                     <div>
                         {hinterrormessage}
                     </div>
+                    <DialogFooter>
+                        <PrimaryButton onClick={toggleHideDialog} text='OK' />
+                    </DialogFooter>
                 </Dialog>
 
             }
