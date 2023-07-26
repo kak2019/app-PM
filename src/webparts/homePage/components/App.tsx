@@ -7,7 +7,15 @@ import { DefaultPalette } from "@fluentui/react/lib/Styling";
 import AppContext from "../../../common/AppContext";
 import { Spinner, SpinnerSize } from "@fluentui/react/lib/Spinner";
 import { useEntities } from "../../../common/hooks";
-import { IIconProps } from "office-ui-fabric-react";
+
+import NewDistribution from '../assets/newDistribution'
+import RequestListSvg from '../assets/requestlist'
+import GoodIssue from '../assets/goodissue'
+import Inventory from '../assets/inventory'
+import MyDisribution from '../assets/myDisribution'
+import EditDocument from '../assets/editDocument'
+import Receive from '../assets/receive'
+import ViewHistory from '../assets/viewhistory'
 
 interface IuserRoleobj {
   CreateFlowV: boolean;
@@ -25,7 +33,6 @@ const USER_ROLE = {
   kdfc: "KDFactory",
   wh: "WareHouse",
 };
-const addIcon: IIconProps = {iconName: 'Add' };
 
 export default memo(function App() {
   const ctx = useContext(AppContext);
@@ -101,93 +108,143 @@ export default memo(function App() {
   const stackStyles: IStackStyles = {
     root: {
       background: DefaultPalette.white,
-      margin: 100,
+      margin: 0,
     },
   };
+  const titleStyles = {
+    fontWeight: 'bold'
+  }
 
   return (
     <section>
       {viewVisible ? (
         <Stack enableScopedSelectors styles={stackStyles}>
-          <Stack>
-          Request
-          <DefaultButton
-            text="Create New Request"
-            className={
-              userRoleobj.CreateFlowV
-                ? styles.homePageButton
-                : styles.homePageButtonDisabled
-            }
-            disabled={!userRoleobj.CreateFlowV}
-            href={`${webURL ? webURL + "/" : ""}sitepages/request.aspx`}
-            iconProps={addIcon}
-          />
+          <div className={styles.section}>
+            <div style={titleStyles}>Request</div>
+            <Stack enableScopedSelectors horizontal horizontalAlign="start">
+            
+            <DefaultButton
+              text="Create New Request"
+              className={
+                userRoleobj.CreateFlowV
+                  ? styles.homePageButton
+                  : styles.homePageButtonDisabled
+              }
+              disabled={!userRoleobj.CreateFlowV}
+              href={`${webURL ? webURL + "/" : ""}sitepages/request.aspx`}
+              onRenderIcon={() => {
+                return <EditDocument />
+              }}
+            />
 
-          <DefaultButton
-            text="Request List"
-            className={
-              userRoleobj.RequestFlowV
-                ? styles.homePageButton
-                : styles.homePageButtonDisabled
-            }
-            disabled={!userRoleobj.RequestFlowV}
-            href={`${webURL ? webURL + "/" : ""}Lists/Request%20List`}
-          />
+            <DefaultButton
+              text="Request List"
+              className={
+                userRoleobj.RequestFlowV
+                  ? styles.homePageButton
+                  : styles.homePageButtonDisabled
+              }
+              disabled={!userRoleobj.RequestFlowV}
+              href={`${webURL ? webURL + "/" : ""}Lists/Request%20List`}
+              onRenderIcon={() => {
+                return <RequestListSvg />
+              }}
+            />
 
-          <DefaultButton
-            text="Goods Issue List"
-            className={
-              userRoleobj.GoodIssueV
-                ? styles.homePageButton
-                : styles.homePageButtonDisabled
-            }
-            disabled={!userRoleobj.GoodIssueV}
-            href={`${webURL ? webURL + "/" : ""}sitepages/GI.aspx`}
-          />
-  </Stack>
-          <DefaultButton
-            text="Create New Distribution Request"
-            className={
-              userRoleobj.CreateDistributionV
-                ? styles.homePageButton
-                : styles.homePageButtonDisabled
-            }
-            disabled={!userRoleobj.CreateDistributionV}
-            href={`${webURL ? webURL + "/" : ""}sitepages/Distribute-flow.aspx`}
-          />
+            <DefaultButton
+              text="Goods Issue List"
+              className={
+                userRoleobj.GoodIssueV
+                  ? styles.homePageButton
+                  : styles.homePageButtonDisabled
+              }
+              disabled={!userRoleobj.GoodIssueV}
+              href={`${webURL ? webURL + "/" : ""}sitepages/GI.aspx`}
+              onRenderIcon={() => {
+                return <GoodIssue />
+              }}
+            />
+          </Stack>
+          </div>
 
-          <DefaultButton
-            text="My Distribution Request"
-            className={
-              userRoleobj.MyDistributionV
-                ? styles.homePageButton
-                : styles.homePageButtonDisabled
-            }
-            disabled={!userRoleobj.MyDistributionV}
-            href={`${webURL ? webURL + "/" : ""}sitepages/Distribution-Flow-Tracker.aspx`}
-          />
+          <div className={styles.section}>
+            <div style={titleStyles}>Distribution</div>
+              <Stack enableScopedSelectors horizontal horizontalAlign="start">
+              <DefaultButton
+                text="New Distribution Request"
+                className={
+                  userRoleobj.CreateDistributionV
+                    ? styles.homePageButton
+                    : styles.homePageButtonDisabled
+                }
+                disabled={!userRoleobj.CreateDistributionV}
+                href={`${webURL ? webURL + "/" : ""}sitepages/Distribute-flow.aspx`}
+                onRenderIcon={() => {
+                  return <NewDistribution />
+                }}
+              />
 
-          <DefaultButton
-            text="Received Distribution"
-            className={
-              userRoleobj.ReciecedDistributionV
-                ? styles.homePageButton
-                : styles.homePageButtonDisabled
-            }
-            disabled={!userRoleobj.ReciecedDistributionV}
-            href={`${webURL ? webURL + "/" : ""}Lists/Distribution%20List`}
-          />
+              <DefaultButton
+                text="My Distribution Request"
+                className={
+                  userRoleobj.MyDistributionV
+                    ? styles.homePageButton
+                    : styles.homePageButtonDisabled
+                }
+                disabled={!userRoleobj.MyDistributionV}
+                href={`${webURL ? webURL + "/" : ""}sitepages/Distribution-Flow-Tracker.aspx`}
+                onRenderIcon={() => {
+                  return <MyDisribution />
+                }}
+              />
 
-          <DefaultButton
-            text="Inventory Management"
-            className={
-              userRoleobj.InventoryV
-                ? styles.homePageButton
-                : styles.homePageButtonDisabled
-            }
-            disabled={!userRoleobj.InventoryV}
-            href={`${webURL ? webURL + "/" : ""}Lists/Inventory%20Management`}
-          />
+              <DefaultButton
+                text="Received Distribution"
+                className={
+                  userRoleobj.ReciecedDistributionV
+                    ? styles.homePageButton
+                    : styles.homePageButtonDisabled
+                }
+                disabled={!userRoleobj.ReciecedDistributionV}
+                href={`${webURL ? webURL + "/" : ""}Lists/Distribution%20List`}
+                onRenderIcon={() => {
+                  return <Receive />
+                }}
+              />
+              </Stack>
+          </div>
+
+          <div className={styles.section}>
+            <div style={titleStyles}>Others</div>
+            <Stack enableScopedSelectors horizontal horizontalAlign="start">
+              <DefaultButton
+                text="Inventory Management"
+                className={
+                  userRoleobj.InventoryV
+                    ? styles.homePageButton
+                    : styles.homePageButtonDisabled
+                }
+                disabled={!userRoleobj.InventoryV}
+                href={`${webURL ? webURL + "/" : ""}Lists/Inventory%20Management`}
+                onRenderIcon={() => {
+                  return <Inventory />
+                }}
+              />
+              <DefaultButton
+                text="View History"
+                className={
+                  userRoleobj.InventoryV
+                    ? styles.homePageButton
+                    : styles.homePageButtonDisabled
+                }
+                //disabled={!userRoleobj.InventoryV}
+                href={`${webURL ? webURL + "/" : ""}Lists/Inventory%20History`}
+                onRenderIcon={() => {
+                  return <ViewHistory />
+                }}
+              />
+            </Stack>
+          </div>
         </Stack>
       ) : (
         <Spinner size={SpinnerSize.large} />

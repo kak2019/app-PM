@@ -34,16 +34,29 @@
 // }
 
 .homePageButton{
-  background-color:#07616d;
-  color:white;
+  background-color:white;
+  color: gray;
   margin-bottom: 8px;
   display: block;
-  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
-
+  width: 240px;
+  height: 45px;
+  font-size: 14px;
+  border-radius: 4px;
+  border-color: rgb(214, 214, 214);
+  margin-right: 10px;
+  // box-shadow: rgba(189, 190, 190, 0.3) 0px 1px 1px 0px, rgba(60, 64, 67, 0.15) 0px 2px 3px 2px;
+  svg {
+    width: 24px;
+    height: 24px;
+  }
 }
 .homePageButtonDisabled{
   background-color:white;
   color:black;
   margin-bottom: 8px;
   display: none;
+}
+
+.section {
+  margin-bottom: 20px;
 }
