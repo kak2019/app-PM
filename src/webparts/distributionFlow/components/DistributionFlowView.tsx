@@ -6,10 +6,10 @@ import { useConst } from '@fluentui/react-hooks';
 import { Stack } from '@fluentui/react/lib/Stack';
 import { Text } from '@fluentui/react/lib/Text';
 import { Label } from '@fluentui/react/lib/Label';
-import { DefaultButton, DetailsListLayoutMode, PrimaryButton, TextField } from 'office-ui-fabric-react';
+import { DefaultButton, DetailsListLayoutMode, IDetailsListStyles, PrimaryButton, TextField } from 'office-ui-fabric-react';
 import { REQUESTSCONST } from '../../../common/features/requests';
 import { useContext, useEffect, useState } from "react";
-import { DetailsList, IColumn, SelectionMode } from '@fluentui/react/lib/DetailsList';
+import { DetailsList, IColumn, SelectionMode,  } from '@fluentui/react/lib/DetailsList';
 import { getSP } from "../../../common/pnpjsConfig";
 import { spfi } from "@pnp/sp";
 import { Dropdown, IDropdownOption, IDropdownStyles } from "office-ui-fabric-react/lib/Dropdown";
@@ -22,10 +22,14 @@ import { DatePicker, addDays, IDatePickerStyles } from "office-ui-fabric-react";
 import { addRequest } from "./distributionFlowUtil/distributionFlow";
 import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
 import { useId, useBoolean } from '@fluentui/react-hooks';
+
+
+
 interface Iitem {
     "PartID": string,
     "PartDescription": string,
-    "PartQty"?: string
+    "PartQty"?: string,
+    "Errormessage"?: string
 }
 interface IDistributionMapping {
     "PMSender": { "Name": string },
@@ -47,6 +51,7 @@ export default function DistributionFlowView(): JSX.Element {
     const [selectedReceiverType, setSelectedReceiverType] = React.useState<IDropdownOption>();
     const [selectedReceiverName, setSelectedReceiverName] = React.useState<IDropdownOption>();
     const [hinterrormessage, sethinterrormessage] = React.useState<string>(null);
+
     const sp = spfi(getSP());
     const MappingterminalArray: string[] = []
     //const userEmail = ctx.context._pageContext._user.email;
@@ -71,6 +76,7 @@ export default function DistributionFlowView(): JSX.Element {
     const dialogStyles = { main: { maxWidth: 450 } };
     const labelId: string = useId('dialogLabel');
     const subTextId: string = useId('subTextLabel');
+    const [isDraggable] = useBoolean(false);
     const modalProps = React.useMemo(
         () => ({
             titleAriaId: labelId,
@@ -81,11 +87,39 @@ export default function DistributionFlowView(): JSX.Element {
         }),
         [labelId, subTextId],
     );
+    const tempdialogStyles = {
+        main: {
+          selectors: {
+            '@media (min-width: 0px)': {
+              //height: 220,
+              maxHeight: 500,
+              maxWidth: 650,
+              minwidth: 362,
+              width: 600,
+            }
+          },
+        }
+        //main: { maxWidth: 1200 }
+      };// main: { maxWidth: 800 }
+      const dialogmodalProps = React.useMemo(
+        () => ({
+    
+          titleAriaId: labelId,
+          subtitleAriaId: subTextId,
+          isBlocking: true,
+          styles: tempdialogStyles,
+          //className:styles.dialogSubText
+          //styles: {main:{margin:0}},
+    
+    
+        }),
+        [isDraggable, labelId, subTextId],
+      );
     const [dialogContent, setDialogContent] = React.useState({
         type: DialogType.normal,
         title: 'Please confirm',
         closeButtonAriaLabel: 'Close',
-        subText: 'confirmation of the request content',
+        subText: '',
     });
     const [dialogButtonVisible, setDialogButtonVisible] = React.useState<boolean>(true);
     const [dialogVisible, setDialogVisible] = React.useState<boolean>(false);
@@ -204,12 +238,19 @@ export default function DistributionFlowView(): JSX.Element {
     };
     const onChangePartQty = React.useCallback(
         (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string, id?: string) => {
+
             allItems.forEach((val: Iitem) => {
                 if (val.PartID === id) {
                     val.PartQty = newValue
+                    if (!(/^\d+$/.test(newValue)) && newValue !== "") {//set errormessage as a property of item
+                        val.Errormessage = "Invaild"
+                    } else {
+                        val.Errormessage = ""
+                    }
                 }
             })
             setallItems([...allItems])
+
         },
         [],
     );
@@ -246,7 +287,7 @@ export default function DistributionFlowView(): JSX.Element {
             minWidth: 200,
             maxWidth: 200,
             onRender: (item: Iitem, i: number) => (
-                <TextField key={item.PartID} value={item.PartQty} onChange={(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => onChangePartQty(event, newValue, item.PartID)} />
+                <TextField errorMessage={item.Errormessage} key={item.PartID} value={item.PartQty} onChange={(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => onChangePartQty(event, newValue, item.PartID)} />
             )
         }
     ];
@@ -261,6 +302,8 @@ export default function DistributionFlowView(): JSX.Element {
             getMapping(myEntity?.Title)
         }
     }, [myEntity]);
+
+    //selected part list in dialog
     const filterPartInfo = (): void => {
         const list = allItems.filter(i => i.PartQty !== undefined && i.PartQty !== "")
         console.log(list)
@@ -273,6 +316,60 @@ export default function DistributionFlowView(): JSX.Element {
         filterPartInfo()
     }, [allItems])
 
+    const dialogcolumns: IColumn[] = [
+        {
+            key: 'column1',
+            name: 'Part ID',
+            isIconOnly: false,
+            fieldName: 'name',
+            minWidth: 80,
+            maxWidth: 80,
+            onRender: (item: Iitem) => (
+                <Text>{item.PartID}</Text>
+            ),
+        },
+        {
+            key: 'column2',
+            name: 'Part Description',
+            isIconOnly: false,
+            fieldName: 'name',
+            minWidth: 260,
+            maxWidth: 260,
+            onRender: (item: Iitem) => (
+                <Text>{item.PartDescription}</Text>
+                // console.log(item.PartDescription)
+            )
+        },
+        {
+            key: 'column3',
+            name: 'Part Qty',
+            isIconOnly: false,
+            fieldName: 'name',
+            minWidth: 200,
+            maxWidth: 200,
+            onRender: (item: Iitem, i: number) => (
+                //<TextField errorMessage={item.Errormessage} key={item.PartID} value={item.PartQty} onChange={(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => onChangePartQty(event, newValue, item.PartID)} />
+            <Text>{item.PartQty}</Text>
+                )
+        }
+    ];
+    //set style for dialoglists
+    const gridStyles: Partial<IDetailsListStyles> = {
+        root: {
+          overflowY: 'scroll',
+          overflowX: 'hidden',
+          selectors: {
+            '& [role=grid]': {
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'start',
+              height: '20vh',
+              minWidth: 500
+            },
+          },
+        },
+    
+      };
 
     const submitFunction = async (): Promise<void> => {
 
@@ -324,7 +421,7 @@ export default function DistributionFlowView(): JSX.Element {
         for (let i = 0; i < dialogitems.length; i++) {
             // console.log("会执行吗", !(/^\d+$/.test(dialogitems[i].Count)))
             if (!(/^\d+$/.test(dialogitems[i].PartQty)) && dialogitems[i].PartQty !== "") {
-                sethinterrormessage("Please checked for non-numeric values in the part count")
+                sethinterrormessage("Only integer is allowed in Quantity field.")
                 flag = false
                 toggleHideDialog();
                 break;
@@ -402,7 +499,7 @@ export default function DistributionFlowView(): JSX.Element {
                 </Label>
             </Stack>
             <Stack verticalAlign="center" horizontal style={stackClass}>
-                <Label style={{ textAlign: 'left', width: 200 }}>Filter by Emballage Number:</Label>
+                <Label style={{ textAlign: 'left', width: 200 }}>Filter: </Label>
                 <TextField style={{ width: 400, height: 25 }} onChange={filterPartList} />
             </Stack>
 
@@ -428,12 +525,19 @@ export default function DistributionFlowView(): JSX.Element {
                     hidden={hideDialog}
                     onDismiss={() => { document.location.href = `${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx` }}
                     dialogContentProps={dialogContent}
-                    modalProps={modalProps}>
-                    {dialogButtonVisible && dialogitems.map((item: Iitem) =>
-                        <div key={item.PartID}>
-                            <ul style={{ paddingInlineStart: 0 }}>{item.PartID}{","} {item.PartDescription}{","} {item.PartQty}</ul>
-                        </div>
-                    )}
+                    modalProps={dialogmodalProps}>
+                    {dialogButtonVisible && <DetailsList
+                        items={dialogitems}
+                        columns={dialogcolumns}
+                        selectionMode={SelectionMode.none}
+                        layoutMode={DetailsListLayoutMode.justified}
+                        isHeaderVisible={true}
+                        onShouldVirtualize={() => false}
+                        styles={gridStyles}
+                    />
+
+
+                        }
                     <DialogFooter>
                         <DefaultButton onClick={() => { document.location.href = `${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx` }} text="OK" style={{ display: !dialogButtonVisible ? 'block' : 'none' }} />
                         <PrimaryButton onClick={submitFunction} text="Yes" style={{ display: dialogButtonVisible ? 'block' : 'none' }} />
