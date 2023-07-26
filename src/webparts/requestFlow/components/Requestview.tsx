@@ -56,7 +56,7 @@ export default function RequestView(): JSX.Element {
           flexDirection: 'column',
           alignItems: 'start',
           height: '20vh',
-          minWidth: 500
+          minWidth: 500,
         },
       },
     },
@@ -192,7 +192,9 @@ export default function RequestView(): JSX.Element {
   const headerStyle: Partial<IDetailsColumnStyles> = {
     cellName: {
       color:"black",
-      fontSize:"12px"
+      fontSize:"12px",
+      backgroundColor:"rgba(0, 130, 155, 1)",
+      
       //红的好使, 字体大小不好使
     }
   }
@@ -467,7 +469,7 @@ export default function RequestView(): JSX.Element {
   return (
     <section>
 
-      <Stack verticalAlign="center" horizontal>
+      <Stack verticalAlign="center" horizontal style={{backgroundColor:"rgba(0, 130, 155, 1)"}}>
         <Label style={{ textAlign: 'left', width: 200 }} >Request By: </Label>{" "} <Text style={{ fontFamily: '"Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif' }}>{myEntity?.Name}</Text>
         {/* <TextField disabled defaultValue="I am disabled" style={{ width: 100 }} /> */}
       </Stack>
@@ -516,7 +518,7 @@ export default function RequestView(): JSX.Element {
         layoutMode={DetailsListLayoutMode.justified}
         isHeaderVisible={true}
         onShouldVirtualize={() => false}
-
+        
       //onItemInvoked={this._onItemInvoked}
       />
       <Stack horizontal style={{ float: 'right', marginRight: 10 }}>
