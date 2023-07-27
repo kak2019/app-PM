@@ -122,7 +122,7 @@ export default memo(function App() {
             <Stack enableScopedSelectors horizontal horizontalAlign="start">
             
             <DefaultButton
-              text="Create New Request"
+              text="New Request"
               className={
                 userRoleobj.CreateFlowV
                   ? styles.homePageButton
