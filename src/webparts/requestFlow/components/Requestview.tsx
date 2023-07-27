@@ -46,6 +46,19 @@ interface IMappingOBJ {
   "Terminal": [{ "Name": string, "ID": string }]
 }
 export default function RequestView(): JSX.Element {
+  const colomnstyle = {
+    root: {
+    color:"white",
+    backgroundColor: 'rgb(0, 130, 155)',
+    '&:hover': {
+      backgroundColor: 'rgb(0, 130, 155)',
+      color:"white",
+    },
+    '&:active': {
+      backgroundColor: 'rgb(0, 130, 155)',
+      color:"white",
+    }
+  }}
   const gridStyles: Partial<IDetailsListStyles> = {
     root: {
       overflowY: 'auto',
@@ -197,6 +210,7 @@ export default function RequestView(): JSX.Element {
       //红的好使, 字体大小不好使
     }
   }
+
   const dialogcolumns: IColumn[] = [
     {
       key: 'column1',
@@ -253,8 +267,9 @@ export default function RequestView(): JSX.Element {
       //iconName: 'Page',
       isIconOnly: false,
       fieldName: 'name',
-      minWidth: 81,
-      maxWidth: 81,
+      minWidth: 61,
+      maxWidth: 61,
+      styles:colomnstyle,
       //onColumnClick: this._onColumnClick,
       onRender: (item: Iitem) => (
         <Text>{item.PartID}</Text>
@@ -267,9 +282,9 @@ export default function RequestView(): JSX.Element {
       //iconName: 'Page',
       isIconOnly: false,
       fieldName: 'name',
-      minWidth: 251,
-      maxWidth: 251,
-      
+      minWidth: 221,
+      maxWidth: 221,
+      styles:colomnstyle,
       //onColumnClick: this._onColumnClick,
       onRender: (item: Iitem) => (
         <Text>{item.PartDescription}</Text>
@@ -281,13 +296,30 @@ export default function RequestView(): JSX.Element {
       //iconName: 'Page',
       isIconOnly: false,
       fieldName: 'name',
-      minWidth: 201,
-      maxWidth: 201,
+      minWidth: 101,
+      maxWidth: 101,
+      styles:colomnstyle,
       //onColumnClick: this._onColumnClick,
       onRender: (item: Iitem, i: number) => (
         <TextField key={item.PartID} value={item.Count} errorMessage={item.ErrorMessage} onChange={(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => onChangeSecondTextFieldValue(event, newValue, item.PartID)} />
       ),
-    }]
+    },
+    {
+      key: 'column4',
+      name: '',
+      ariaLabel: 'Column operations for File type, Press to sort on File type',
+      //iconName: 'Page',
+      isIconOnly: false,
+      fieldName: 'name',
+      minWidth: 20,
+      maxWidth: 20,
+      styles:colomnstyle,
+      //onColumnClick: this._onColumnClick,
+      // onRender: (item: Iitem) => (
+      //   <Text>{item.PartDescription}</Text>
+      // ),
+    }
+  ]
   const dropdownStyles: Partial<IDropdownStyles> = {
     root: { width: 400 } 
   };
@@ -451,7 +483,7 @@ export default function RequestView(): JSX.Element {
         toggleHideDialog();
         return
       } else if (dialogitems.length === 0) {
-        sethinterrormessage("Please fill in at least one part of the information");
+        sethinterrormessage("Please fill in at least one part quantity");
         setdialogvisible(false)
         toggleHideDialog();
         return
@@ -469,11 +501,11 @@ export default function RequestView(): JSX.Element {
     <section>
 
       <Stack verticalAlign="center" horizontal style={{backgroundColor:"rgba(0, 130, 155, 1)"}}>
-        <Label style={{ textAlign: 'left', width: 200 }} >Request By: </Label>{" "} <Text style={{ fontFamily: '"Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif' }}>{myEntity?.Name}</Text>
+        <Label style={{ textAlign: 'left', width: 200 ,color:'white', marginLeft:8}} >Request By: </Label>{" "} <Text style={{ fontFamily: '"Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif',color:'white' } }>{myEntity?.Name}</Text>
         {/* <TextField disabled defaultValue="I am disabled" style={{ width: 100 }} /> */}
       </Stack>
       <Stack horizontal verticalAlign="center" style={stackClass}>
-        <Label style={{ textAlign: 'left', width: 200 }}>Terminal: </Label>
+        <Label style={{ textAlign: 'left', width: 200 ,marginLeft:8}}>Terminal: </Label>
         <Dropdown
           placeholder="Select an option"
           //label="Basic uncontrolled example"
@@ -485,7 +517,7 @@ export default function RequestView(): JSX.Element {
 
       </Stack>
       <Stack horizontal verticalAlign="center" style={stackClass}>
-        <Label style={{ textAlign: 'left', width: 200 }}>Date Needed: </Label>
+        <Label style={{ textAlign: 'left', width: 200 ,marginLeft:8}}>Date Needed: </Label>
         <DatePicker
           styles={datePickerStyles}
           placeholder="Select a date..."
@@ -501,11 +533,11 @@ export default function RequestView(): JSX.Element {
         />
       </Stack>
       <Stack horizontal verticalAlign="center" style={stackClass}>
-        <Label style={{ textAlign: 'left', width: 200 }}>Delivery Address: </Label> <Text style={{ fontFamily: '"Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif' }}>{address}</Text>
+        <Label style={{ textAlign: 'left', width: 200 ,marginLeft:8}}>Delivery Address: </Label> <Text style={{ fontFamily: '"Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif' }}>{address}</Text>
       </Stack>
       <hr />
       <Stack horizontal verticalAlign="center" style={stackClass}>
-        <Label style={{ textAlign: 'left', width: 200 }}>Filter:</Label><TextField styles={{root: { width: 400 }}} style={{height: 25}} onChange={_onChangeText} />    {/* //label="Filter by Emballage Number:" */}
+        <Label style={{ textAlign: 'left', width: 200 ,marginLeft:8}}>Filter:</Label><TextField styles={{root: { width: 400 }}} style={{height: 25}} onChange={_onChangeText} />    {/* //label="Filter by Emballage Number:" */}
       </Stack>
       <DetailsList
         items={items}// [{"Emballage Number":"123","Emballage Type":"456" ,"Count":"11"},]
@@ -521,13 +553,14 @@ export default function RequestView(): JSX.Element {
       //onItemInvoked={this._onItemInvoked}
       />
       <Stack horizontal style={{ float: 'right', marginRight: 10 }}>
-        <PrimaryButton secondaryText="Opens the Sample Dialog" onClick={validateRequest} text="Submit" style={{ marginRight: 10 }} />
+        
         <DefaultButton onClick={() => {
           //const returnUrl = window.location.href;
           //`${ctx.context._pageContext._web.absoluteUrl}/sitepages/GI.aspx`;
           //document.location.href = returnUrl.slice(0, returnUrl.indexOf("SitePage")) + "SitePage/Home.aspx"
           document.location.href = `${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx`;
-        }} text="Cancel" />
+        }} text="Cancel" className={styles.cancelbutton} />
+        <PrimaryButton secondaryText="Opens the Sample Dialog" onClick={validateRequest} text="Submit"  className={styles.submitbutton}/>
       </Stack>
 
       {dialogvisible ?
@@ -566,8 +599,9 @@ export default function RequestView(): JSX.Element {
 
           <DialogFooter>
             <DefaultButton onClick={() => { document.location.href = `${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx` }} text="OK" style={{ display: !buttonvisible ? 'block' : 'none' }} />
-            <PrimaryButton onClick={submitFunction} text="Yes" style={{ display: buttonvisible ? 'block' : 'none' }} />
-            <DefaultButton onClick={toggleHideDialog} text="Cancel" style={{ display: buttonvisible ? 'block' : 'none' }} />
+            
+            <DefaultButton onClick={toggleHideDialog} text="Cancel" style={{ display: buttonvisible ? 'block' : 'none' }} className={styles.dialogcancelbutton}/>
+            <PrimaryButton onClick={submitFunction} text="Yes" style={{ display: buttonvisible ? 'block' : 'none' }} className={styles.dialogyesbutton} />
 
           </DialogFooter>
         </Dialog>
@@ -581,7 +615,7 @@ export default function RequestView(): JSX.Element {
             {hinterrormessage}
           </div>
           <DialogFooter>
-            <PrimaryButton onClick={toggleHideDialog} text='OK'/>
+            <PrimaryButton onClick={toggleHideDialog} text='OK' className={styles.dialogyesbutton}/>
           </DialogFooter>
         </Dialog>
 
