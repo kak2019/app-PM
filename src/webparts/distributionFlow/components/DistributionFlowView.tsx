@@ -436,16 +436,18 @@ export default function DistributionFlowView(): JSX.Element {
                 flag = false
                 toggleHideDialog();
                 break;
+                
 
             }
-
+            
 
         }
+        setDialogContent((dialogContent) => ({ ...dialogContent, title: "Error", subText: '', }))
         console.log("error", hinterrormessage)
         console.log("flag", flag)
         //console.log("listtemp",templist)
         if (flag) {
-            if (selectedReceiverType === null || selectedReceiverType === undefined) {
+            if (selectedReceiverType === null || selectedReceiverType === undefined || selectedReceiverName === null || selectedReceiverName === undefined) {
                 sethinterrormessage("Please check if Receiver is selected");
                 setDialogVisible(false)
                 toggleHideDialog();
@@ -459,8 +461,10 @@ export default function DistributionFlowView(): JSX.Element {
                 sethinterrormessage(null);
                 setDialogVisible(true)
                 toggleHideDialog();
+                setDialogContent((dialogContent) => ({ ...dialogContent, title: "Confirmation", subText: `The following ${dialogitems.length} part will be included:` }))
             }
         }
+        
     }
 
     return (
@@ -483,7 +487,7 @@ export default function DistributionFlowView(): JSX.Element {
                     styles={dropdownStyles}
                     placeholder="Select "
                     onChange={receiverNameonChange}
-
+                    selectedKey={selectedReceiverName ? selectedReceiverName.key : undefined}
                 />
             </Stack>
             <Stack verticalAlign="center" horizontal style={stackClass}>
@@ -534,7 +538,7 @@ export default function DistributionFlowView(): JSX.Element {
             {dialogVisible ?
                 <Dialog
                     hidden={hideDialog}
-                    onDismiss={() => { document.location.href = `${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx` }}
+                    onDismiss={toggleHideDialog} //{() => { document.location.href = `${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx` }}
                     dialogContentProps={dialogContent}
                     modalProps={dialogmodalProps}>
                     {dialogButtonVisible && <DetailsList
