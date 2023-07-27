@@ -73,18 +73,20 @@ export default function DistributionFlowView(): JSX.Element {
     const [allItems, setallItems] = React.useState<Iitem[]>(REQUESTSCONST.PART_LIST)
     const [dialogitems, setdialogitems] = React.useState<Iitem[]>([])
     //Dialog
-    const dialogStyles = { main: {
-        selectors: {
-          '@media (min-width: 0px)': {
-            //height: 220,
-            maxHeight: 500,
-            maxWidth: 650,
-            minwidth: 362,
-            width: 400,
-          }
+    const dialogStyles = {
+        main: {
+            selectors: {
+                '@media (min-width: 0px)': {
+                    //height: 220,
+                    maxHeight: 500,
+                    maxWidth: 650,
+                    minwidth: 362,
+                    width: 400,
+                }
+            }
         }
-      }};
-      //main: { maxWidth: 1200 } };
+    };
+    //main: { maxWidth: 1200 } };
     const labelId: string = useId('dialogLabel');
     const subTextId: string = useId('subTextLabel');
     const [isDraggable] = useBoolean(false);
@@ -254,7 +256,7 @@ export default function DistributionFlowView(): JSX.Element {
                 if (val.PartID === id) {
                     val.PartQty = newValue
                     if (!(/^\d+$/.test(newValue)) && newValue !== "") {//set errormessage as a property of item
-                        val.Errormessage = "Invaild"
+                        val.Errormessage = "Only integer is allowed"
                     } else {
                         val.Errormessage = ""
                     }
@@ -292,7 +294,7 @@ export default function DistributionFlowView(): JSX.Element {
         },
         {
             key: 'column3',
-            name: 'Part Qty',
+            name: 'Part Quantity',
             isIconOnly: false,
             fieldName: 'name',
             minWidth: 200,
@@ -353,7 +355,7 @@ export default function DistributionFlowView(): JSX.Element {
         },
         {
             key: 'column3',
-            name: 'Part Qty',
+            name: 'Part Quantity',
             isIconOnly: false,
             fieldName: 'name',
             minWidth: 200,
@@ -406,7 +408,7 @@ export default function DistributionFlowView(): JSX.Element {
         addRequest({ request }).then(promises => { console.log("promiss", promises, typeof (promises)); promiss = promises }).catch(err => console.log("err", err));
         console.log("typeof promises==='string'", typeof promiss === "string")
         if (typeof promiss !== "string") {
-            setDialogContent((dialogContent) => ({ ...dialogContent, title: "Submit successfully", subText: "The request will be listed in some minutes." }))
+            setDialogContent((dialogContent) => ({ ...dialogContent, title: "Confirmation", subText: "Submit successfully! The request will be listed in some minutes." }))
             setDialogButtonVisible(false)
         } else {
             setDialogContent((dialogContent) => ({ ...dialogContent, title: "Submit Failuer" }))
@@ -420,14 +422,9 @@ export default function DistributionFlowView(): JSX.Element {
         const templist = [];
         let flag = true;
         setDialogVisible(false)
-        for (let i = 0; i < dialogitems.length; i++) {
-            if (/^\d+$/.test(dialogitems[i].PartQty) && dialogitems[i].PartQty !== "") {
-                templist.push(dialogitems[i])
-            }
-            setdialogitems(templist)
-        }
+
         sethinterrormessage(null);
-        // console.log("listtemp1",templist)
+        //console.log("listtemp1",templist)
 
         for (let i = 0; i < dialogitems.length; i++) {
             // console.log("会执行吗", !(/^\d+$/.test(dialogitems[i].Count)))
@@ -436,15 +433,23 @@ export default function DistributionFlowView(): JSX.Element {
                 flag = false
                 toggleHideDialog();
                 break;
-                
+
 
             }
-            
-
+        }
+        //put setdialogitems after the validation of quantity. 
+        if (flag) {
+            for (let i = 0; i < dialogitems.length; i++) {
+                if (/^\d+$/.test(dialogitems[i].PartQty) && dialogitems[i].PartQty !== "") {
+                    templist.push(dialogitems[i])
+                }
+                setdialogitems(templist)
+            }
         }
         setDialogContent((dialogContent) => ({ ...dialogContent, title: "Error", subText: '', }))
-        console.log("error", hinterrormessage)
-        console.log("flag", flag)
+        // console.log("error", hinterrormessage)
+        // console.log("flag", flag)
+        // console.log("itemlength", dialogitems.length)
         //console.log("listtemp",templist)
         if (flag) {
             if (selectedReceiverType === null || selectedReceiverType === undefined || selectedReceiverName === null || selectedReceiverName === undefined) {
@@ -453,7 +458,7 @@ export default function DistributionFlowView(): JSX.Element {
                 toggleHideDialog();
                 return
             } else if (dialogitems.length === 0) {
-                sethinterrormessage("Please fill in at least one part of the information");
+                sethinterrormessage("Please fill in at least one part quantity");
                 setDialogVisible(false)
                 toggleHideDialog();
                 return
@@ -464,7 +469,7 @@ export default function DistributionFlowView(): JSX.Element {
                 setDialogContent((dialogContent) => ({ ...dialogContent, title: "Confirmation", subText: `The following ${dialogitems.length} part will be included:` }))
             }
         }
-        
+
     }
 
     return (
