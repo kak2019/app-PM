@@ -6,7 +6,7 @@ import { useConst } from '@fluentui/react-hooks';
 import { Stack } from '@fluentui/react/lib/Stack';
 import { Text } from '@fluentui/react/lib/Text';
 import { Label } from '@fluentui/react/lib/Label';
-import { DefaultButton, DetailsListLayoutMode, IDetailsListStyles, PrimaryButton, TextField } from 'office-ui-fabric-react';
+import { DefaultButton, DetailsListLayoutMode, IDetailsListStyles, Icon, PrimaryButton, TextField } from 'office-ui-fabric-react';
 import { REQUESTSCONST } from '../../../common/features/requests';
 import { useContext, useEffect, useState } from "react";
 import { DetailsList, IColumn, SelectionMode, } from '@fluentui/react/lib/DetailsList';
@@ -115,6 +115,7 @@ export default function DistributionFlowView(): JSX.Element {
                 }
             },
             textAlign: 'center',
+            title: <><Icon iconName="upload"/></>
             
         },
         
@@ -128,7 +129,7 @@ export default function DistributionFlowView(): JSX.Element {
             subtitleAriaId: subTextId,
             isBlocking: true,
             styles: tempdialogStyles,
-            
+          
             
             //className:styles.dialogSubText
             //styles: {main:{margin:0}},

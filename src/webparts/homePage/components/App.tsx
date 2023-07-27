@@ -169,7 +169,7 @@ export default memo(function App() {
             <div className={styles.parttitle}>Distribution</div>
               <Stack enableScopedSelectors horizontal horizontalAlign="start">
               <DefaultButton
-                text="New Distribution Request"
+                text="New Distribution"
                 className={
                   userRoleobj.CreateDistributionV
                     ? styles.homePageButton
@@ -183,7 +183,7 @@ export default memo(function App() {
               />
 
               <DefaultButton
-                text="My Distribution Request"
+                text="My Distributions"
                 className={
                   userRoleobj.MyDistributionV
                     ? styles.homePageButton
