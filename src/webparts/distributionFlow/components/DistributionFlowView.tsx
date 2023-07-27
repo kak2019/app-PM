@@ -131,6 +131,7 @@ export default function DistributionFlowView(): JSX.Element {
             styles: tempdialogStyles,
           
             
+            
             //className:styles.dialogSubText
             //styles: {main:{margin:0}},
 

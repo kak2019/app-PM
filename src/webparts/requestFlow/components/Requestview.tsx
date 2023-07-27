@@ -107,7 +107,8 @@ export default function RequestView(): JSX.Element {
           minwidth: 362,
           width: 400,
         }
-      }
+      },
+      textAlign: 'center',
     }
     //main: { maxWidth: 1200 }
   };// main: { maxWidth: 800 }
@@ -122,6 +123,7 @@ export default function RequestView(): JSX.Element {
           width: 600,
         }
       },
+      textAlign: 'center',
     }
     //main: { maxWidth: 1200 }
   };// main: { maxWidth: 800 }
