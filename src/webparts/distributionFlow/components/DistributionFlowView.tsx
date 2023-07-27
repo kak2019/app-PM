@@ -94,11 +94,11 @@ export default function DistributionFlowView(): JSX.Element {
         () => ({
             titleAriaId: labelId,
             subtitleAriaId: subTextId,
-            isBlocking: false,
+            isBlocking: true,
             styles: dialogStyles,
 
         }),
-        [labelId, subTextId],
+        [isDraggable, labelId, subTextId],
     );
     const tempdialogStyles = {
         main: {
@@ -543,7 +543,9 @@ export default function DistributionFlowView(): JSX.Element {
             {dialogVisible ?
                 <Dialog
                     hidden={hideDialog}
-                    onDismiss={toggleHideDialog} //{() => { document.location.href = `${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx` }}
+                    onDismiss={() => {
+                        if(dialogButtonVisible) {toggleHideDialog()}  else{ document.location.href = `${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx` }}}
+  //{toggleHideDialog} //{() => { document.location.href = `${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx` }}//modalProps
                     dialogContentProps={dialogContent}
                     modalProps={dialogmodalProps}>
                     {dialogButtonVisible && <DetailsList
