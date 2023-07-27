@@ -296,8 +296,8 @@ export default function RequestView(): JSX.Element {
       //iconName: 'Page',
       isIconOnly: false,
       fieldName: 'name',
-      minWidth: 101,
-      maxWidth: 101,
+      minWidth: 141,
+      maxWidth: 141,
       styles:colomnstyle,
       //onColumnClick: this._onColumnClick,
       onRender: (item: Iitem, i: number) => (
@@ -500,7 +500,7 @@ export default function RequestView(): JSX.Element {
   return (
     <section>
 
-      <Stack verticalAlign="center" horizontal style={{backgroundColor:"rgba(0, 130, 155, 1)"}}>
+      <Stack verticalAlign="center" horizontal style={{backgroundColor:"rgba(0, 130, 155, 1)",height:42}}>
         <Label style={{ textAlign: 'left', width: 200 ,color:'white', marginLeft:8}} >Request By: </Label>{" "} <Text style={{ fontFamily: '"Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif',color:'white' } }>{myEntity?.Name}</Text>
         {/* <TextField disabled defaultValue="I am disabled" style={{ width: 100 }} /> */}
       </Stack>
