@@ -48,7 +48,7 @@ interface IMappingOBJ {
 export default function RequestView(): JSX.Element {
   const gridStyles: Partial<IDetailsListStyles> = {
     root: {
-      overflowY: 'scroll',
+      overflowY: 'auto',
       overflowX: 'hidden',
       selectors: {
         '& [role=grid]': {
@@ -193,7 +193,6 @@ export default function RequestView(): JSX.Element {
     cellName: {
       color:"black",
       fontSize:"12px",
-      backgroundColor:"rgba(0, 130, 155, 1)",
       
       //红的好使, 字体大小不好使
     }

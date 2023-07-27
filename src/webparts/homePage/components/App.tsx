@@ -213,7 +213,7 @@ export default memo(function App() {
           </div>
 
           <div className={styles.section}>
-            <div className={styles.parttitle}>Others</div>
+            <div className={styles.parttitle}>Inventory </div>
             <Stack enableScopedSelectors horizontal horizontalAlign="start">
               <DefaultButton
                 text="Inventory Management"
