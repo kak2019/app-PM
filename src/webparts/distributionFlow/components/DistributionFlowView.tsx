@@ -40,7 +40,19 @@ interface IDistributionMapping {
 
 export default function DistributionFlowView(): JSX.Element {
 
-
+    const columnstyle = {
+        root: {
+        color:"white",
+        backgroundColor: 'rgb(0, 130, 155)',
+        '&:hover': {
+          backgroundColor: 'rgb(0, 130, 155)',
+          color:"white",
+        },
+        '&:active': {
+          backgroundColor: 'rgb(0, 130, 155)',
+          color:"white",
+        }
+      }}
     const [receiver, setReceiver] = useState([]);
     const [selectedReceiverID, setSelectedReceiverID] = React.useState<string>();
     const today = useConst(new Date(Date.now()));
@@ -288,8 +300,9 @@ export default function DistributionFlowView(): JSX.Element {
             name: 'Part ID',
             isIconOnly: false,
             fieldName: 'name',
-            minWidth: 80,
-            maxWidth: 80,
+            minWidth: 61,
+            maxWidth: 61,
+            styles: columnstyle,
             onRender: (item: Iitem) => (
                 <Text>{item.PartID}</Text>
             ),
@@ -299,8 +312,9 @@ export default function DistributionFlowView(): JSX.Element {
             name: 'Part Description',
             isIconOnly: false,
             fieldName: 'name',
-            minWidth: 260,
-            maxWidth: 260,
+            minWidth: 221,
+            maxWidth: 221,
+            styles: columnstyle,
             onRender: (item: Iitem) => (
                 <Text>{item.PartDescription}</Text>
                 // console.log(item.PartDescription)
@@ -311,12 +325,28 @@ export default function DistributionFlowView(): JSX.Element {
             name: 'Part Quantity',
             isIconOnly: false,
             fieldName: 'name',
-            minWidth: 200,
-            maxWidth: 200,
+            minWidth: 141,
+            maxWidth: 141,
+            styles: columnstyle,
             onRender: (item: Iitem, i: number) => (
                 <TextField errorMessage={item.Errormessage} key={item.PartID} value={item.PartQty} onChange={(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => onChangePartQty(event, newValue, item.PartID)} />
             )
-        }
+        },
+        {
+            key: 'column4',
+            name: '',
+            ariaLabel: 'Column operations for File type, Press to sort on File type',
+            //iconName: 'Page',
+            isIconOnly: false,
+            fieldName: 'name',
+            minWidth: 20,
+            maxWidth: 20,
+            styles:columnstyle,
+            //onColumnClick: this._onColumnClick,
+            // onRender: (item: Iitem) => (
+            //   <Text>{item.PartDescription}</Text>
+            // ),
+          }
     ];
 
     React.useEffect(() => {
