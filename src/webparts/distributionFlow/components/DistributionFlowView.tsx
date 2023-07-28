@@ -6,7 +6,7 @@ import { useConst } from '@fluentui/react-hooks';
 import { Stack } from '@fluentui/react/lib/Stack';
 import { Text } from '@fluentui/react/lib/Text';
 import { Label } from '@fluentui/react/lib/Label';
-import { DefaultButton, DetailsListLayoutMode, IDetailsListStyles, Icon, PrimaryButton, TextField } from 'office-ui-fabric-react';
+import { DefaultButton, DetailsListLayoutMode, IDetailsListStyles, PrimaryButton, TextField } from 'office-ui-fabric-react';
 import { REQUESTSCONST } from '../../../common/features/requests';
 import { useContext, useEffect, useState } from "react";
 import { DetailsList, IColumn, SelectionMode, } from '@fluentui/react/lib/DetailsList';
@@ -127,7 +127,7 @@ export default function DistributionFlowView(): JSX.Element {
                 }
             },
             textAlign: 'center',
-            title: <><Icon iconName="upload"/></>
+            
             
         },
         
@@ -161,9 +161,9 @@ export default function DistributionFlowView(): JSX.Element {
     const [dialogButtonVisible, setDialogButtonVisible] = React.useState<boolean>(true);
     const [dialogVisible, setDialogVisible] = React.useState<boolean>(false);
     const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
-    const _getKey = (item: IColumn, index?: number): string => {
-        return item.key;
-      }
+    // const _getKey = (item: IColumn, index?: number): string => {
+    //     return item.key;
+    //   }
 
     interface Iops {
         "text": string,
@@ -571,7 +571,7 @@ export default function DistributionFlowView(): JSX.Element {
                 items={items}
                 columns={columns}
                 selectionMode={SelectionMode.none}
-                getKey={_getKey}
+                //getKey={_getKey}
                 setKey="PartID"
                 layoutMode={DetailsListLayoutMode.justified}
                 isHeaderVisible={true}
@@ -584,7 +584,8 @@ export default function DistributionFlowView(): JSX.Element {
                     //document.location.href = returnUrl.slice(0, returnUrl.indexOf("SitePage")) + "SitePage/Home.aspx"
                     document.location.href = `${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx`;
                 }} text="Cancel" className={styles.cancelbutton} />
-                <PrimaryButton secondaryText="Opens the Sample Dialog" onClick={validateRequest} text="Submit" className={styles.submitbutton} />
+                <PrimaryButton secondaryText="Opens the Sample Dialog" onClick={validateRequest} text="Submit"  />
+                {/* //className={styles.submitbutton} */}
             </Stack>
             {dialogVisible ?
                 <Dialog
