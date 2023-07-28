@@ -1,6 +1,7 @@
 import * as React from "react";
 
-const SimpleEmpty = (): JSX.Element => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const SimpleEmpty = (props: any): JSX.Element => {
   return (
     <section
       style={{
@@ -60,6 +61,7 @@ const SimpleEmpty = (): JSX.Element => {
           </svg>
         </div>
         <div style={{ color: "rgba(0, 0, 0, 0.45)" }}>No data</div>
+        <div style={{ paddingTop: "10px", color: "rgba(0, 0, 0, 0.45)" }}>{props.children}</div>
       </div>
     </section>
   );

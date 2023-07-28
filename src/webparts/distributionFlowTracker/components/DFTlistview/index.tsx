@@ -25,6 +25,7 @@ export default memo(function index() {
     useEffect(() => {
         setListViewItems([...distributions]);
     }, [distributions]);
+    const reminder = "You haven't create any distribution flows"
 
     const getIndexByID = useCallback(
         (ID: string): number => {
@@ -325,7 +326,7 @@ export default memo(function index() {
                     )}
                 </Formik>
             ) : (
-                (isFetchingDistribution === DistributionStatus.Idle) ? <SimpleEmpty /> : null
+                (isFetchingDistribution === DistributionStatus.Idle) ? <SimpleEmpty><span>{reminder}</span></SimpleEmpty> : null
             )}
         </>
     )

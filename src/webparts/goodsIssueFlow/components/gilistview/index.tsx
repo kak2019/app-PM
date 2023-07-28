@@ -43,6 +43,7 @@ export default memo(function index() {
   useEffect(() => {
     setListViewItems([...requests]);
   }, [requests]);
+  const reminder = "You haven't receive any request flows"
 
   const getIndexByID = useCallback(
     (ID: string): number => {
@@ -461,7 +462,7 @@ export default memo(function index() {
           )}
         </Formik>
       ) : (
-        (isFetchingRequest === RequestStatus.Idle) ? <SimpleEmpty /> : null
+        (isFetchingRequest === RequestStatus.Idle) ? <SimpleEmpty><span>{reminder}</span></SimpleEmpty> : null
       )}
     </>
   );
