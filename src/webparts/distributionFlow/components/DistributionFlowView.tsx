@@ -127,7 +127,7 @@ export default function DistributionFlowView(): JSX.Element {
                 }
             },
             textAlign: 'center',
-            
+            //title: <><Icon iconName="upload"/></>
             
         },
         
