@@ -25,7 +25,10 @@ import { IWebEnsureUserResult } from '@pnp/sp/site-users/types';
 import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
 import { useId, useBoolean } from '@fluentui/react-hooks';
 import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
-import styles from './RequestFlow.module.scss'
+import styles from './RequestFlow.module.scss';
+import  Viewhistory from '../assets/submit';
+import Erroricon from '../assets/error'
+
 // interface IPartJson {
 //   [ID:number]: {
 //     "PartID": string,
@@ -69,7 +72,7 @@ export default function RequestView(): JSX.Element {
           flexDirection: 'column',
           alignItems: 'start',
           height: '20vh',
-          minWidth: 500,
+          minWidth: 400,
         },
       },
     },
@@ -103,9 +106,9 @@ export default function RequestView(): JSX.Element {
         '@media (min-width: 0px)': {
           //height: 220,
           maxHeight: 500,
-          maxWidth: 650,
+          maxWidth: 550,
           minwidth: 362,
-          width: 400,
+          width: 300,
         }
       },
       textAlign: 'center',
@@ -157,7 +160,7 @@ export default function RequestView(): JSX.Element {
 
   const dialogContentProps1 = {
     type: DialogType.normal,
-    title: 'Error ',
+    title: ' ',//"Error"
     closeButtonAriaLabel: 'Close',
     subText: '',
   };
@@ -426,7 +429,7 @@ export default function RequestView(): JSX.Element {
     addRequest({ request }).then(promises => { console.log("promiss", promises, typeof (promises)); promiss = promises }).catch(err => console.log("err", err));
     console.log("typeof promises==='string'", typeof promiss === "string")
     if (typeof promiss !== "string") {
-      setdialogContentProps((dialogContentProps) => ({ ...dialogContentProps, title: "Confirmation", subText: "Submitted successfully! The request will be listed in some minutes." }))
+      setdialogContentProps((dialogContentProps) => ({ ...dialogContentProps, title: "", subText: "" }))
       setbuttonVisible(false)
 
     } else {
@@ -480,12 +483,12 @@ export default function RequestView(): JSX.Element {
     //console.log("listtemp",templist)
     if (flag ) {
       if (selectedItem === null || selectedItem === undefined) {
-        sethinterrormessage("Please check if Terminal is selected");
+        sethinterrormessage("Please select Ternimal.");
         setdialogvisible(false)
         toggleHideDialog();
         return
       } else if (dialogitems.length === 0) {
-        sethinterrormessage("Please fill in at least one part quantity");
+        sethinterrormessage("Please fill in at least one part quantity.");
         setdialogvisible(false)
         toggleHideDialog();
         return
@@ -575,7 +578,7 @@ export default function RequestView(): JSX.Element {
           modalProps={dialogmodalProps}
           
         > {
-          buttonvisible && <DetailsList
+          buttonvisible ? <DetailsList
               items={dialogitems}// [{"Emballage Number":"123","Emballage Type":"456" ,"Count":"11"},]
               //compact={isCompactMode}
               columns={dialogcolumns}
@@ -588,7 +591,18 @@ export default function RequestView(): JSX.Element {
               styles={gridStyles}
 
             //onItemInvoked={this._onItemInvoked}
-            />
+            />: (
+              <div style={{height: '100px'}}>
+                <p style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', fontWeight: 'bold'}}>
+                  <div style={{marginRight: '10px', display: 'flex', alignItems: 'center'}}>
+                    <Viewhistory />
+                  </div>
+                  Submitted!
+                </p>
+                <p style={{fontSize: '14px', textAlign: 'center'}}>Submitted successfully! The request will be listed in some minutes.</p>
+              </div>
+            )
+  
 
             // buttonvisible && dialogitems.map((item: Iitem) =>
             //   <div key={item.PartID}>
@@ -596,16 +610,13 @@ export default function RequestView(): JSX.Element {
             //   </div>
             // )
 
-          }
+         } 
 
-
-          <DialogFooter>
-            <DefaultButton onClick={() => { document.location.href = `${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx` }} text="OK" style={{ display: !buttonvisible ? 'block' : 'none' }} className={styles.dialogyesbutton}/>
-            
-            <DefaultButton onClick={toggleHideDialog} text="Cancel" style={{ display: buttonvisible ? 'block' : 'none' }} className={styles.dialogcancelbutton}/>
-            <PrimaryButton onClick={submitFunction} text="Yes" style={{ display: buttonvisible ? 'block' : 'none' }} className={styles.dialogyesbutton} />
-
-          </DialogFooter>
+          <DialogFooter styles={!buttonvisible ? {actionsRight: {justifyContent: 'center'}} : {}}>
+          <PrimaryButton onClick={() => { document.location.href = `${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx` }} text="OK" style={{ display: !buttonvisible ? 'block' : 'none' }} className={styles.dialogyesbutton}/>
+          <DefaultButton onClick={toggleHideDialog} text="Cancel" style={{ display: buttonvisible ? 'block' : 'none' }} />
+          <PrimaryButton onClick={submitFunction} text="Yes" style={{ display: buttonvisible ? 'block' : 'none' }} className={styles.dialogyesbutton}/>
+        </DialogFooter>
         </Dialog>
 
         : <Dialog
@@ -613,10 +624,21 @@ export default function RequestView(): JSX.Element {
           modalProps={modalProps}
           hidden={hideDialog}
           onDismiss={toggleHideDialog}>
-          <div>
+          {/* <div>
             {hinterrormessage}
-          </div>
-          <DialogFooter>
+          </div> */}
+          
+              <div style={{height: '100px'}}>
+                <p style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', fontWeight: 'bold'}}>
+                  <div style={{marginRight: '10px', display: 'flex', alignItems: 'center'}}>
+                    <Erroricon />
+                  </div>
+                  Error
+                </p>
+                <p style={{fontSize: '14px', textAlign: 'center'}}>{hinterrormessage}</p>
+              </div>
+            
+          <DialogFooter styles={{actionsRight: {justifyContent: 'center'}}}>
             <PrimaryButton onClick={toggleHideDialog} text='OK' className={styles.dialogyesbutton}/>
           </DialogFooter>
         </Dialog>
