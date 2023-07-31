@@ -7,7 +7,7 @@ export enum DistributionStatus {
 }
 
 export const DISTRIBUTIONCONST = Object.freeze({
-    LIST_NAME: "Distribution List",
+    LIST_NAME: "Received Distributions",
     PART_LIST: [
         { PartID: "1", PartDescription: "PALLET OF WOOD, TYPE L" },
         { PartID: "21", PartDescription: "FRAME OF WOOD, TYPE L" },
@@ -71,5 +71,5 @@ export const initialState: IDistributionState = {
     sender: "",
     listId: "",
     statue: DistributionStatus.Idle,
-    message:""
+    message: ""
 }
