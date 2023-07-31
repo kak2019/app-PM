@@ -197,7 +197,7 @@ export default memo(function App() {
               />
 
               <DefaultButton
-                text="Received Distribution"
+                text="Received Distributions"
                 className={
                   userRoleobj.ReciecedDistributionV
                     ? styles.homePageButton
