@@ -86,7 +86,7 @@ export default memo(function SubmitAction({
     return (
         <div style={{ width: 120 }}>
             <PrimaryButton
-                text="submit"
+                text="save"
                 iconProps={{ iconName: "Save" }}
                 onClick={handleSubmit}
                 allowDisabledFocus
