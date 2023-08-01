@@ -22,8 +22,9 @@ import { DatePicker, addDays, IDatePickerStyles } from "office-ui-fabric-react";
 import { addRequest } from "./distributionFlowUtil/distributionFlow";
 import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
 import { useId, useBoolean } from '@fluentui/react-hooks';
-import styles from './DistributionFlow.module.scss'
-
+import styles from './DistributionFlow.module.scss';
+import Submiticon from '../assets/submit';
+import Erroricon from '../assets/error';
 
 interface Iitem {
     "PartID": string,
@@ -42,17 +43,18 @@ export default function DistributionFlowView(): JSX.Element {
 
     const columnstyle = {
         root: {
-        color:"white",
-        backgroundColor: 'rgb(0, 130, 155)',
-        '&:hover': {
-          backgroundColor: 'rgb(0, 130, 155)',
-          color:"white",
-        },
-        '&:active': {
-          backgroundColor: 'rgb(0, 130, 155)',
-          color:"white",
+            color: "white",
+            backgroundColor: 'rgb(0, 130, 155)',
+            '&:hover': {
+                backgroundColor: 'rgb(0, 130, 155)',
+                color: "white",
+            },
+            '&:active': {
+                backgroundColor: 'rgb(0, 130, 155)',
+                color: "white",
+            }
         }
-      }}
+    }
     const [receiver, setReceiver] = useState([]);
     const [selectedReceiverID, setSelectedReceiverID] = React.useState<string>();
     const today = useConst(new Date(Date.now()));
@@ -122,16 +124,16 @@ export default function DistributionFlowView(): JSX.Element {
                     maxWidth: 650,
                     minwidth: 362,
                     width: 600,
-                    
-                    
+
+
                 }
             },
             textAlign: 'center',
             //title: <><Icon iconName="upload"/></>
-            
+
         },
-        
-        
+
+
         //main: { maxWidth: 1200 }
     };// main: { maxWidth: 800 }
     const dialogmodalProps = React.useMemo(
@@ -141,9 +143,9 @@ export default function DistributionFlowView(): JSX.Element {
             subtitleAriaId: subTextId,
             isBlocking: true,
             styles: tempdialogStyles,
-          
-            
-            
+
+
+
             //className:styles.dialogSubText
             //styles: {main:{margin:0}},
 
@@ -156,7 +158,7 @@ export default function DistributionFlowView(): JSX.Element {
         title: 'Error',
         closeButtonAriaLabel: 'Close',
         subText: '',
-        
+
     });
     const [dialogButtonVisible, setDialogButtonVisible] = React.useState<boolean>(true);
     const [dialogVisible, setDialogVisible] = React.useState<boolean>(false);
@@ -341,12 +343,12 @@ export default function DistributionFlowView(): JSX.Element {
             fieldName: 'name',
             minWidth: 20,
             maxWidth: 20,
-            styles:columnstyle,
+            styles: columnstyle,
             //onColumnClick: this._onColumnClick,
             // onRender: (item: Iitem) => (
             //   <Text>{item.PartDescription}</Text>
             // ),
-          }
+        }
     ];
 
     React.useEffect(() => {
@@ -452,7 +454,7 @@ export default function DistributionFlowView(): JSX.Element {
         addRequest({ request }).then(promises => { console.log("promiss", promises, typeof (promises)); promiss = promises }).catch(err => console.log("err", err));
         console.log("typeof promises==='string'", typeof promiss === "string")
         if (typeof promiss !== "string") {
-            setDialogContent((dialogContent) => ({ ...dialogContent, title: "Confirmation", subText: "Submit successfully! The request will be listed in some minutes." }))
+            setDialogContent((dialogContent) => ({ ...dialogContent, title: "", subText: "" }))
             setDialogButtonVisible(false)
         } else {
             setDialogContent((dialogContent) => ({ ...dialogContent, title: "Submit Failuer" }))
@@ -490,19 +492,19 @@ export default function DistributionFlowView(): JSX.Element {
                 setdialogitems(templist)
             }
         }
-        setDialogContent((dialogContent) => ({ ...dialogContent, title: "Error", subText: '', }))
+        setDialogContent((dialogContent) => ({ ...dialogContent, title: "", subText: '', }))
         // console.log("error", hinterrormessage)
         // console.log("flag", flag)
         // console.log("itemlength", dialogitems.length)
         //console.log("listtemp",templist)
         if (flag) {
             if (selectedReceiverType === null || selectedReceiverType === undefined || selectedReceiverName === null || selectedReceiverName === undefined) {
-                sethinterrormessage("Please check if Receiver is selected");
+                sethinterrormessage("Please select Receiver.");
                 setDialogVisible(false)
                 toggleHideDialog();
                 return
             } else if (dialogitems.length === 0) {
-                sethinterrormessage("Please fill in at least one part quantity");
+                sethinterrormessage("Please fill in at least one part quantity.");
                 setDialogVisible(false)
                 toggleHideDialog();
                 return
@@ -519,7 +521,7 @@ export default function DistributionFlowView(): JSX.Element {
     return (
         <section>
             <Stack verticalAlign="center" horizontal style={{ backgroundColor: "rgba(0, 130, 155, 1)", height: 42 }}>
-                <Label style={{ textAlign: 'left', width: 200, color:'white',marginLeft: 8 }}> Request By:</Label>
+                <Label style={{ textAlign: 'left', width: 200, color: 'white', marginLeft: 8 }}> Request By:</Label>
                 <Label style={{ fontFamily: '"Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif', color: 'white' }}> {myEntity?.Name}</Label>
             </Stack>
             <Stack verticalAlign="center" horizontal style={stackClass}>
@@ -584,7 +586,7 @@ export default function DistributionFlowView(): JSX.Element {
                     //document.location.href = returnUrl.slice(0, returnUrl.indexOf("SitePage")) + "SitePage/Home.aspx"
                     document.location.href = `${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx`;
                 }} text="Cancel" className={styles.cancelbutton} />
-                <PrimaryButton secondaryText="Opens the Sample Dialog" onClick={validateRequest} text="Submit"  />
+                <PrimaryButton secondaryText="Opens the Sample Dialog" onClick={validateRequest} text="Submit" className={styles.submitbutton} />
                 {/* //className={styles.submitbutton} */}
             </Stack>
             {dialogVisible ?
@@ -596,8 +598,8 @@ export default function DistributionFlowView(): JSX.Element {
                     //{toggleHideDialog} //{() => { document.location.href = `${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx` }}//modalProps
                     dialogContentProps={dialogContent}
                     modalProps={dialogmodalProps}
-                    >
-                    {dialogButtonVisible && <DetailsList
+                >
+                    {dialogButtonVisible ? <DetailsList
                         items={dialogitems}
                         columns={dialogcolumns}
                         selectionMode={SelectionMode.none}
@@ -605,11 +607,21 @@ export default function DistributionFlowView(): JSX.Element {
                         isHeaderVisible={true}
                         onShouldVirtualize={() => false}
                         styles={gridStyles}
-                    />
+                    /> : (
+                        <div style={{ height: '100px' }}>
+                            <p style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', fontWeight: 'bold' }}>
+                                <div style={{ marginRight: '10px', display: 'flex', alignItems: 'center' }}>
+                                    <Submiticon />
+                                </div>
+                                Submitted!
+                            </p>
+                            <p style={{ fontSize: '14px', textAlign: 'center' }}>Submitted successfully! The request will be listed in some minutes.</p>
+                        </div>
+                    )
 
 
                     }
-                    <DialogFooter>
+                    <DialogFooter styles={!dialogButtonVisible ? { actionsRight: { justifyContent: 'center' } } : {}}>
                         <DefaultButton onClick={() => { document.location.href = `${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx` }} text="OK" style={{ display: !dialogButtonVisible ? 'block' : 'none' }} className={styles.dialogyesbutton} />
                         <DefaultButton onClick={toggleHideDialog} text="Cancel" style={{ display: dialogButtonVisible ? 'block' : 'none' }} className={styles.dialogcancelbutton} />
                         <PrimaryButton onClick={submitFunction} text="Yes" style={{ display: dialogButtonVisible ? 'block' : 'none' }} className={styles.dialogyesbutton} />
@@ -620,10 +632,19 @@ export default function DistributionFlowView(): JSX.Element {
                     modalProps={modalProps}
                     hidden={hideDialog}
                     onDismiss={toggleHideDialog}>
-                    <div>
+                    {/* <div>
                         {hinterrormessage}
+                    </div> */}
+                    <div style={{ height: '100px' }}>
+                        <p style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', fontWeight: 'bold' }}>
+                            <div style={{ marginRight: '10px', display: 'flex', alignItems: 'center' }}>
+                                <Erroricon />
+                            </div>
+                            Error
+                        </p>
+                        <p style={{ fontSize: '14px', textAlign: 'center' }}>{hinterrormessage}</p>
                     </div>
-                    <DialogFooter>
+                    <DialogFooter styles={{actionsRight: {justifyContent: 'center'}}}>
                         <PrimaryButton onClick={toggleHideDialog} text='OK' className={styles.dialogyesbutton} />
                     </DialogFooter>
                 </Dialog>
