@@ -16,6 +16,7 @@ import MyDisribution from '../assets/myDisribution'
 import EditDocument from '../assets/editDocument'
 import Receive from '../assets/receive'
 import ViewHistory from '../assets/viewhistory'
+import InvoiceIcon from  '../assets/InvoiceIcon'
 
 interface IuserRoleobj {
   CreateFlowV: boolean;
@@ -118,11 +119,11 @@ export default memo(function App() {
       {viewVisible ? (
         <Stack enableScopedSelectors styles={stackStyles}>
           <div className={styles.section} style={{display:(userRoleobj.CreateFlowV||userRoleobj.RequestFlowV||userRoleobj.GoodIssueV)?"block":"none"}}>
-            <div className={styles.parttitle} style={{display:(userRoleobj.CreateFlowV||userRoleobj.RequestFlowV||userRoleobj.GoodIssueV)?"block":"none"}}>Request</div>
+            {/* <div className={styles.parttitle} style={{display:(userRoleobj.CreateFlowV||userRoleobj.RequestFlowV||userRoleobj.GoodIssueV)?"block":"none"}}>Request</div> */}
             <Stack enableScopedSelectors horizontal horizontalAlign="start">
             
             <DefaultButton
-              text="New Request"
+              text="Incoming"
               className={
                 userRoleobj.CreateFlowV
                   ? styles.homePageButton
@@ -136,7 +137,7 @@ export default memo(function App() {
             />
 
             <DefaultButton
-              text="Request List"
+              text="Incoming List"
               className={
                 userRoleobj.RequestFlowV
                   ? styles.homePageButton
@@ -166,10 +167,10 @@ export default memo(function App() {
           </div>
 
           <div className={styles.section}>
-            <div className={styles.parttitle}>Distribution</div>
+            {/* <div className={styles.parttitle}>Distribution</div> */}
               <Stack enableScopedSelectors horizontal horizontalAlign="start">
               <DefaultButton
-                text="New Distribution"
+                text="Outgoing"
                 className={
                   userRoleobj.CreateDistributionV
                     ? styles.homePageButton
@@ -213,10 +214,10 @@ export default memo(function App() {
           </div>
 
           <div className={styles.section}>
-            <div className={styles.parttitle}>Inventory </div>
+            {/* <div className={styles.parttitle}>Inventory </div> */}
             <Stack enableScopedSelectors horizontal horizontalAlign="start">
               <DefaultButton
-                text="Inventory Management"
+                text="Stock Reports"
                 className={
                   userRoleobj.InventoryV
                     ? styles.homePageButton
@@ -239,6 +240,24 @@ export default memo(function App() {
                 href={`${webURL ? webURL + "/" : ""}Lists/Inventory%20History`}
                 onRenderIcon={() => {
                   return <ViewHistory />
+                }}
+              />
+            </Stack>
+          </div>
+
+          <div className={styles.section}>
+          <Stack enableScopedSelectors horizontal horizontalAlign="start">
+          <DefaultButton
+                text="Invoice Print Out"
+                className={
+                  userRoleobj.InventoryV
+                    ? styles.homePageButton
+                    : styles.homePageButtonDisabled
+                }
+                disabled={!userRoleobj.InventoryV}
+                //href={`${webURL ? webURL + "/" : ""}Lists/Inventory%20Management`}
+                onRenderIcon={() => {
+                  return <InvoiceIcon/>
                 }}
               />
             </Stack>
