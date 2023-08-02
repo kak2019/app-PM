@@ -11,7 +11,7 @@ import { IReadonlyTheme } from '@microsoft/sp-component-base';
 import * as strings from 'BundleCaculationWebPartStrings';
 import BundleCaculation from './components/BundleCaculation';
 import { IBundleCaculationProps } from './components/IBundleCaculationProps';
-
+import { getSP } from '../../common/pnpjsConfig';
 export interface IBundleCaculationWebPartProps {
   description: string;
 }
@@ -29,7 +29,8 @@ export default class BundleCaculationWebPart extends BaseClientSideWebPart<IBund
         isDarkTheme: this._isDarkTheme,
         environmentMessage: this._environmentMessage,
         hasTeamsContext: !!this.context.sdks.microsoftTeams,
-        userDisplayName: this.context.pageContext.user.displayName
+        userDisplayName: this.context.pageContext.user.displayName,
+        context:this.context
       }
     );
 
@@ -38,7 +39,7 @@ export default class BundleCaculationWebPart extends BaseClientSideWebPart<IBund
 
   protected onInit(): Promise<void> {
     this._environmentMessage = this._getEnvironmentMessage();
-
+    getSP(this.context);
     return super.onInit();
   }
 
