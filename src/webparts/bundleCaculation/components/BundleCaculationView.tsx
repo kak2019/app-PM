@@ -13,7 +13,7 @@ interface Iitem {
     "Material": string,
     "MaterialDescription": string,
     "Count"?: string,
-    "Component": {Name:string,Count:number},
+    "Component": {PartID:number,Name:string,Count:number}[],
   }
 
 
@@ -65,7 +65,7 @@ React.useEffect(()=>{
           maxWidth: 141,
           //onColumnClick: this._onColumnClick,
           onRender: (item: Iitem, i: number) => (
-           <Text> {item.Count}</Text>
+           <Text> {item.Component[0].PartID}</Text>
           ),
         },
         {
