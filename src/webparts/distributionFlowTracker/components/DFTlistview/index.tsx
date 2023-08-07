@@ -269,13 +269,21 @@ export default memo(function index() {
             isResizable: false,
             render: (rowitem: IDistributionListItem) => {
                 return (
+                    // Enable Reset Action
+                    // <Stack horizontal tokens={stackTokens}>
+                    //     <SubmitAction
+                    //         //disabled={isFreezed(rowitem.ID)}
+                    //         disabled={false}
+                    //         idx={getIndexByID(rowitem.ID)}
+                    //     />
+                    //     <ResetAction
+                    //         //disabled={isFreezed(rowitem.ID)}
+                    //         disabled={false}
+                    //         idx={getIndexByID(rowitem.ID)}
+                    //     />
+                    // </Stack>
                     <Stack horizontal tokens={stackTokens}>
                         <SubmitAction
-                            //disabled={isFreezed(rowitem.ID)}
-                            disabled={false}
-                            idx={getIndexByID(rowitem.ID)}
-                        />
-                        <ResetAction
                             //disabled={isFreezed(rowitem.ID)}
                             disabled={false}
                             idx={getIndexByID(rowitem.ID)}
