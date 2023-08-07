@@ -10,7 +10,7 @@ import { FormikCheckbox, FormikDropdown, FormikTextField } from "../../../../com
 import { DISTRIBUTIONCONST, DistributionStatus } from "../../../../common/features/distributions";
 import { FieldUserRenderer } from "@pnp/spfx-controls-react";
 import SubmitAction from "./submitAction";
-import ResetAction from "./resetAction";
+//import ResetAction from "./resetAction";
 import AllErrors from "./allErrors";
 import styles from "./DFTListView.module.scss"
 import SimpleEmpty from "../../../../common/components/Empty";
