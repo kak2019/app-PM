@@ -80,8 +80,8 @@ export default memo(function App() {
           case USER_ROLE.terminal:
             setuserRoleobj({
               ...userRoleobj,
-              CreateFlowV: true,
-              RequestFlowV: true,
+              CreateFlowV: false,
+              RequestFlowV: false,
               GoodIssueV: true,
             });
             break;

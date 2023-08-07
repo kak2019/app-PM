@@ -6,6 +6,7 @@ import { TextField } from '@fluentui/react/lib/TextField'
 import { PrimaryButton } from '@fluentui/react/lib/Button'
 import { Stack } from '@fluentui/react/lib/Stack';
 import { Label } from '@fluentui/react/lib/Label';
+import { IDetailsListStyles } from 'office-ui-fabric-react';
 
 
 
@@ -129,26 +130,52 @@ React.useEffect(()=>{
       }
 
       const handleCountChange = (e: React.FormEvent, val: string):void => {
+        //setCount(val)
         setCount(val)
       }
-
-      const handleDrodownChange = (event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption, index?: number):void => {
-        const material = {
-          ...BUNDLECONST.MATERIAL_LIST[index]
-        }
-        setCurMaterial(material)
-        setList(material.Component.slice(0).map((val) => ({
-          ...val,
-          Count: Number(count) * val.Count
-        })))
-      }
-
       const handleGoClick = ():void => {
         setList(curMaterial.Component.slice(0).map((val) => ({
           ...val,
           Count: Number(count) * val.Count
         })))
       }
+      const handleDrodownChange = (event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption, index?: number):void => {
+        setCount("1");
+        const material = {
+          ...BUNDLECONST.MATERIAL_LIST[index]
+        }
+        setCurMaterial(material)
+        setList(material.Component.slice(0).map((val) => ({
+          ...val,
+          //Count: Number(count) * val.Count
+          Count: Number("1") * val.Count
+        })))
+        
+        
+        
+      }
+
+    //  React.useEffect(()=>{
+    //     if(curMaterial !== undefined){
+    //     //handleGoClick()
+    // }
+    //  },[count]) 
+    const gridStyles: Partial<IDetailsListStyles> = {
+        root: {
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          selectors: {
+            '& [role=grid]': {
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'start',
+              height: '100vh',
+              minWidth: 400,
+            },
+          },
+        },
+    
+      };
 
 return(
     <section>
@@ -174,7 +201,7 @@ return(
         <PrimaryButton text="GO" styles={{root: {marginLeft: 10}}} onClick={handleGoClick} />
     </Stack>
 
-    <DetailsList
+    {list?.length>0&&<DetailsList
         items={list}// [{"Emballage Number":"123","Emballage Type":"456" ,"Count":"11"},]
         //compact={isCompactMode}
         columns={columns}
@@ -186,9 +213,9 @@ return(
         onShouldVirtualize={() => false}
         
       //onItemInvoked={this._onItemInvoked}
-      />
+      />}
     <DetailsList
-        items={items}// [{"Emballage Number":"123","Emballage Type":"456" ,"Count":"11"},]
+        items={items}
         //compact={isCompactMode}
         columns={materialColumns}
         selectionMode={SelectionMode.none}
@@ -197,7 +224,7 @@ return(
         layoutMode={DetailsListLayoutMode.justified}
         isHeaderVisible={true}
         onShouldVirtualize={() => false}
-        
+        styles={gridStyles}
       //onItemInvoked={this._onItemInvoked}
       />
       </section>
