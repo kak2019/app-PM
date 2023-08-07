@@ -51,7 +51,6 @@ export enum RequestStatus {
 export const REQUESTSCONST = Object.freeze({
   LIST_NAME: "Request List",
   PART_LIST: [
-
     { PartID: "1", PartDescription: "PALLET OF WOOD, TYPE L" },
     { PartID: "21", PartDescription: "FRAME OF WOOD, TYPE L" },
     { PartID: "61", PartDescription: "SPACER OF WOOD FIBRE, L INNER" },
@@ -90,23 +89,22 @@ export const REQUESTSCONST = Object.freeze({
     { PartID: "841", PartDescription: "LID OF PLASTIC FOR EMB 840" },
     { PartID: "81", PartDescription: "SPACER OF PLASTIC, L INNER" },
     { PartID: "82", PartDescription: "SPACER OF PLASTIC, K INNER" },
-    { PartID: "116", PartDescription: "FIXING SPACER OF PLASTIC" }
- ],
+    { PartID: "116", PartDescription: "FIXING SPACER OF PLASTIC" },
+  ],
   STATUS_OPTIONS: [
     { key: "Req Received", text: "Req Received" },
     { key: "Req Accepted", text: "Req Accepted" },
     { key: "Req Rejected", text: "Req Rejected" },
-    { key: "Req On HOLD", text: "Req On HOLD" },
-    { key: "Req Approved", text: "Req Approved" },
+    // { key: "Req On HOLD", text: "Req On HOLD" },   //Andy requests to delete status Req on HOLD and Req Approved. No need for this
+    // { key: "Req Approved", text: "Req Approved" },
     { key: "GI / In Transit", text: "GI / In Transit" },
     { key: "Completed", text: "Completed" },
   ],
   FULLORPARTIAL_OPTIONS: [
     { key: "Full Filled", text: "Full Filled" },
     { key: "Partial Filled", text: "Partial Filled" },
-  ]
+  ],
 });
-
 
 export interface IRequestState {
   item: IRequestListItem;
