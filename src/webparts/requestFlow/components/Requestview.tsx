@@ -120,7 +120,7 @@ export default function RequestView(): JSX.Element {
       selectors: {
         '@media (min-width: 0px)': {
           //height: 500,
-          maxHeight: 750,
+          maxHeight: '100vh',
           maxWidth: 650,
           minwidth: 362,
           width: 600,
