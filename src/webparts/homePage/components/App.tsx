@@ -119,7 +119,7 @@ export default memo(function App() {
       {viewVisible ? (
         <Stack enableScopedSelectors styles={stackStyles}>
           <div className={styles.section} style={{display:(userRoleobj.CreateFlowV||userRoleobj.RequestFlowV||userRoleobj.GoodIssueV)?"block":"none"}}>
-            <div className={styles.parttitle} style={{display:(userRoleobj.CreateFlowV||userRoleobj.RequestFlowV||userRoleobj.GoodIssueV)?"block":"none"}}>Incoming</div>
+            <div className={styles.parttitle} style={{display:(userRoleobj.CreateFlowV||userRoleobj.RequestFlowV||userRoleobj.GoodIssueV)?"block":"none"}}>Request / Incoming</div>
             <Stack enableScopedSelectors horizontal horizontalAlign="start">
             
             <DefaultButton
@@ -167,7 +167,7 @@ export default memo(function App() {
           </div>
 
           <div className={styles.section}>
-            <div className={styles.parttitle}>Outgoing</div>
+            <div className={styles.parttitle}>Distribution / Outgoing</div>
               <Stack enableScopedSelectors horizontal horizontalAlign="start">
               <DefaultButton
                 text="Outgoing"
@@ -246,7 +246,7 @@ export default memo(function App() {
           </div>
 
           <div className={styles.section}>
-          <div className={styles.parttitle}>Invoice</div>
+          <div className={styles.parttitle}>Invoice Template</div>
           <Stack enableScopedSelectors horizontal horizontalAlign="start">
           <DefaultButton
                 text="Invoice Print Out"
