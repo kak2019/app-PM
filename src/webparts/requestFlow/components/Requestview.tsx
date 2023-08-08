@@ -71,7 +71,7 @@ export default function RequestView(): JSX.Element {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'start',
-          height: '20vh',
+          maxHeight: '60vh',
           minWidth: 400,
         },
       },
@@ -105,7 +105,7 @@ export default function RequestView(): JSX.Element {
       selectors: {
         '@media (min-width: 0px)': {
           //height: 220,
-          maxHeight: 500,
+          maxHeight: 900,
           maxWidth: 550,
           minwidth: 362,
           width: 300,
@@ -119,8 +119,8 @@ export default function RequestView(): JSX.Element {
     main: {
       selectors: {
         '@media (min-width: 0px)': {
-          //height: 220,
-          maxHeight: 500,
+          //height: 500,
+          maxHeight: 750,
           maxWidth: 650,
           minwidth: 362,
           width: 600,
@@ -387,15 +387,7 @@ export default function RequestView(): JSX.Element {
     console.log("dialogitems", dialogitems, dialogitems.length)
 
   }
-  // useEffect(()=>{
-  //   const templist = []
-  //   for(let i=0;i<dialogitems.length;i++){
-  //     if(dialogitems[i].Count!==""){
-  //       templist.push(dialogitems[i])
-  //     }
-  //     setdialogitems(templist)
-  //   }
-  // },[dialogitems])
+
   useEffect(() => {
     filterPartInfo();
   }, [allItems])
@@ -409,11 +401,6 @@ export default function RequestView(): JSX.Element {
       templist[i] = dialogitems[i];
       jsonData[i + 1] = dialogitems[i];
     }
-    // dialogitems.forEach((element, index) => {
-    //   //let obj :IPartJson= {}
-    //   //templist.push(obj[ID]=JSON.stringify(element))
-
-    // });
     console.log("temp", jsonData)
     const request = {
       RequestorId: resultRequestor.data.Id,
@@ -459,7 +446,7 @@ export default function RequestView(): JSX.Element {
     // console.log("listtemp1",templist)
 
     for (let i = 0; i < dialogitems.length; i++) {
-      // console.log("会执行吗", !(/^\d+$/.test(dialogitems[i].Count)))
+    // 这个正则 是为了校验输入是不是纯数字
       if (!(/^\d+$/.test(dialogitems[i].Count)) && dialogitems[i].Count !== "") {
         sethinterrormessage("Only integer is allowed in Quantity field.")
         flag = false
@@ -589,7 +576,6 @@ export default function RequestView(): JSX.Element {
               isHeaderVisible={true}
               onShouldVirtualize={() => false}
               styles={gridStyles}
-
             //onItemInvoked={this._onItemInvoked}
             />: (
               <div style={{height: '100px'}}>
