@@ -123,6 +123,7 @@ React.useEffect(()=>{
       ))
       const dropdownStyles: Partial<IDropdownStyles> = {
         dropdown: { width: 300 },
+        callout: { maxHeight: "20px", overflowY: 'auto' },
       };
 
       const stackClass = {
@@ -131,7 +132,8 @@ React.useEffect(()=>{
 
       const handleCountChange = (e: React.FormEvent, val: string):void => {
         //setCount(val)
-        setCount(val)
+        if ((/^\d+$/.test(val)) ||val  === "") {
+        setCount(val)}
       }
       const handleGoClick = ():void => {
         setList(curMaterial.Component.slice(0).map((val) => ({
@@ -197,10 +199,11 @@ return(
           value={count}
           onChange={handleCountChange}
           styles={{root: { width: 300 }}}
+          
         />
         <PrimaryButton text="GO" styles={{root: {marginLeft: 10}}} onClick={handleGoClick} />
     </Stack>
-
+    {list?.length>0&&<hr style={{color:"rgb(0, 130, 155)"}}/>}
     {list?.length>0&&<DetailsList
         items={list}// [{"Emballage Number":"123","Emballage Type":"456" ,"Count":"11"},]
         //compact={isCompactMode}
@@ -214,6 +217,7 @@ return(
         
       //onItemInvoked={this._onItemInvoked}
       />}
+      <hr style={{color:"rgb(0, 130, 155)"}}/>
     <DetailsList
         items={items}
         //compact={isCompactMode}
