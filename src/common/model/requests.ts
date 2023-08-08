@@ -22,6 +22,7 @@ export interface IRequestListItem {
     ConfirmationFromSupplier?: boolean; //1 0
     Field1?: string;
     Field2?: string;
+    Remarks?: string;
     Created?: string;
 }
 
@@ -34,4 +35,5 @@ export interface IRequestGIError {
     ConfirmationFromSupplier?: string;
     Field1?: string;
     Field2?: string;
+    Remarks?: string;
 }

@@ -43,6 +43,7 @@ const fetchById = async (arg: { Id: number }): Promise<IRequestListItem> => {
                         <FieldRef Name="ConfirmationFromSupplier"/>
                         <FieldRef Name="Field1"/>
                         <FieldRef Name="Field2"/>
+                        <FieldRef Name="Remarks"/>
                         <FieldRef Name="Created"/>
                       </ViewFields>
                       <RowLimit>1</RowLimit>
@@ -74,6 +75,7 @@ const fetchById = async (arg: { Id: number }): Promise<IRequestListItem> => {
             ConfirmationFromSupplier: response.Row[0].ConfirmationFromSupplier === "Yes",
             Field1: response.Row[0].Field1,
             Field2: response.Row[0].Field2,
+            Remarks: response.Row[0].Remarks,
             Created: dayjs(response.Row[0].Created).format("YYYY/MM/DD HH:mm:ss A")
           } as IRequestListItem;
         }
@@ -125,6 +127,7 @@ const fetchByTerminalId = async (arg: {
                           <FieldRef Name="ConfirmationFromSupplier"/>
                           <FieldRef Name="Field1"/>
                           <FieldRef Name="Field2"/>
+                          <FieldRef Name="Remarks"/>
                           <FieldRef Name="Created"/>
                         </ViewFields>
                         <RowLimit>5000</RowLimit>
@@ -157,6 +160,7 @@ const fetchByTerminalId = async (arg: {
               ConfirmationFromSupplier: item.ConfirmationFromSupplier === "Yes",
               Field1: item.Field1,
               Field2: item.Field2,
+              Remarks: item.Remarks,
               Created: dayjs(item.Created).format("YYYY/MM/DD HH:mm:ss A")
             } as IRequestListItem)
           ).sort((a, b) => a.Created > b.Created ? -1 : 1);

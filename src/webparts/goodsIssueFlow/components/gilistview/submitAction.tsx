@@ -1,5 +1,5 @@
 import * as React from "react";
-import {memo} from "react";
+import { memo } from "react";
 import { useFormikContext } from "formik";
 import { PrimaryButton } from "office-ui-fabric-react";
 
@@ -72,6 +72,7 @@ export default memo(function SubmitAction({
       ConfirmationFromSupplier: rowValues.ConfirmationFromSupplier,
       Field1: rowValues.Field1,
       Field2: rowValues.Field2,
+      Remarks: rowValues.Remarks,
       StatusUpdateById: (
         JSON.parse(myEntity.Users)[0] as IPrincipal
       ).id.toString(),

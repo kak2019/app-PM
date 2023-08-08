@@ -36,6 +36,7 @@ const fetchById = async (arg: { Id: number }): Promise<IDistributionListItem> =>
                         <FieldRef Name="ConfirmationFromReceiver"/>
                         <FieldRef Name="Field1"/>
                         <FieldRef Name="Field2"/>
+                        <FieldRef Name="Remarks"/>
                         <FieldRef Name="Created"/>
                       </ViewFields>
                       <RowLimit>1</RowLimit>
@@ -60,6 +61,7 @@ const fetchById = async (arg: { Id: number }): Promise<IDistributionListItem> =>
                     ConfirmationFromReceiver: response.Row[0].ConfirmationFromReceiver === "Yes",
                     Field1: response.Row[0].Field1,
                     Field2: response.Row[0].Field2,
+                    Remarks: response.Row[0].Remarks,
                     Created: dayjs(response.Row[0].Created).format("YYYY/MM/DD HH:mm:ss A")
                 } as IDistributionListItem;
             }
@@ -107,6 +109,7 @@ const fetchBySender = async (arg: {
 		                        <FieldRef Name="ConfirmationFromReceiver"/>
 		                        <FieldRef Name="Field1"/>
 		                        <FieldRef Name="Field2"/>
+                                <FieldRef Name="Remarks"/>  
                                 <FieldRef Name="Created"/>
 	                        </ViewFields>
 	                        <RowLimit>5000</RowLimit>
@@ -134,6 +137,7 @@ const fetchBySender = async (arg: {
                             ConfirmationFromReceiver: item.ConfirmationFromReceiver === "Yes",
                             Field1: item.Field1,
                             Field2: item.Field2,
+                            Remarks: item.Remarks,
                             Created: dayjs(item.Created).format("YYYY/MM/DD HH:mm:ss A")
                         } as IDistributionListItem)
                     ).sort((a, b) => a.Created > b.Created ? -1 : 1);

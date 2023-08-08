@@ -56,6 +56,7 @@ export default memo(function SubmitAction({
             ConfirmationFromReceiver: rowValues.ConfirmationFromReceiver,
             Field1: rowValues.Field1,
             Field2: rowValues.Field2,
+            Remarks: rowValues.Remarks,
             StatusUpdatedById: (
                 JSON.parse(myEntity.Users)[0] as IPrincipal
             ).id.toString(),

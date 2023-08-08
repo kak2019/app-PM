@@ -213,7 +213,7 @@ export default memo(function index() {
         },
         {
             name: "Field1",
-            displayName: "Field1",
+            displayName: "ASN / Delivery Note",
             minWidth: 150,
             maxWidth: 180,
             isResizable: false,
@@ -235,7 +235,7 @@ export default memo(function index() {
         },
         {
             name: "Field2",
-            displayName: "Field2",
+            displayName: "Invoice",
             minWidth: 150,
             maxWidth: 180,
             isResizable: false,
@@ -246,6 +246,28 @@ export default memo(function index() {
                         <Field
                             component={FormikTextField}
                             name={`formlvItems[${getIndexByID(rowitem.ID)}].Field2`}
+                            styles={textFieldStyles}
+                            disabled={false}
+                        //disabled={isFreezed(rowitem.ID)}
+                        />
+                    );
+                },
+                [listviewItems]
+            ),
+        },
+        {
+            name: "Remarks",
+            displayName: "Remarks",
+            minWidth: 150,
+            maxWidth: 180,
+            isResizable: false,
+            sorting: false,
+            render: useCallback(
+                (rowitem: IDistributionListItem) => {
+                    return (
+                        <Field
+                            component={FormikTextField}
+                            name={`formlvItems[${getIndexByID(rowitem.ID)}].Remarks`}
                             styles={textFieldStyles}
                             disabled={false}
                         //disabled={isFreezed(rowitem.ID)}

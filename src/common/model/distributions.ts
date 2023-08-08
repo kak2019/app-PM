@@ -16,6 +16,7 @@ export interface IDistributionListItem {
     ConfirmationFromReceiver?: boolean;
     Field1?: string;
     Field2?: string;
+    Remarks?: string;
     Created?: string;
 }
 
