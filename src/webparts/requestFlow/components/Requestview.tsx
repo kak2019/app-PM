@@ -470,7 +470,7 @@ export default function RequestView(): JSX.Element {
     //console.log("listtemp",templist)
     if (flag ) {
       if (selectedItem === null || selectedItem === undefined) {
-        sethinterrormessage("Please select Ternimal.");
+        sethinterrormessage("Please select Terminal.");
         setdialogvisible(false)
         toggleHideDialog();
         return
