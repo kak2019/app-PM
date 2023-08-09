@@ -547,54 +547,54 @@ export const BUNDLECONST = Object.freeze({
         }
       ]
     },
-    {
-      "Material": "20750",
-      "MaterialDescription": "KIT of BOX OF PLASTIC",
-      "Component": [
-        {
-          "PartID": 750,
-          "Name": "BOX OF PLASTIC",
-          "Count": 1
-        },
-        {
-          "PartID": 751,
-          "Name": "LID OF PLASTIC",
-          "Count": 1
-        }
-      ]
-    },
-    {
-      "Material": "20780",
-      "MaterialDescription": "KIT of BOX OF PLASTIC",
-      "Component": [
-        {
-          "PartID": 780,
-          "Name": "BOX OF PLASTIC",
-          "Count": 1
-        },
-        {
-          "PartID": 781,
-          "Name": "LID OF PLASTIC",
-          "Count": 1
-        }
-      ]
-    },
-    {
-      "Material": "20840",
-      "MaterialDescription": "KIT of BOX OF PLASTIC",
-      "Component": [
-        {
-          "PartID": 840,
-          "Name": "BOX OF PLASTIC",
-          "Count": 1
-        },
-        {
-          "PartID": 841,
-          "Name": "LID OF PLASTIC FOR EMB 840",
-          "Count": 1
-        }
-      ]
-    }
+    // {
+    //   "Material": "20750",
+    //   "MaterialDescription": "KIT of BOX OF PLASTIC",
+    //   "Component": [
+    //     {
+    //       "PartID": 750,
+    //       "Name": "BOX OF PLASTIC",
+    //       "Count": 1
+    //     },
+    //     {
+    //       "PartID": 751,
+    //       "Name": "LID OF PLASTIC",
+    //       "Count": 1
+    //     }
+    //   ]
+    // },
+    // {
+    //   "Material": "20780",
+    //   "MaterialDescription": "KIT of BOX OF PLASTIC",
+    //   "Component": [
+    //     {
+    //       "PartID": 780,
+    //       "Name": "BOX OF PLASTIC",
+    //       "Count": 1
+    //     },
+    //     {
+    //       "PartID": 781,
+    //       "Name": "LID OF PLASTIC",
+    //       "Count": 1
+    //     }
+    //   ]
+    // },
+    // {
+    //   "Material": "20840",
+    //   "MaterialDescription": "KIT of BOX OF PLASTIC",
+    //   "Component": [
+    //     {
+    //       "PartID": 840,
+    //       "Name": "BOX OF PLASTIC",
+    //       "Count": 1
+    //     },
+    //     {
+    //       "PartID": 841,
+    //       "Name": "LID OF PLASTIC FOR EMB 840",
+    //       "Count": 1
+    //     }
+    //   ]
+    // }
   ] ,
   PART_LIST: [
 
