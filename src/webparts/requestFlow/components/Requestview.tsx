@@ -71,7 +71,7 @@ export default function RequestView(): JSX.Element {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'start',
-          maxHeight: '60vh',
+          maxHeight: '57vh',
           minWidth: 400,
         },
       },

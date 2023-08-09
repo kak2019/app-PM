@@ -119,8 +119,8 @@ export default function DistributionFlowView(): JSX.Element {
         main: {
             selectors: {
                 '@media (min-width: 0px)': {
-                    //height: 220,
-                    maxHeight: 500,
+                    //height: 220,"
+                    maxHeight: '100vh',
                     maxWidth: 650,
                     minwidth: 362,
                     width: 600,
@@ -415,15 +415,15 @@ export default function DistributionFlowView(): JSX.Element {
     //set style for dialoglists
     const gridStyles: Partial<IDetailsListStyles> = {
         root: {
-            overflowY: 'scroll',
+            overflowY: 'auto',
             overflowX: 'hidden',
             selectors: {
                 '& [role=grid]': {
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'start',
-                    height: '20vh',
-                    minWidth: 500
+                    maxHeight: '57vh',
+                    minWidth: 400
                 },
             },
         },
