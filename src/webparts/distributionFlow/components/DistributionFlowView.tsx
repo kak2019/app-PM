@@ -18,7 +18,7 @@ import "@pnp/sp/webs";
 import "@pnp/sp/lists";
 import "@pnp/sp/items";
 import "@pnp/sp/items/get-all";
-import { DatePicker, addDays, IDatePickerStyles } from "office-ui-fabric-react";
+import { DatePicker, addDays, IDatePickerStyles } from "@fluentui/react";
 import { addRequest } from "./distributionFlowUtil/distributionFlow";
 import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
 import { useId, useBoolean } from '@fluentui/react-hooks';
