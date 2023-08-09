@@ -173,14 +173,12 @@ export default function DistributionFlowView(): JSX.Element {
     }
     //styles
     const dropdownStyles: Partial<IDropdownStyles> = {
-        dropdown: { width: 200 },
+        root: { width: 200 },
     };
     const datepickerStyles: Partial<IDatePickerStyles> = {
         root: { width: 400 }
     };
-    const stackClass = {
-        marginTop: '10px'
-    };
+    
     //name is undefined, if response is not a array, set it as array and return.
     const getMapping = (myterminalID: string): void => {
         sp.web.lists.getByTitle("Distribution Mapping").items.select("PMSender/Name", "PMReceiver/Name", "PMReceiver/ID", "PMReceiverType/Type").filter(`PMSender/Title eq ${myterminalID}`).expand("PMSender,PMReceiver").getAll().then((response1) => {
@@ -516,7 +514,10 @@ export default function DistributionFlowView(): JSX.Element {
             }
         }
 
-    }
+    };
+    const stackClass = {
+        marginTop: '10px'
+    };
 
     return (
         <section>
@@ -542,7 +543,7 @@ export default function DistributionFlowView(): JSX.Element {
                 />
             </Stack>
             <Stack verticalAlign="center" horizontal style={stackClass}>
-                <Label style={{ textAlign: 'left', width: 140, marginLeft: 8 }}>
+                <Label style={{ textAlign: 'left', width: 200, marginLeft: 8 }}>
                     Date Needed:</Label>
                 <DatePicker
                     placeholder="Select date"
@@ -563,9 +564,10 @@ export default function DistributionFlowView(): JSX.Element {
                     {address}
                 </Label>
             </Stack>
+            <hr />
             <Stack verticalAlign="center" horizontal style={stackClass}>
                 <Label style={{ textAlign: 'left', width: 200, marginLeft: 8 }}>Filter: </Label>
-                <TextField style={{ width: 400, height: 25 }} onChange={filterPartList} />
+                <TextField styles={{root: { width: 400 }}} style={{height: 25}} onChange={filterPartList} />
             </Stack>
 
             <DetailsList
