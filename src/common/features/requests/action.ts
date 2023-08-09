@@ -4,7 +4,6 @@ import { getSP } from "../../pnpjsConfig";
 import { REQUESTSCONST } from "./requestsSlice";
 import { FeatureKey } from "../../featureKey";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import * as dayjs from "dayjs";
 
 const fetchById = async (arg: { Id: number }): Promise<IRequestListItem> => {
   const sp = spfi(getSP());
