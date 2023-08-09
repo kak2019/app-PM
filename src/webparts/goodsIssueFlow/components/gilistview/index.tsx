@@ -20,7 +20,10 @@ import {
   mergeStyleSets,
   Stack,
 } from "office-ui-fabric-react";
-import { REQUESTSCONST, RequestStatus } from "../../../../common/features/requests";
+import {
+  REQUESTSCONST,
+  RequestStatus,
+} from "../../../../common/features/requests";
 import {
   FormikDropdown,
   FormikDatePicker,
@@ -43,7 +46,7 @@ export default memo(function index() {
   useEffect(() => {
     setListViewItems([...requests]);
   }, [requests]);
-  const reminder = "You haven't receive any request flows"
+  const reminder = "You haven't receive any request flows";
 
   const getIndexByID = useCallback(
     (ID: string): number => {
@@ -109,43 +112,6 @@ export default memo(function index() {
       sorting: false,
     },
     {
-      name: "Requestor",
-      displayName: "Requested By",
-      minWidth: 100,
-      maxWidth: 150,
-      isResizable: true,
-      sorting: false,
-      render: useCallback(
-        (rowitem: IRequestListItem) => {
-          return rowitem.Requestor !== "" ? (
-            <FieldUserRenderer
-              users={JSON.parse(rowitem.Requestor)} //FieldUserRenderer users value {JSON.parse("[{\"id\":\"11\",\"title\":\"Qin Howard (Consultant)\",\"email\":\"howard.qin@consultant.udtrucks.com\",\"sip\":\"howard.qin@consultant.udtrucks.com\",\"picture\":\"https://udtrucks-my.sharepoint.com:443/User%20Photos/Profile%20Pictures/c1f6b293-e3c7-4c33-9b17-040ffdb5a3b7_MThumb.jpg?t=63800730891\",\"jobTitle\":\"Consultant_EX\",\"department\":\"BP15861\"}]")}
-              context={ctx.context}
-            />
-          ) : (
-            ""
-          );
-        },
-        [listviewItems]
-      ),
-    },
-    {
-      name: "RequesterId_x003a_Name",
-      displayName: "Requestor",
-      minWidth: 80,
-      maxWidth: 100,
-      isResizable: true,
-      sorting: false,
-    },
-    // {
-    //   name: "TerminalId_x003a_Name",
-    //   displayName: "Terminal",
-    //   minWidth: 80,
-    //   maxWidth: 100,
-    //   isResizable: true,
-    //   sorting: false,
-    // },
-    {
       name: "PartID",
       displayName: "Part ID",
       minWidth: 80,
@@ -176,37 +142,9 @@ export default memo(function index() {
       maxWidth: 120,
       isResizable: true,
       sorting: false,
-      render: useCallback((rowitem: IRequestListItem) => {
-        return dayjs(rowitem.DateNeeded).fromNow();
-      }, [listviewItems]),
-    },
-    {
-      name: "DeliveryLocationAndCountry",
-      displayName: "Delivery Location and Country",
-      minWidth: 200,
-      maxWidth: 250,
-      isResizable: true,
-      sorting: false,
-    },
-    {
-      name: "HowMuchCanBeFullfilled",
-      displayName: "How much can be full filled",
-      minWidth: 175,
-      maxWidth: 200,
-      isResizable: false,
-      sorting: false,
       render: useCallback(
         (rowitem: IRequestListItem) => {
-          return (
-            <Field
-              component={FormikTextField}
-              name={`formlvItems[${getIndexByID(
-                rowitem.ID
-              )}].HowMuchCanBeFullfilled`}
-              styles={narrowTextFieldStyles}
-              disabled={isFreezed(rowitem.ID)}
-            />
-          );
+          return dayjs(rowitem.DateNeeded).fromNow();
         },
         [listviewItems]
       ),
@@ -254,27 +192,6 @@ export default memo(function index() {
               options={REQUESTSCONST.FULLORPARTIAL_OPTIONS}
               disabled={isFreezed(rowitem.ID)}
             />
-          );
-        },
-        [listviewItems]
-      ),
-    },
-    {
-      name: "StatusUpdateBy",
-      displayName: "Status Update By",
-      minWidth: 150,
-      maxWidth: 210,
-      isResizable: true,
-      sorting: false,
-      render: useCallback(
-        (rowitem: IRequestListItem) => {
-          return rowitem.StatusUpdateBy !== "" ? (
-            <FieldUserRenderer
-              users={JSON.parse(rowitem.StatusUpdateBy)}
-              context={ctx.context}
-            />
-          ) : (
-            ""
           );
         },
         [listviewItems]
@@ -343,7 +260,7 @@ export default memo(function index() {
               )}].ConfirmationFromSupplier`}
               component={FormikCheckbox}
               disabled={true}
-            //disabled={isFreezed(rowitem.ID)}
+              //disabled={isFreezed(rowitem.ID)}
             />
           );
         },
@@ -414,12 +331,107 @@ export default memo(function index() {
       ),
     },
     {
+      name: "Requestor",
+      displayName: "Created By",
+      minWidth: 100,
+      maxWidth: 150,
+      isResizable: true,
+      sorting: false,
+      render: useCallback(
+        (rowitem: IRequestListItem) => {
+          return rowitem.Requestor !== "" ? (
+            <FieldUserRenderer
+              users={JSON.parse(rowitem.Requestor)} //FieldUserRenderer users value {JSON.parse("[{\"id\":\"11\",\"title\":\"Qin Howard (Consultant)\",\"email\":\"howard.qin@consultant.udtrucks.com\",\"sip\":\"howard.qin@consultant.udtrucks.com\",\"picture\":\"https://udtrucks-my.sharepoint.com:443/User%20Photos/Profile%20Pictures/c1f6b293-e3c7-4c33-9b17-040ffdb5a3b7_MThumb.jpg?t=63800730891\",\"jobTitle\":\"Consultant_EX\",\"department\":\"BP15861\"}]")}
+              context={ctx.context}
+            />
+          ) : (
+            ""
+          );
+        },
+        [listviewItems]
+      ),
+    },
+    {
       name: "Created",
       displayName: "Create Time",
       minWidth: 100,
       maxWidth: 120,
       isResizable: true,
-      sorting: true,
+      sorting: false,
+      render: useCallback(
+        (rowitem: IRequestListItem) => {
+          return dayjs(rowitem.Created).fromNow();
+        },
+        [listviewItems]
+      ),
+    },
+    {
+      name: "RequesterId_x003a_Name",
+      displayName: "Requestor",
+      minWidth: 80,
+      maxWidth: 100,
+      isResizable: true,
+      sorting: false,
+    },
+    // {
+    //   name: "TerminalId_x003a_Name",
+    //   displayName: "Terminal",
+    //   minWidth: 80,
+    //   maxWidth: 100,
+    //   isResizable: true,
+    //   sorting: false,
+    // },
+    {
+      name: "DeliveryLocationAndCountry",
+      displayName: "Delivery Location and Country",
+      minWidth: 200,
+      maxWidth: 250,
+      isResizable: true,
+      sorting: false,
+    },
+    {
+      name: "HowMuchCanBeFullfilled",
+      displayName: "How much can be full filled",
+      minWidth: 175,
+      maxWidth: 200,
+      isResizable: false,
+      sorting: false,
+      render: useCallback(
+        (rowitem: IRequestListItem) => {
+          return (
+            <Field
+              component={FormikTextField}
+              name={`formlvItems[${getIndexByID(
+                rowitem.ID
+              )}].HowMuchCanBeFullfilled`}
+              styles={narrowTextFieldStyles}
+              disabled={isFreezed(rowitem.ID)}
+            />
+          );
+        },
+        [listviewItems]
+      ),
+    },
+    {
+      name: "StatusUpdateBy",
+      displayName: "Status Update By",
+      minWidth: 150,
+      maxWidth: 210,
+      isResizable: true,
+      sorting: false,
+      render: useCallback(
+        (rowitem: IRequestListItem) => {
+          return rowitem.StatusUpdateBy !== "" ? (
+            <FieldUserRenderer
+              users={JSON.parse(rowitem.StatusUpdateBy)}
+              context={ctx.context}
+            />
+          ) : (
+            ""
+          );
+        },
+        [listviewItems]
+      ),
     },
     {
       name: "Actions",
@@ -463,7 +475,7 @@ export default memo(function index() {
                 render={(arrayHelpers) => (
                   <div>
                     {props.values.formlvItems &&
-                      props.values.formlvItems.length > 0 ? (
+                    props.values.formlvItems.length > 0 ? (
                       <ListView
                         items={listviewItems}
                         viewFields={listviewFields}
@@ -482,9 +494,11 @@ export default memo(function index() {
             </Form>
           )}
         </Formik>
-      ) : (
-        (isFetchingRequest === RequestStatus.Idle) ? <SimpleEmpty><span>{reminder}</span></SimpleEmpty> : null
-      )}
+      ) : isFetchingRequest === RequestStatus.Idle ? (
+        <SimpleEmpty>
+          <span>{reminder}</span>
+        </SimpleEmpty>
+      ) : null}
     </>
   );
 });
