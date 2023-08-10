@@ -14,10 +14,12 @@ import { IRequestListItem } from "../../../../common/model/requests";
 import AppContext from "../../../../common/AppContext";
 import { FieldUserRenderer } from "@pnp/spfx-controls-react";
 import {
+  CommandBar,
   IDropdownStyles,
   IStackTokens,
   ITextFieldStyles,
   mergeStyleSets,
+  registerIcons,
   Stack,
 } from "office-ui-fabric-react";
 import {
@@ -35,6 +37,7 @@ import AllErrors from "./allErrors";
 import { formValidationSchema } from "./formValidation";
 import SubmitAction from "./submitAction";
 import SimpleEmpty from "../../../../common/components/Empty";
+import { toCSV } from "../../../../common/components/toCSV";
 
 export default memo(function index() {
   const ctx = useContext(AppContext);
@@ -71,8 +74,32 @@ export default memo(function index() {
     },
     [requests]
   );
-
   //#region ==============Styles and Templates==============
+  registerIcons({
+    icons: {
+      "excel-svg": (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+          <path
+            d="M10 0H4a1.003 1.003 0 0 0-1 1v3l7.001 4L13 9.968 16 8V4z"
+            fill="#21a366"
+          />
+          <path fill="#107c41" d="M16 8H3v4l7 1.4 6-1.4V8z" />
+          <path
+            d="M3 12v3a1.003 1.003 0 0 0 1 1h11a1 1 0 0 0 1-1v-3z"
+            fill="#185c37"
+          />
+          <path d="M10 4H3v10h6a2 2 0 0 0 2-2V5a1 1 0 0 0-1-1z" opacity=".5" />
+          <rect y="3" width="10" height="10" rx="1" fill="#107c41" />
+          <path
+            d="M2.292 11l1.942-3.008L2.455 5h1.431l.971 1.912q.134.272.184.406h.013q.096-.217.2-.423L6.293 5h1.314L5.782 7.975 7.652 11H6.255L5.133 8.9A1.753 1.753 0 0 1 5 8.62h-.016a1.324 1.324 0 0 1-.13.271L3.698 11z"
+            fill="#fff"
+          />
+          <path d="M16 1v3h-6V0h5a1.003 1.003 0 0 1 1 1z" fill="#33c481" />
+        </svg>
+      ),
+    },
+  });
+
   const textFieldStyles: Partial<ITextFieldStyles> = {
     fieldGroup: { width: 150 },
   };
@@ -174,7 +201,7 @@ export default memo(function index() {
     },
     {
       name: "FullOrPartialFilled",
-      displayName: "Full//Partial Filled",
+      displayName: "Full / Partial Filled",
       isResizable: true,
       sorting: false,
       minWidth: 150,
@@ -339,7 +366,7 @@ export default memo(function index() {
       sorting: false,
       render: useCallback(
         (rowitem: IRequestListItem) => {
-          return rowitem.Requestor !== "" ? (
+          return rowitem.Requestor !== '""' ? (
             <FieldUserRenderer
               users={JSON.parse(rowitem.Requestor)} //FieldUserRenderer users value {JSON.parse("[{\"id\":\"11\",\"title\":\"Qin Howard (Consultant)\",\"email\":\"howard.qin@consultant.udtrucks.com\",\"sip\":\"howard.qin@consultant.udtrucks.com\",\"picture\":\"https://udtrucks-my.sharepoint.com:443/User%20Photos/Profile%20Pictures/c1f6b293-e3c7-4c33-9b17-040ffdb5a3b7_MThumb.jpg?t=63800730891\",\"jobTitle\":\"Consultant_EX\",\"department\":\"BP15861\"}]")}
               context={ctx.context}
@@ -421,7 +448,7 @@ export default memo(function index() {
       sorting: false,
       render: useCallback(
         (rowitem: IRequestListItem) => {
-          return rowitem.StatusUpdateBy !== "" ? (
+          return rowitem.StatusUpdateBy !== '""' ? (
             <FieldUserRenderer
               users={JSON.parse(rowitem.StatusUpdateBy)}
               context={ctx.context}
@@ -454,7 +481,27 @@ export default memo(function index() {
     },
   ];
   //#endregion
+  const handleExportClick = (): void => {
+    const headers = listviewFields.map((column) => ({
+      label: column.displayName,
+      key: column.name,
+    }));
 
+    const data = listviewItems.map((rowitem) => ({
+      ...rowitem,
+      Requestor:
+        rowitem.Requestor !== '""'
+          ? JSON.parse(rowitem.Requestor)[0].title
+          : "",
+      StatusUpdateBy:
+        rowitem.StatusUpdateBy !== '""'
+          ? JSON.parse(rowitem.StatusUpdateBy)[0].title
+          : "",
+    }));
+    const csvContent = `data:text/csv;charset=utf-8,${toCSV(data, headers)}`;
+    const encodedUri = encodeURI(csvContent);
+    window.open(encodedUri);
+  };
   return (
     <>
       {listviewItems?.length > 0 ? (
@@ -474,6 +521,20 @@ export default memo(function index() {
                 name="formlvItems"
                 render={(arrayHelpers) => (
                   <div>
+                    <CommandBar
+                      items={[
+                        {
+                          key: "export",
+                          text: "Export to CSV",
+                          iconProps: {
+                            iconName: "excel-svg",
+                            style: { width: 16 },
+                          },
+                          onClick: () => handleExportClick(),
+                        },
+                      ]}
+                      aria-label="GI actions"
+                    />
                     {props.values.formlvItems &&
                     props.values.formlvItems.length > 0 ? (
                       <ListView
