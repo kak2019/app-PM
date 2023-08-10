@@ -1,25 +1,25 @@
 .listWrapper {
-    background-color: #f0f0f0;
-    // min-height: 65vh;
-    /* Firefox */
-    min-height: -moz-calc(100vh - 280px);
-    /* WebKit */
-    min-height: -webkit-calc(100vh - 280px);
-    /* Opera */
-    min-height: -o-calc(100vh - 280px);
-    /* Standard */
-    min-height: calc(100vh - 280px);
+  background-color: #f0f0f0;
+  // min-height: 65vh;
+  /* Firefox */
+  min-height: -moz-calc(100vh - 324px);
+  /* WebKit */
+  min-height: -webkit-calc(100vh - 324px);
+  /* Opera */
+  min-height: -o-calc(100vh - 324px);
+  /* Standard */
+  min-height: calc(100vh - 324px);
 
-    min-width: 94vw;
-    // overflow: scroll;
-    overflow-x: inherit;
+  min-width: 94vw;
+  // overflow: scroll;
+  overflow-x: inherit;
 }
 
 .list {
-    overflow: inherit;
+  overflow: inherit;
 }
 
 .list div[role="gridcell"] {
-    align-items: flex-start;
-    display: flex;
+  align-items: flex-start;
+  display: flex;
 }

@@ -500,7 +500,14 @@ export default memo(function index() {
     }));
     const csvContent = `data:text/csv;charset=utf-8,${toCSV(data, headers)}`;
     const encodedUri = encodeURI(csvContent);
-    window.open(encodedUri);
+
+    const aLink = document.createElement("a");
+    const evt = new Event("click");
+
+    aLink.download = "Goods Issue List";
+    aLink.href = encodedUri;
+    aLink.dispatchEvent(evt);
+    aLink.click();
   };
   return (
     <>
@@ -521,32 +528,34 @@ export default memo(function index() {
                 name="formlvItems"
                 render={(arrayHelpers) => (
                   <div>
-                    <CommandBar
-                      items={[
-                        {
-                          key: "export",
-                          text: "Export to CSV",
-                          iconProps: {
-                            iconName: "excel-svg",
-                            style: { width: 16 },
-                          },
-                          onClick: () => handleExportClick(),
-                        },
-                      ]}
-                      aria-label="GI actions"
-                    />
                     {props.values.formlvItems &&
                     props.values.formlvItems.length > 0 ? (
-                      <ListView
-                        items={listviewItems}
-                        viewFields={listviewFields}
-                        selectionMode={SelectionMode.none}
-                        showFilter={true}
-                        filterPlaceHolder="Search..."
-                        stickyHeader={true}
-                        className={styles.listWrapper}
-                        listClassName={styles.list}
-                      />
+                      <>
+                        <CommandBar
+                          items={[
+                            {
+                              key: "export",
+                              text: "Export to CSV",
+                              iconProps: {
+                                iconName: "excel-svg",
+                                style: { width: 16 },
+                              },
+                              onClick: () => handleExportClick(),
+                            },
+                          ]}
+                          aria-label="GI actions"
+                        />
+                        <ListView
+                          items={listviewItems}
+                          viewFields={listviewFields}
+                          selectionMode={SelectionMode.none}
+                          showFilter={true}
+                          filterPlaceHolder="Search..."
+                          stickyHeader={true}
+                          className={styles.listWrapper}
+                          listClassName={styles.list}
+                        />
+                      </>
                     ) : null}
                     {props.errors && <AllErrors errors={props.errors} />}
                   </div>
