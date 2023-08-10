@@ -63,11 +63,11 @@ export default function CaculateView(): JSX.Element {
   const columns: IColumn[] = [
     {
       key: 'column1',
-      name: 'Part ID',
+      name: 'ID',
       ariaLabel: 'Column operations for File type, Press to sort on File type',
       isIconOnly: false,
       fieldName: 'PartID',
-      minWidth: 61,
+      minWidth: 35 ,
       maxWidth: 61,
       styles: colomnstyle
       // onRender: (item: Iitem) => (
@@ -76,12 +76,12 @@ export default function CaculateView(): JSX.Element {
     },
     {
       key: 'column2',
-      name: 'Part Description',
+      name: 'Description',
       ariaLabel: 'Column operations for File type, Press to sort on File type',
       //iconName: 'Page',
       isIconOnly: false,
       fieldName: 'Name',
-      minWidth: 221,
+      minWidth: 185,
       maxWidth: 221,
       styles: colomnstyle
       // onRender: (item: Iitem) => (
@@ -145,7 +145,7 @@ export default function CaculateView(): JSX.Element {
     }
   ))
   const dropdownStyles: Partial<IDropdownStyles> = {
-    dropdown: { width: 300 },
+    dropdown: { width: 150 },
     callout: { maxHeight: "20px", overflowY: 'auto' },
     root: {
       marginRight: 10
@@ -262,7 +262,7 @@ export default function CaculateView(): JSX.Element {
           maxWidth: '80vh',
         },
       },
-      marginTop: '40px',
+      marginTop: '10px',
       borderRadius: '10px'
     },
     headerWrapper: {
@@ -277,9 +277,10 @@ export default function CaculateView(): JSX.Element {
     <section className={styles.caculatorbody}>
 
       <Label className={styles.caculatortitle} >Calculator</Label>
-      <Label styles={{ root: { padding: '0 25px' } }}>
+      <Label styles={{ root: { padding: '0 10px' } }}>
         <Stack horizontal verticalAlign="center" style={stackClass}>
-          <Label style={{ width: 100, marginLeft: 32 }}>Material: </Label>
+        {/* <Label style={{ width: 100, marginLeft: 32 }}>Material: </Label> */}
+          <Label style={{ width: 80, marginLeft: 10 }}>Material: </Label>
           <Dropdown
             placeholder="Select an option"
             options={options}
@@ -292,18 +293,21 @@ export default function CaculateView(): JSX.Element {
           </div>
         </Stack>
 
-        <div style={{ marginLeft: '138px' }}>{curMaterial && curMaterial.MaterialDescription}</div>
+        <div style={{ marginLeft: '90px' }}>{curMaterial && curMaterial.MaterialDescription}</div>
         <Stack horizontal verticalAlign="center" style={stackClass}>
-          <Label style={{ width: 100, marginLeft: 32 }}>Quantity: </Label>
+        {/* <Label style={{ width: 100, marginLeft: 32 }}>Quantity: </Label> */}
+          <Label style={{ width: 80, marginLeft: 10 }}>Quantity: </Label>
           <TextField
             value={count}
             onChange={handleCountChange}
-            styles={{ root: { width: 300 } }}
+            styles={{ root: { width: 150 } }}
 
           />
-          <PrimaryButton text="GO" styles={{ root: { marginLeft: 10, backgroundColor: "rgba(0, 130, 155, 1)", borderRadius: '5px' } }} className={styles.gobutton} onClick={handleGoClick} />
+          <PrimaryButton text="GO" styles={{ root: { marginLeft: 10, backgroundColor: "rgba(0, 130, 155, 1)", borderRadius: '5px',minWidth:40 } }} className={styles.gobutton} onClick={handleGoClick} />
         </Stack>
+        
         {list?.length > 0 && <hr style={{ color: "rgb(0, 130, 155)" }} />}
+        {list?.length > 0&&<Label  style={{  marginLeft: 10 ,textAlign:'center' ,fontWeight:700}}>Component</Label>}
         {list?.length > 0 && <DetailsList
           items={list}// [{"Emballage Number":"123","Emballage Type":"456" ,"Count":"11"},]
           //compact={isCompactMode}
@@ -366,6 +370,7 @@ export default function CaculateView(): JSX.Element {
         //onItemInvoked={this._onItemInvoked}
         />
       </Dialog>
+      <Label/>
     </section>
   )
 
