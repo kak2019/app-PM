@@ -8,7 +8,9 @@ import { Stack } from '@fluentui/react/lib/Stack';
 import { Label } from '@fluentui/react/lib/Label';
 import { IDetailsListStyles } from 'office-ui-fabric-react';
 import styles from './BundleCaculation.module.scss'
-
+import { Dialog, DialogType} from '@fluentui/react/lib/Dialog';
+import OptionDetailSVG from '../assets/bundleQuestion'
+import { useId, useBoolean } from '@fluentui/react-hooks';
 
 
 
@@ -35,6 +37,9 @@ export default function CaculateView(): JSX.Element {
   const [list, setList] = React.useState<ComponentType[]>([])
   const [count, setCount] = React.useState<string>("1")
   const [curMaterial, setCurMaterial] = React.useState<Iitem>()
+  const [hideDialog, setHideDialog] = React.useState<boolean>(true)
+  const [isDraggable] = useBoolean(false);
+  const [selectedKey, setSelectedKey] = React.useState<string>('')
   const _getKey = (item: IColumn, index?: number): string => {
     return item.key;
   }
@@ -142,8 +147,39 @@ export default function CaculateView(): JSX.Element {
   const dropdownStyles: Partial<IDropdownStyles> = {
     dropdown: { width: 300 },
     callout: { maxHeight: "20px", overflowY: 'auto' },
+    root: {
+      marginRight: 10
+    }
   };
 
+  const tempdialogStyles = {
+    main: {
+      selectors: {
+        '@media (min-width: 0px)': {
+          //height: 500,
+          maxHeight:"70vh",
+          maxWidth: 650,
+          minwidth: 362,
+          width: 600,
+        }
+      },
+      textAlign: 'center',
+    }
+    //main: { maxWidth: 1200 }
+  };// main: { maxWidth: 800 }
+  const labelId: string = useId('dialogLabel');
+  const subTextId: string = useId('subTextLabel');
+  const dialogmodalProps = React.useMemo(
+    () => ({
+      titleAriaId: labelId,
+      subtitleAriaId: subTextId,
+      isBlocking: true,
+      styles: tempdialogStyles,
+      //className:styles.dialogSubText
+      //styles: {main:{margin:0}},
+    }),
+    [isDraggable, labelId, subTextId],
+  );
   const stackClass = {
     marginTop: '10px'
   }
@@ -171,11 +207,26 @@ export default function CaculateView(): JSX.Element {
       //Count: Number(count) * val.Count
       Count: Number("1") * val.Count
     })))
-
-
+    setSelectedKey(material.Material)
+  }
+  const toggleHideDialog = () :void => {
+    setHideDialog(!hideDialog)
+  }
+  const showOptionList = ():void => {
+    toggleHideDialog()
 
   }
-
+  const onItemInvoked = (material: Iitem) :void => {
+    setCount("1");
+    setCurMaterial(material)
+    setList(material.Component.slice(0).map((val) => ({
+      ...val,
+      //Count: Number(count) * val.Count
+      Count: Number("1") * val.Count
+    })))
+    setSelectedKey(material.Material)
+    setHideDialog(true)
+  }
   //  React.useEffect(()=>{
   //     if(curMaterial !== undefined){
   //     //handleGoClick()
@@ -190,7 +241,7 @@ export default function CaculateView(): JSX.Element {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'start',
-          height: '100vh',
+          height: '60vh',
           minWidth: 400,
         },
       },
@@ -208,19 +259,25 @@ export default function CaculateView(): JSX.Element {
           alignItems: 'start',
           //height: '100vh',
           minWidth: 400,
-          maxWidth:'80vh',
+          maxWidth: '80vh',
         },
       },
+      marginTop: '40px',
+      borderRadius: '10px'
     },
+    headerWrapper: {
+      marginTop: '-16px'
+    },
+
 
   };
 
 
   return (
-    <section>
+    <section className={styles.caculatorbody}>
 
       <Label className={styles.caculatortitle} >Calculator</Label>
-      <Label className={styles.caculatorbody}>
+      <Label styles={{ root: { padding: '0 25px' } }}>
         <Stack horizontal verticalAlign="center" style={stackClass}>
           <Label style={{ width: 100, marginLeft: 32 }}>Material: </Label>
           <Dropdown
@@ -228,7 +285,11 @@ export default function CaculateView(): JSX.Element {
             options={options}
             styles={dropdownStyles}
             onChange={handleDrodownChange}
+            selectedKey={selectedKey}
           />
+          <div style={{ cursor: 'pointer' }} onClick={showOptionList}>
+            <OptionDetailSVG />
+          </div>
         </Stack>
 
         <div style={{ marginLeft: '138px' }}>{curMaterial && curMaterial.MaterialDescription}</div>
@@ -240,7 +301,7 @@ export default function CaculateView(): JSX.Element {
             styles={{ root: { width: 300 } }}
 
           />
-          <PrimaryButton text="GO" styles={{root: {marginLeft: 10, backgroundColor: "rgba(0, 130, 155, 1)" }}} className={styles.gobutton} onClick={handleGoClick} />
+          <PrimaryButton text="GO" styles={{ root: { marginLeft: 10, backgroundColor: "rgba(0, 130, 155, 1)", borderRadius: '5px' } }} className={styles.gobutton} onClick={handleGoClick} />
         </Stack>
         {list?.length > 0 && <hr style={{ color: "rgb(0, 130, 155)" }} />}
         {list?.length > 0 && <DetailsList
@@ -273,6 +334,38 @@ export default function CaculateView(): JSX.Element {
           />
         </div>
       </Label>
+      <Dialog
+        hidden={hideDialog}
+        onDismiss={toggleHideDialog}
+        dialogContentProps={{
+          type: DialogType.normal,
+          title: 'Material',
+          closeButtonAriaLabel: 'Close',
+          styles: {
+            subText: {
+              marginBottom: '0 0 10px',
+              
+            }
+           
+          }
+        }}
+        modalProps={dialogmodalProps}
+      >
+        <DetailsList
+          items={items}
+          //compact={isCompactMode}
+          columns={materialColumns}
+          selectionMode={SelectionMode.none}
+          getKey={_getKey}
+          setKey="Material"
+          layoutMode={DetailsListLayoutMode.justified}
+          isHeaderVisible={true}
+          onShouldVirtualize={() => false}
+          styles={gridStyles}
+          onItemInvoked={onItemInvoked}
+        //onItemInvoked={this._onItemInvoked}
+        />
+      </Dialog>
     </section>
   )
 
