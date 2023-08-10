@@ -17,6 +17,7 @@ import EditDocument from '../assets/editDocument'
 import Receive from '../assets/receive'
 import ViewHistory from '../assets/viewhistory'
 import InvoiceIcon from  '../assets/InvoiceIcon'
+import { Label } from "office-ui-fabric-react";
 
 interface IuserRoleobj {
   CreateFlowV: boolean;
@@ -33,6 +34,7 @@ const USER_ROLE = {
   fc: "Factory",
   kdfc: "KDFactory",
   wh: "WareHouse",
+  admin:"Admin"
 };
 
 export default memo(function App() {
@@ -50,7 +52,7 @@ export default memo(function App() {
     groups,
     fetchGroupsByUserEmail,
   ] = useEntities();
-
+  const [userRoleText,setuserRoleText] = React.useState<string>("")
   const [viewVisible, setviewVisible] = React.useState<boolean>(false);
   const [userRoleobj, setuserRoleobj] = React.useState<IuserRoleobj>({
     CreateFlowV: false,
@@ -76,6 +78,7 @@ export default memo(function App() {
               RequestFlowV: true,
               ReciecedDistributionV: false,
             });
+            setuserRoleText("Supplier");
             break;
           case USER_ROLE.terminal:
             setuserRoleobj({
@@ -84,6 +87,7 @@ export default memo(function App() {
               RequestFlowV: false,
               GoodIssueV: true,
             });
+            setuserRoleText("Terminal");
             break;
           case USER_ROLE.fc:
             setuserRoleobj({
@@ -91,12 +95,23 @@ export default memo(function App() {
               CreateFlowV: true,
               RequestFlowV: true,
             });
+            setuserRoleText("Factory");
             break;
           case USER_ROLE.kdfc:
             setuserRoleobj({ ...userRoleobj });
+            setuserRoleText("KD Factory");
             break;
           case USER_ROLE.wh:
             setuserRoleobj({ ...userRoleobj });
+            setuserRoleText("SPOL");
+            break;
+          case USER_ROLE.admin:
+            setuserRoleobj({...userRoleobj,
+              CreateFlowV: true,
+              RequestFlowV: true,
+              GoodIssueV: true,
+            });
+            setuserRoleText("Admin");
             break;
           default:
             break;
@@ -116,6 +131,8 @@ export default memo(function App() {
 
   return (
     <section>
+      {userRoleText !==""&&<Label>Hello, you have logged in as {userRoleText}.</Label>}
+      <br/>
       {viewVisible ? (
         <Stack enableScopedSelectors styles={stackStyles}>
           <div className={styles.section} style={{display:(userRoleobj.CreateFlowV||userRoleobj.RequestFlowV||userRoleobj.GoodIssueV)?"block":"none"}}>
