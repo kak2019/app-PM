@@ -90,7 +90,7 @@ export const REQUESTSCONST = Object.freeze({
     { PartID: "20840", PartDescription: "KIT of BOX OF PLASTIC" },
     { PartID: "81", PartDescription: "SPACER OF PLASTIC, L INNER" },
     { PartID: "82", PartDescription: "SPACER OF PLASTIC, K INNER" },
-    { PartID: "116", PartDescription: "FIXING SPACER OF PLASTIC" },
+    // { PartID: "116", PartDescription: "FIXING SPACER OF PLASTIC" },
      //{ PartID: "750", PartDescription: "BOX OF PLASTIC" },
     //{ PartID: "751", PartDescription: "LID OF PLASTIC" },
     {PartID:"20750",PartDescription: "KIT of BOX OF PLASTIC"},
