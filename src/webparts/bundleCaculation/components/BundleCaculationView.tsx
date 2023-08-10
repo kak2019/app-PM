@@ -307,7 +307,7 @@ export default function CaculateView(): JSX.Element {
         </Stack>
         
         {list?.length > 0 && <hr style={{ color: "rgb(0, 130, 155)" }} />}
-        {list?.length > 0&&<Label  style={{  marginLeft: 10 ,textAlign:'center' ,fontWeight:700}}>Component</Label>}
+        {list?.length > 0&&<Label  style={{  marginLeft: 10  ,fontWeight:600}}>Components:</Label>}
         {list?.length > 0 && <DetailsList
           items={list}// [{"Emballage Number":"123","Emballage Type":"456" ,"Count":"11"},]
           //compact={isCompactMode}
