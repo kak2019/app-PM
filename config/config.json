@@ -49,6 +49,14 @@
           "manifest": "./src/webparts/bundleCaculation/BundleCaculationWebPart.manifest.json"
         }
       ]
+    },
+    "onelinesentence-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/onelinesentence/OnelinesentenceWebPart.js",
+          "manifest": "./src/webparts/onelinesentence/OnelinesentenceWebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
@@ -59,6 +67,7 @@
     "DistributionFlowTrackerWebPartStrings": "lib/webparts/distributionFlowTracker/loc/{locale}.js",
     "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js",
     "HomePageWebPartStrings": "lib/webparts/homePage/loc/{locale}.js",
-    "BundleCaculationWebPartStrings": "lib/webparts/bundleCaculation/loc/{locale}.js"
+    "BundleCaculationWebPartStrings": "lib/webparts/bundleCaculation/loc/{locale}.js",
+    "OnelinesentenceWebPartStrings": "lib/webparts/onelinesentence/loc/{locale}.js"
   }
 }
