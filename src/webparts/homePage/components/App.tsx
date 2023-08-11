@@ -17,7 +17,6 @@ import EditDocument from '../assets/editDocument'
 import Receive from '../assets/receive'
 import ViewHistory from '../assets/viewhistory'
 import InvoiceIcon from  '../assets/InvoiceIcon'
-import { Label } from "office-ui-fabric-react";
 
 interface IuserRoleobj {
   CreateFlowV: boolean;
@@ -27,6 +26,7 @@ interface IuserRoleobj {
   MyDistributionV: boolean;
   ReciecedDistributionV: boolean;
   InventoryV: boolean;
+  InvoiceTempV:boolean;
 }
 const USER_ROLE = {
   supplier: "Supplier",
@@ -52,7 +52,7 @@ export default memo(function App() {
     groups,
     fetchGroupsByUserEmail,
   ] = useEntities();
-  const [userRoleText,setuserRoleText] = React.useState<string>("")
+  //const [userRoleText,setuserRoleText] = React.useState<string>("")
   const [viewVisible, setviewVisible] = React.useState<boolean>(false);
   const [userRoleobj, setuserRoleobj] = React.useState<IuserRoleobj>({
     CreateFlowV: false,
@@ -62,6 +62,7 @@ export default memo(function App() {
     MyDistributionV: true,
     ReciecedDistributionV: true,
     InventoryV: true,
+    InvoiceTempV:true
   });
 
   useEffect(() => {
@@ -77,8 +78,9 @@ export default memo(function App() {
               CreateFlowV: true,
               RequestFlowV: true,
               ReciecedDistributionV: false,
+              InvoiceTempV:false
             });
-            setuserRoleText("Supplier");
+            //setuserRoleText("Supplier");
             break;
           case USER_ROLE.terminal:
             setuserRoleobj({
@@ -87,7 +89,7 @@ export default memo(function App() {
               RequestFlowV: false,
               GoodIssueV: true,
             });
-            setuserRoleText("Terminal");
+            //setuserRoleText("Terminal");
             break;
           case USER_ROLE.fc:
             setuserRoleobj({
@@ -95,15 +97,15 @@ export default memo(function App() {
               CreateFlowV: true,
               RequestFlowV: true,
             });
-            setuserRoleText("Factory");
+            //setuserRoleText("Factory");
             break;
           case USER_ROLE.kdfc:
             setuserRoleobj({ ...userRoleobj });
-            setuserRoleText("KD Factory");
+            //setuserRoleText("KD Factory");
             break;
           case USER_ROLE.wh:
             setuserRoleobj({ ...userRoleobj });
-            setuserRoleText("SPOL");
+            //setuserRoleText("SPOL");
             break;
           case USER_ROLE.admin:
             setuserRoleobj({...userRoleobj,
@@ -111,7 +113,7 @@ export default memo(function App() {
               RequestFlowV: true,
               GoodIssueV: true,
             });
-            setuserRoleText("Admin");
+            //setuserRoleText("Admin");
             break;
           default:
             break;
@@ -131,9 +133,9 @@ export default memo(function App() {
 
   return (
     <section>
-      <Stack horizontal>
+      {/* <Stack horizontal>
       {userRoleText !==""&&<Label>Hello, you have logged in as {<span style={{color:"red"}}>{userRoleText}.</span>}</Label>}</Stack>
-      <br/>
+      <br/> */}
       {viewVisible ? (
         <Stack enableScopedSelectors styles={stackStyles}>
           <div className={styles.section} style={{display:(userRoleobj.CreateFlowV||userRoleobj.RequestFlowV||userRoleobj.GoodIssueV)?"block":"none"}}>
@@ -264,17 +266,17 @@ export default memo(function App() {
           </div>
 
           <div className={styles.section}>
-          <div className={styles.parttitle}>Invoice Template</div>
+          <div className={styles.parttitle} style={{display:(userRoleobj.InvoiceTempV?"block":"none")}}>Invoice Template</div>
           <Stack enableScopedSelectors horizontal horizontalAlign="start">
           <DefaultButton
                 text="Invoice Print Out"
                 className={
-                  userRoleobj.InventoryV
+                  userRoleobj.InvoiceTempV
                     ? styles.homePageButton
                     : styles.homePageButtonDisabled
                 }
-                disabled={!userRoleobj.InventoryV}
-                //href={`${webURL ? webURL + "/" : ""}Lists/Inventory%20Management`}
+                disabled={!userRoleobj.InvoiceTempV}
+                href={`${webURL ? webURL + "/" : ""}/Shared Documents/UD interim Invoice%26packing list.xlsx`}
                 onRenderIcon={() => {
                   return <InvoiceIcon/>
                 }}
