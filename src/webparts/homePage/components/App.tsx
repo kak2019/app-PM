@@ -131,7 +131,8 @@ export default memo(function App() {
 
   return (
     <section>
-      {userRoleText !==""&&<Label>Hello, you have logged in as {userRoleText}.</Label>}
+      <Stack horizontal>
+      {userRoleText !==""&&<Label>Hello, you have logged in as {<span style={{color:"red"}}>{userRoleText}.</span>}</Label>}</Stack>
       <br/>
       {viewVisible ? (
         <Stack enableScopedSelectors styles={stackStyles}>
