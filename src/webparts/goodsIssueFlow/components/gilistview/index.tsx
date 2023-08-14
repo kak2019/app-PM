@@ -246,6 +246,29 @@ export default memo(function index() {
       ),
     },
     {
+      name: "HowMuchCanBeFullfilled",
+      displayName: "How much can be full filled",
+      minWidth: 175,
+      maxWidth: 200,
+      isResizable: false,
+      sorting: false,
+      render: useCallback(
+        (rowitem: IRequestListItem) => {
+          return (
+            <Field
+              component={FormikTextField}
+              name={`formlvItems[${getIndexByID(
+                rowitem.ID
+              )}].HowMuchCanBeFullfilled`}
+              styles={narrowTextFieldStyles}
+              disabled={isFreezed(rowitem.ID)}
+            />
+          );
+        },
+        [listviewItems]
+      ),
+    },
+    {
       name: "DateByWhenItWillReach",
       displayName: "Date by when it will reach",
       minWidth: 165,
@@ -287,7 +310,7 @@ export default memo(function index() {
               )}].ConfirmationFromSupplier`}
               component={FormikCheckbox}
               disabled={true}
-              //disabled={isFreezed(rowitem.ID)}
+            //disabled={isFreezed(rowitem.ID)}
             />
           );
         },
@@ -417,29 +440,6 @@ export default memo(function index() {
       sorting: false,
     },
     {
-      name: "HowMuchCanBeFullfilled",
-      displayName: "How much can be full filled",
-      minWidth: 175,
-      maxWidth: 200,
-      isResizable: false,
-      sorting: false,
-      render: useCallback(
-        (rowitem: IRequestListItem) => {
-          return (
-            <Field
-              component={FormikTextField}
-              name={`formlvItems[${getIndexByID(
-                rowitem.ID
-              )}].HowMuchCanBeFullfilled`}
-              styles={narrowTextFieldStyles}
-              disabled={isFreezed(rowitem.ID)}
-            />
-          );
-        },
-        [listviewItems]
-      ),
-    },
-    {
       name: "StatusUpdateBy",
       displayName: "Status Update By",
       minWidth: 150,
@@ -529,7 +529,7 @@ export default memo(function index() {
                 render={(arrayHelpers) => (
                   <div>
                     {props.values.formlvItems &&
-                    props.values.formlvItems.length > 0 ? (
+                      props.values.formlvItems.length > 0 ? (
                       <>
                         <CommandBar
                           items={[

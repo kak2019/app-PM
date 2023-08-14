@@ -138,33 +138,33 @@ const fetchByTerminalId = async (arg: {
         if (response.Row.length > 0) {
           return response.Row.map(
             (item) =>
-              ({
-                ID: item.ID,
-                Title: item.Title,
-                RequestNumber: item.RequestNumber,
-                RequesterId: JSON.stringify(item.RequesterId),
-                RequesterId_x003a_Name: item.RequesterId_x003a_Name,
-                Requestor: JSON.stringify(item.Requestor),
-                TerminalId: JSON.stringify(item.TerminalId),
-                TerminalId_x003a_Name: item.TerminalId_x003a_Name,
-                PartID: item.PartID,
-                PartDescription: item.PartDescription,
-                Quantity: item.Quantity,
-                DateNeeded: item.DateNeeded,
-                DeliveryLocationAndCountry: item.DeliveryLocationAndCountry,
-                HowMuchCanBeFullfilled: item.HowMuchCanBeFullfilled,
-                Status: item.Status,
-                FullOrPartialFilled: item.FullOrPartialFilled,
-                StatusUpdateBy: JSON.stringify(item.StatusUpdateBy),
-                QtySent: item.QtySent,
-                DateByWhenItWillReach: item.DateByWhenItWillReach,
-                ConfirmationFromSupplier:
-                  item.ConfirmationFromSupplier === "Yes",
-                Field1: item.Field1,
-                Field2: item.Field2,
-                Remarks: item.Remarks,
-                Created: item.Created,
-              } as IRequestListItem)
+            ({
+              ID: item.ID,
+              Title: item.Title,
+              RequestNumber: item.RequestNumber,
+              RequesterId: JSON.stringify(item.RequesterId),
+              RequesterId_x003a_Name: item.RequesterId_x003a_Name,
+              Requestor: JSON.stringify(item.Requestor),
+              TerminalId: JSON.stringify(item.TerminalId),
+              TerminalId_x003a_Name: item.TerminalId_x003a_Name,
+              PartID: item.PartID,
+              PartDescription: item.PartDescription,
+              Quantity: item.Quantity,
+              DateNeeded: item.DateNeeded,
+              DeliveryLocationAndCountry: item.DeliveryLocationAndCountry,
+              HowMuchCanBeFullfilled: item.HowMuchCanBeFullfilled,
+              Status: item.Status,
+              FullOrPartialFilled: item.FullOrPartialFilled,
+              StatusUpdateBy: JSON.stringify(item.StatusUpdateBy),
+              QtySent: item.QtySent,
+              DateByWhenItWillReach: item.DateByWhenItWillReach,
+              ConfirmationFromSupplier:
+                item.ConfirmationFromSupplier === "Yes",
+              Field1: item.Field1,
+              Field2: item.Field2,
+              Remarks: item.Remarks,
+              Created: item.Created,
+            } as IRequestListItem)
           );
         } else {
           return [] as IRequestListItem[];
