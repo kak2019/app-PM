@@ -49,7 +49,7 @@ export enum RequestStatus {
     { PartID: "841", PartDescription: "LID OF PLASTIC FOR EMB 840" }
   ],*/
 export const REQUESTSCONST = Object.freeze({
-  LIST_NAME: "Request List",
+  LIST_NAME: "Incoming List",
   PART_LIST: [
     { PartID: "1", PartDescription: "PALLET OF WOOD, TYPE L" },
     { PartID: "21", PartDescription: "FRAME OF WOOD, TYPE L" },
@@ -81,7 +81,7 @@ export const REQUESTSCONST = Object.freeze({
     { PartID: "461", PartDescription: "LID OF PLASTIC (ESD)" },
     { PartID: "500", PartDescription: "BOX OF PLASTIC" },
     { PartID: "501", PartDescription: "LID OF PLASTIC" },
-   
+
     // { PartID: "780", PartDescription: "BOX OF PLASTIC" },
     // { PartID: "781", PartDescription: "LID OF PLASTIC" },
     { PartID: "20780", PartDescription: "KIT of BOX OF PLASTIC" },
@@ -91,9 +91,9 @@ export const REQUESTSCONST = Object.freeze({
     { PartID: "81", PartDescription: "SPACER OF PLASTIC, L INNER" },
     { PartID: "82", PartDescription: "SPACER OF PLASTIC, K INNER" },
     // { PartID: "116", PartDescription: "FIXING SPACER OF PLASTIC" },
-     //{ PartID: "750", PartDescription: "BOX OF PLASTIC" },
+    //{ PartID: "750", PartDescription: "BOX OF PLASTIC" },
     //{ PartID: "751", PartDescription: "LID OF PLASTIC" },
-    {PartID:"20750",PartDescription: "KIT of BOX OF PLASTIC"},
+    { PartID: "20750", PartDescription: "KIT of BOX OF PLASTIC" },
   ],
   STATUS_OPTIONS: [
     { key: "Req Received", text: "Req Received" },
