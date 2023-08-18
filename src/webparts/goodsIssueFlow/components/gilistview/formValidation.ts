@@ -30,6 +30,10 @@ export const formValidationSchema = Yup.object().shape({
                   "How much can be full filled should always be equal to Qty sent"
                 )
             : schema
+        )
+        .max(
+          Yup.ref("Quantity"),
+          "Qty sent should not be greater than Requested"
         ),
     })
   ),

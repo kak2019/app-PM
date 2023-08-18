@@ -102,7 +102,7 @@ export const REQUESTSCONST = Object.freeze({
     // { key: "Req On HOLD", text: "Req On HOLD" },   //Andy requests to delete status Req on HOLD and Req Approved. No need for this
     // { key: "Req Approved", text: "Req Approved" },
     { key: "GI / In Transit", text: "GI / In Transit" },
-    { key: "Completed", text: "Completed" },
+    { key: "Completed", text: "Completed", disabled: true },
   ],
   FULLORPARTIAL_OPTIONS: [
     { key: "Full Filled", text: "Full Filled" },

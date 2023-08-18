@@ -1,8 +1,8 @@
 import * as React from "react";
 import { memo, useEffect, useContext, useState, useCallback } from "react";
 import { Field, FieldArray, Form, Formik } from "formik";
-import * as dayjs from "dayjs";
-import * as relativeTime from "dayjs/plugin/relativeTime";
+// import * as dayjs from "dayjs";
+// import * as relativeTime from "dayjs/plugin/relativeTime";
 import {
   ListView,
   IViewField,
@@ -15,12 +15,16 @@ import AppContext from "../../../../common/AppContext";
 import { FieldUserRenderer } from "@pnp/spfx-controls-react";
 import {
   CommandBar,
+  Dropdown,
+  IDropdownOption,
   IDropdownStyles,
   IStackTokens,
   ITextFieldStyles,
+  Label,
   mergeStyleSets,
   registerIcons,
   Stack,
+  TextField,
 } from "office-ui-fabric-react";
 import {
   REQUESTSCONST,
@@ -38,28 +42,69 @@ import { formValidationSchema } from "./formValidation";
 import SubmitAction from "./submitAction";
 import SimpleEmpty from "../../../../common/components/Empty";
 import { toCSV } from "../../../../common/components/toCSV";
+import { QtySentField } from "./QtySentField";
 
 export default memo(function index() {
   const ctx = useContext(AppContext);
-  dayjs.extend(relativeTime);
+  // dayjs.extend(relativeTime);
   const [isFetchingRequest, , , requests, , , , , , , , , , ,] = useRequests();
   const [listviewItems, setListViewItems] =
     useState<IRequestListItem[]>(undefined);
+  const [filterString1, setFilterString1] = useState("");
+  const [filterString2, setFilterString2] = useState("");
+  const [filterString3, setFilterString3] = useState("");
+  // const webURL = ctx.context?._pageContext?._web?.absoluteUrl;
 
   useEffect(() => {
-    setListViewItems([...requests]);
-  }, [requests]);
+    // Search on all columns
+    // const items = filterString
+    //   ? [...requests].filter((i) => {
+    //       let key: keyof IRequestListItem;
+    //       let result = false;
+    //       for (key in i) {
+    //         if (i[key].toString().toLowerCase().indexOf(filterString) > -1) {
+    //           result = true;
+    //           break;
+    //         }
+    //       }
+    //       return result;
+    //     })
+    //   : [...requests];
+
+    let items = [...requests];
+    if (filterString1.length > 0) {
+      items = items.filter((i) => {
+        return (
+          i.RequestNumber.toLowerCase().indexOf(filterString1.toLowerCase()) >
+          -1
+        );
+      });
+    }
+    if (filterString2.length > 0) {
+      items = items.filter((i) => {
+        return i.DateNeeded.toString().indexOf(filterString2) > -1;
+      });
+    }
+
+    if (filterString3.length > 0) {
+      items = items.filter((i) => {
+        return i.Status === filterString3;
+      });
+    }
+    setListViewItems(items);
+  }, [requests, filterString1, filterString2, filterString3]);
+
   const reminder = "You haven't receive any request flows";
 
   const getIndexByID = useCallback(
     (ID: string): number => {
-      const res = listviewItems.filter((i) => i.ID === ID);
+      const res = requests.filter((i) => i.ID === ID);
       if (res.length > 0) {
-        return listviewItems.indexOf(res[0]);
+        return requests.indexOf(res[0]);
       }
       return -1;
     },
-    [listviewItems]
+    [requests]
   );
 
   const isFreezed = useCallback(
@@ -67,7 +112,9 @@ export default memo(function index() {
       const res = requests.filter((i) => i.ID === ID);
       if (res.length > 0) {
         return (
-          res[0].Status === "GI / In Transit" || res[0].Status === "Completed"
+          res[0].Status === "GI / In Transit" ||
+          res[0].Status === "Completed" ||
+          res[0].Status === "Req Rejected"
         );
       }
       return false;
@@ -133,59 +180,59 @@ export default memo(function index() {
     {
       name: "RequestNumber",
       displayName: "Request Number",
-      minWidth: 100,
-      maxWidth: 150,
-      isResizable: true,
+      minWidth: 128,
+      maxWidth: 128,
+      isResizable: false,
       sorting: false,
     },
     {
       name: "PartID",
       displayName: "Part ID",
-      minWidth: 80,
-      maxWidth: 100,
-      isResizable: true,
+      minWidth: 50,
+      maxWidth: 50,
+      isResizable: false,
       sorting: false,
     },
     {
       name: "PartDescription",
       displayName: "Part Description",
-      minWidth: 120,
-      maxWidth: 150,
-      isResizable: true,
+      minWidth: 175,
+      maxWidth: 175,
+      isResizable: false,
       sorting: false,
     },
     {
       name: "Quantity",
       displayName: "Quantity",
       minWidth: 65,
-      maxWidth: 80,
-      isResizable: true,
+      maxWidth: 65,
+      isResizable: false,
       sorting: false,
     },
     {
       name: "DateNeeded",
       displayName: "Date Needed",
-      minWidth: 100,
-      maxWidth: 120,
-      isResizable: true,
+      minWidth: 90,
+      maxWidth: 90,
+      isResizable: false,
       sorting: false,
-      render: useCallback(
-        (rowitem: IRequestListItem) => {
-          return dayjs(rowitem.DateNeeded).fromNow();
-        },
-        [listviewItems]
-      ),
+      // render: useCallback(
+      //   (rowitem: IRequestListItem) => {
+      //     return dayjs(rowitem.DateNeeded).fromNow();
+      //   },
+      //   [listviewItems]
+      // ),
     },
     {
       name: "Status",
       displayName: "Status",
-      isResizable: true,
+      isResizable: false,
       sorting: false,
-      minWidth: 150,
-      maxWidth: 210,
+      minWidth: 130,
+      maxWidth: 130,
       render: useCallback(
         (rowitem: IRequestListItem) => {
-          return (
+          return rowitem.Status !== "Completed" ? (
             <Field
               name={`formlvItems[${getIndexByID(rowitem.ID)}].Status`}
               component={FormikDropdown}
@@ -194,49 +241,55 @@ export default memo(function index() {
               options={REQUESTSCONST.STATUS_OPTIONS}
               disabled={isFreezed(rowitem.ID)}
             />
-          );
-        },
-        [listviewItems]
-      ),
-    },
-    {
-      name: "FullOrPartialFilled",
-      displayName: "Full / Partial Filled",
-      isResizable: true,
-      sorting: false,
-      minWidth: 150,
-      maxWidth: 210,
-      render: useCallback(
-        (rowitem: IRequestListItem) => {
-          return (
-            <Field
-              name={`formlvItems[${getIndexByID(
-                rowitem.ID
-              )}].FullOrPartialFilled`}
-              component={FormikDropdown}
+          ) : (
+            <Dropdown
+              selectedKey="Completed"
+              disabled
+              options={[{ key: "Completed", text: "Completed" }]}
               styles={dropdownStyles}
-              placeholder="Select a option"
-              options={REQUESTSCONST.FULLORPARTIAL_OPTIONS}
-              disabled={isFreezed(rowitem.ID)}
             />
           );
         },
         [listviewItems]
       ),
     },
+    // {
+    //   name: "FullOrPartialFilled",
+    //   displayName: "Full / Partial Filled",
+    //   isResizable: true,
+    //   sorting: false,
+    //   minWidth: 150,
+    //   maxWidth: 210,
+    //   render: useCallback(
+    //     (rowitem: IRequestListItem) => {
+    //       return (
+    //         <Field
+    //           name={`formlvItems[${getIndexByID(rowitem.ID)}].FullOrPartialFilled`}
+    //           component={FormikDropdown}
+    //           styles={dropdownStyles}
+    //           placeholder="Select a option"
+    //           options={REQUESTSCONST.FULLORPARTIAL_OPTIONS}
+    //           disabled={isFreezed(rowitem.ID)}
+    //         />
+    //       );
+    //     },
+    //     [listviewItems]
+    //   ),
+    // },
     {
       name: "QtySent",
       displayName: "Qty Sent",
-      minWidth: 100,
-      maxWidth: 120,
+      minWidth: 110,
+      maxWidth: 110,
       isResizable: false,
       sorting: false,
       render: useCallback(
         (rowitem: IRequestListItem) => {
+          const idx = getIndexByID(rowitem.ID);
           return (
             <Field
-              component={FormikTextField}
-              name={`formlvItems[${getIndexByID(rowitem.ID)}].QtySent`}
+              component={QtySentField}
+              name={`formlvItems[${idx}].QtySent`}
               styles={narrowTextFieldStyles}
               disabled={isFreezed(rowitem.ID)}
             />
@@ -248,9 +301,9 @@ export default memo(function index() {
     {
       name: "HowMuchCanBeFullfilled",
       displayName: "How much can be full filled",
-      minWidth: 175,
-      maxWidth: 200,
-      isResizable: false,
+      minWidth: 105,
+      maxWidth: 185,
+      isResizable: true,
       sorting: false,
       render: useCallback(
         (rowitem: IRequestListItem) => {
@@ -271,9 +324,9 @@ export default memo(function index() {
     {
       name: "DateByWhenItWillReach",
       displayName: "Date by when it will reach",
-      minWidth: 165,
-      maxWidth: 300,
-      isResizable: true,
+      minWidth: 175,
+      maxWidth: 175,
+      isResizable: false,
       sorting: false,
       render: useCallback(
         (rowitem: IRequestListItem) => {
@@ -297,8 +350,8 @@ export default memo(function index() {
     {
       name: "ConfirmationFromSupplier",
       displayName: "Confirmation from supplier",
-      minWidth: 165,
-      maxWidth: 300,
+      minWidth: 60,
+      maxWidth: 185,
       isResizable: true,
       sorting: false,
       render: useCallback(
@@ -310,7 +363,7 @@ export default memo(function index() {
               )}].ConfirmationFromSupplier`}
               component={FormikCheckbox}
               disabled={true}
-            //disabled={isFreezed(rowitem.ID)}
+              //disabled={isFreezed(rowitem.ID)}
             />
           );
         },
@@ -320,8 +373,8 @@ export default memo(function index() {
     {
       name: "Field1",
       displayName: "ASN / Delivery Note",
-      minWidth: 150,
-      maxWidth: 180,
+      minWidth: 160,
+      maxWidth: 160,
       isResizable: false,
       sorting: false,
       render: useCallback(
@@ -341,8 +394,8 @@ export default memo(function index() {
     {
       name: "Field2",
       displayName: "Invoice",
-      minWidth: 150,
-      maxWidth: 180,
+      minWidth: 160,
+      maxWidth: 160,
       isResizable: false,
       sorting: false,
       render: useCallback(
@@ -362,8 +415,8 @@ export default memo(function index() {
     {
       name: "Remarks",
       displayName: "Remarks",
-      minWidth: 150,
-      maxWidth: 180,
+      minWidth: 160,
+      maxWidth: 160,
       isResizable: false,
       sorting: false,
       render: useCallback(
@@ -383,9 +436,9 @@ export default memo(function index() {
     {
       name: "Requestor",
       displayName: "Created By",
-      minWidth: 100,
-      maxWidth: 150,
-      isResizable: true,
+      minWidth: 140,
+      maxWidth: 140,
+      isResizable: false,
       sorting: false,
       render: useCallback(
         (rowitem: IRequestListItem) => {
@@ -404,22 +457,22 @@ export default memo(function index() {
     {
       name: "Created",
       displayName: "Create Time",
-      minWidth: 100,
+      minWidth: 120,
       maxWidth: 120,
-      isResizable: true,
+      isResizable: false,
       sorting: false,
-      render: useCallback(
-        (rowitem: IRequestListItem) => {
-          return dayjs(rowitem.Created).fromNow();
-        },
-        [listviewItems]
-      ),
+      // render: useCallback(
+      //   (rowitem: IRequestListItem) => {
+      //     return dayjs(rowitem.Created).fromNow();
+      //   },
+      //   [listviewItems]
+      // ),
     },
     {
       name: "RequesterId_x003a_Name",
       displayName: "Requestor",
       minWidth: 80,
-      maxWidth: 100,
+      maxWidth: 120,
       isResizable: true,
       sorting: false,
     },
@@ -434,17 +487,17 @@ export default memo(function index() {
     {
       name: "DeliveryLocationAndCountry",
       displayName: "Delivery Location and Country",
-      minWidth: 200,
-      maxWidth: 250,
+      minWidth: 125,
+      maxWidth: 205,
       isResizable: true,
       sorting: false,
     },
     {
       name: "StatusUpdateBy",
       displayName: "Status Update By",
-      minWidth: 150,
-      maxWidth: 210,
-      isResizable: true,
+      minWidth: 140,
+      maxWidth: 140,
+      isResizable: false,
       sorting: false,
       render: useCallback(
         (rowitem: IRequestListItem) => {
@@ -509,8 +562,121 @@ export default memo(function index() {
     aLink.dispatchEvent(evt);
     aLink.click();
   };
+  const handleFilterString1Change = React.useCallback(
+    (
+      event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
+      newValue?: string
+    ) => {
+      if (!newValue || newValue.length <= 19) {
+        setFilterString1(newValue || "");
+      }
+    },
+    []
+  );
+  const handleFilterString2Change = React.useCallback(
+    (
+      event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
+      newValue?: string
+    ) => {
+      if (!newValue || newValue.length <= 10) {
+        setFilterString2(newValue || "");
+      }
+    },
+    []
+  );
+  const handleFilterString3Change = React.useCallback(
+    (
+      event: React.FormEvent<HTMLDivElement>,
+      option?: IDropdownOption,
+      index?: number
+    ) => {
+      if (index === 0) {
+        setFilterString3("");
+      } else {
+        setFilterString3(option.text);
+      }
+    },
+    []
+  );
   return (
     <>
+      <Stack
+        horizontal
+        tokens={stackTokens}
+        styles={{ root: { width: "94vw" } }}
+      >
+        <Stack.Item grow disableShrink styles={{ root: { width: 890 } }}>
+          <div className={styles.listViewSearchContainer}>
+            <Stack horizontal tokens={stackTokens}>
+              <Label>Request Number</Label>
+              <TextField
+                placeholder="Search"
+                styles={{ root: { width: 100 } }}
+                value={filterString1}
+                onChange={handleFilterString1Change}
+              />
+              <Label>Dated needed</Label>
+              <TextField
+                placeholder="Search"
+                styles={{ root: { width: 100 } }}
+                value={filterString2}
+                onChange={handleFilterString2Change}
+              />
+              <Label>Status</Label>
+              <Dropdown
+                placeholder="Search"
+                selectedKey={filterString3 || "All"}
+                options={[
+                  { key: "All", text: "<All>" },
+                  { key: "Req Received", text: "Req Received" },
+                  { key: "Req Accepted", text: "Req Accepted" },
+                  { key: "Req Rejected", text: "Req Rejected" },
+                  { key: "GI / In Transit", text: "GI / In Transit" },
+                  { key: "Completed", text: "Completed" },
+                ]}
+                styles={dropdownStyles}
+                onChange={handleFilterString3Change}
+              />
+            </Stack>
+          </div>
+        </Stack.Item>
+        <Stack.Item grow={3}>&nbsp;</Stack.Item>
+        <Stack.Item
+          grow
+          disableShrink
+          styles={{
+            root: {
+              width: 130,
+              alignItems: "center",
+              justifyContent: "center",
+            },
+          }}
+        >
+          <CommandBar
+            items={[
+              {
+                key: "export",
+                text: "Export to CSV",
+                split: true,
+                ariaLabel: "Export",
+                iconProps: {
+                  iconName: "excel-svg",
+                  style: { width: 16 },
+                },
+                disabled: listviewItems?.length === 0,
+                onClick: () => handleExportClick(),
+              },
+              // {
+              //   key: "back",
+              //   text: "Return to Homepage",
+              //   iconProps: { iconName: "ReturnKey" },
+              //   href: "" + webURL,
+              // },
+            ]}
+            aria-label="GI actions"
+          />
+        </Stack.Item>
+      </Stack>
       {listviewItems?.length > 0 ? (
         <Formik
           initialValues={{ formlvItems: listviewItems }}
@@ -529,33 +695,18 @@ export default memo(function index() {
                 render={(arrayHelpers) => (
                   <div>
                     {props.values.formlvItems &&
-                      props.values.formlvItems.length > 0 ? (
-                      <>
-                        <CommandBar
-                          items={[
-                            {
-                              key: "export",
-                              text: "Export to CSV",
-                              iconProps: {
-                                iconName: "excel-svg",
-                                style: { width: 16 },
-                              },
-                              onClick: () => handleExportClick(),
-                            },
-                          ]}
-                          aria-label="GI actions"
-                        />
-                        <ListView
-                          items={listviewItems}
-                          viewFields={listviewFields}
-                          selectionMode={SelectionMode.none}
-                          showFilter={true}
-                          filterPlaceHolder="Search..."
-                          stickyHeader={true}
-                          className={styles.listWrapper}
-                          listClassName={styles.list}
-                        />
-                      </>
+                    props.values.formlvItems.length > 0 ? (
+                      <ListView
+                        items={listviewItems}
+                        viewFields={listviewFields}
+                        selectionMode={SelectionMode.none}
+                        // showFilter={true}
+                        // filterPlaceHolder="Search..."
+                        stickyHeader={true}
+                        className={styles.listWrapper}
+                        listClassName={styles.list}
+                        compact={true}
+                      />
                     ) : null}
                     {props.errors && <AllErrors errors={props.errors} />}
                   </div>
