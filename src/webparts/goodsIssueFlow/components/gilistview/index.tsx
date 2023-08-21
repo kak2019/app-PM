@@ -230,27 +230,30 @@ export default memo(function index() {
       sorting: false,
       minWidth: 130,
       maxWidth: 130,
-      render: (rowitem: IRequestListItem) => {
-        const readonlyStatus = isFreezed(rowitem.ID);
-        return !readonlyStatus ? (
-          <Field
-            name={`formlvItems[${getIndexByID(rowitem.ID)}].Status`}
-            component={FormikDropdown}
-            styles={dropdownStyles}
-            placeholder="Select a status"
-            options={REQUESTSCONST.STATUS_OPTIONS}
-            disabled={readonlyStatus}
-          />
-        ) : (
-          <Dropdown
-            disabled
-            options={[
-              { key: rowitem.Status, text: rowitem.Status, selected: true },
-            ]}
-            styles={dropdownStyles}
-          />
-        );
-      },
+      render: useCallback(
+        (rowitem: IRequestListItem) => {
+          const readonlyStatus = isFreezed(rowitem.ID);
+          return !readonlyStatus ? (
+            <Field
+              name={`formlvItems[${getIndexByID(rowitem.ID)}].Status`}
+              component={FormikDropdown}
+              styles={dropdownStyles}
+              placeholder="Select a status"
+              options={REQUESTSCONST.STATUS_OPTIONS}
+              disabled={readonlyStatus}
+            />
+          ) : (
+            <Dropdown
+              disabled
+              options={[
+                { key: rowitem.Status, text: rowitem.Status, selected: true },
+              ]}
+              styles={dropdownStyles}
+            />
+          );
+        },
+        [listviewItems]
+      ),
     },
     // {
     //   name: "FullOrPartialFilled",
