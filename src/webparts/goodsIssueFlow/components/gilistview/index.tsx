@@ -230,28 +230,27 @@ export default memo(function index() {
       sorting: false,
       minWidth: 130,
       maxWidth: 130,
-      render: useCallback(
-        (rowitem: IRequestListItem) => {
-          return rowitem.Status !== "Completed" ? (
-            <Field
-              name={`formlvItems[${getIndexByID(rowitem.ID)}].Status`}
-              component={FormikDropdown}
-              styles={dropdownStyles}
-              placeholder="Select a status"
-              options={REQUESTSCONST.STATUS_OPTIONS}
-              disabled={isFreezed(rowitem.ID)}
-            />
-          ) : (
-            <Dropdown
-              selectedKey="Completed"
-              disabled
-              options={[{ key: "Completed", text: "Completed" }]}
-              styles={dropdownStyles}
-            />
-          );
-        },
-        [listviewItems]
-      ),
+      render: (rowitem: IRequestListItem) => {
+        const readonlyStatus = isFreezed(rowitem.ID);
+        return !readonlyStatus ? (
+          <Field
+            name={`formlvItems[${getIndexByID(rowitem.ID)}].Status`}
+            component={FormikDropdown}
+            styles={dropdownStyles}
+            placeholder="Select a status"
+            options={REQUESTSCONST.STATUS_OPTIONS}
+            disabled={readonlyStatus}
+          />
+        ) : (
+          <Dropdown
+            disabled
+            options={[
+              { key: rowitem.Status, text: rowitem.Status, selected: true },
+            ]}
+            styles={dropdownStyles}
+          />
+        );
+      },
     },
     // {
     //   name: "FullOrPartialFilled",
@@ -716,9 +715,21 @@ export default memo(function index() {
           )}
         </Formik>
       ) : isFetchingRequest === RequestStatus.Idle ? (
-        <SimpleEmpty>
-          <span>{reminder}</span>
-        </SimpleEmpty>
+        requests?.length === 0 ? (
+          <SimpleEmpty>
+            <span>{reminder}</span>
+          </SimpleEmpty>
+        ) : (
+          <ListView
+            items={[]}
+            viewFields={listviewFields}
+            // selectionMode={SelectionMode.none}
+            // stickyHeader={true}
+            className={styles.listWrapper}
+            listClassName={styles.list}
+            compact={true}
+          />
+        )
       ) : null}
     </>
   );

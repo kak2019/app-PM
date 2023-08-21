@@ -21,6 +21,10 @@ export const formValidationSchema = Yup.object().shape({
         )
         .positive("Qty sent must be a positive number")
         .integer("Qty sent must be an integer")
+        .max(
+          Yup.ref("Quantity"),
+          "Qty sent should not be greater than Requested"
+        )
         .when("Status", ([value]: string[], schema: Yup.Schema) =>
           value === "GI / In Transit"
             ? schema
@@ -30,10 +34,6 @@ export const formValidationSchema = Yup.object().shape({
                   "How much can be full filled should always be equal to Qty sent"
                 )
             : schema
-        )
-        .max(
-          Yup.ref("Quantity"),
-          "Qty sent should not be greater than Requested"
         ),
     })
   ),
