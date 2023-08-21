@@ -678,7 +678,7 @@ export default memo(function index() {
       </Stack>
       {listviewItems?.length > 0 ? (
         <Formik
-          initialValues={{ formlvItems: listviewItems }}
+          initialValues={{ formlvItems: requests }}
           onSubmit={(values, actions) => {
             setTimeout(() => {
               console.log(JSON.stringify(values.formlvItems, null, 2));
