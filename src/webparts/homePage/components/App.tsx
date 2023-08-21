@@ -111,7 +111,8 @@ export default memo(function App() {
             setuserRoleobj({...userRoleobj,
               CreateFlowV: true,
               RequestFlowV: true,
-              GoodIssueV: true,
+              GoodIssueV: false,
+              MyDistributionV: false,
             });
             //setuserRoleText("Admin");
             break;
