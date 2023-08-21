@@ -51,7 +51,7 @@ export const DISTRIBUTIONCONST = Object.freeze({
     ],
     STATUS_OPTIONS: [
         { key: "In Transit", text: "In Transit" },
-        { key: "Completed", text: "Completed" }
+        { key: "Cancelled", text: "Cancelled" }
     ]
 });
 

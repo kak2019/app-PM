@@ -54,19 +54,19 @@ export default memo(function index() {
     [listviewItems]
   );
 
-  // const isFreezed = useCallback(
-  //     (ID: string): boolean => {
-  //         const res = distributions.filter((i) => i.ID === ID);
-  //         if (res.length > 0) {
-  //             if (res[0].ConfirmationFromReceiver) {
-  //                 return true
-  //             }
-  //             return false
-  //         }
-  //         return false;
-  //     },
-  //     [distributions]
-  // )
+  const isFreezed = useCallback(
+    (ID: string): boolean => {
+      const res = distributions.filter((i) => i.ID === ID);
+      if (res.length > 0) {
+        if (res[0].Status === "Cancelled") {
+          return true
+        }
+        return false
+      }
+      return false;
+    },
+    [distributions]
+  )
 
   //#region ==============Styles and Templates==============
   registerIcons({
@@ -200,7 +200,7 @@ export default memo(function index() {
               styles={dropdownStyles}
               placeholder="Select a status"
               options={DISTRIBUTIONCONST.STATUS_OPTIONS}
-              disabled={true}
+              disabled={isFreezed(rowitem.ID)}
             />
           );
         },
@@ -244,7 +244,7 @@ export default memo(function index() {
               )}].ConfirmationFromReceiver`}
               component={FormikCheckbox}
               disabled={true}
-              //disabled={isFreezed(rowitem.ID)}
+            //disabled={isFreezed(rowitem.ID)}
             />
           );
         },
@@ -265,8 +265,7 @@ export default memo(function index() {
               component={FormikTextField}
               name={`formlvItems[${getIndexByID(rowitem.ID)}].Field1`}
               styles={textFieldStyles}
-              disabled={false}
-              //disabled={isFreezed(rowitem.ID)}
+              disabled={isFreezed(rowitem.ID)}
             />
           );
         },
@@ -287,8 +286,7 @@ export default memo(function index() {
               component={FormikTextField}
               name={`formlvItems[${getIndexByID(rowitem.ID)}].Field2`}
               styles={textFieldStyles}
-              disabled={false}
-              //disabled={isFreezed(rowitem.ID)}
+              disabled={isFreezed(rowitem.ID)}
             />
           );
         },
@@ -309,8 +307,7 @@ export default memo(function index() {
               component={FormikTextField}
               name={`formlvItems[${getIndexByID(rowitem.ID)}].Remarks`}
               styles={textFieldStyles}
-              disabled={false}
-              //disabled={isFreezed(rowitem.ID)}
+              disabled={isFreezed(rowitem.ID)}
             />
           );
         },
@@ -391,7 +388,7 @@ export default memo(function index() {
               actions.setSubmitting(false);
             }, 1000);
           }}
-          //validationSchema={formValidationSchema}
+        //validationSchema={formValidationSchema}
         >
           {(props) => (
             <Form>
@@ -400,7 +397,7 @@ export default memo(function index() {
                 render={(arrayHelpers) => (
                   <div>
                     {props.values.formlvItems &&
-                    props.values.formlvItems.length > 0 ? (
+                      props.values.formlvItems.length > 0 ? (
                       <>
                         <CommandBar
                           items={[

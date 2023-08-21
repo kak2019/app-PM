@@ -53,6 +53,7 @@ export default memo(function SubmitAction({
         const rowValues = { ...(values as IFormValues).formlvItems[idx] };
         const distribution = {
             ID: rowValues.ID,
+            Status: rowValues.Status,
             ConfirmationFromReceiver: rowValues.ConfirmationFromReceiver,
             Field1: rowValues.Field1,
             Field2: rowValues.Field2,
