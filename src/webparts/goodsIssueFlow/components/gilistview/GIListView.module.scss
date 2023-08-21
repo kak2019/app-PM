@@ -40,13 +40,13 @@ div[role="presentation"][class="ms-DetailsList-contentWrapper"] {
   background-color: #f0f0f0;
   // min-height: 65vh;
   /* Firefox */
-  min-height: -moz-calc(100vh - 264px);
+  min-height: -moz-calc(100vh - 300px);
   /* WebKit */
-  min-height: -webkit-calc(100vh - 264px);
+  min-height: -webkit-calc(100vh - 300px);
   /* Opera */
-  min-height: -o-calc(100vh - 264px);
+  min-height: -o-calc(100vh - 300px);
   /* Standard */
-  min-height: calc(100vh - 264px);
-
-  min-width: 94vw;
+  min-height: calc(100vh - 300px);
+  overflow: scroll;
+  min-width: 93vw;
 }
