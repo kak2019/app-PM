@@ -544,7 +544,7 @@ export default function DistributionFlowView(): JSX.Element {
             </Stack>
             <Stack verticalAlign="center" horizontal style={stackClass}>
                 <Label style={{ textAlign: 'left', width: 200, marginLeft: 8 }}>
-                    Date Needed:</Label>
+                    Date:</Label>
                 <DatePicker
                     placeholder="Select date"
                     minDate={minDate}
@@ -558,7 +558,7 @@ export default function DistributionFlowView(): JSX.Element {
             </Stack>
             <Stack verticalAlign="center" horizontal style={stackClass}>
                 <Label style={{ textAlign: 'left', width: 200, marginLeft: 8 }}>
-                    Delevery Address:
+                    Address:
                 </Label>
                 <Label>
                     {address}

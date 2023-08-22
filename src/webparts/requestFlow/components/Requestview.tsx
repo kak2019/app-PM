@@ -509,7 +509,7 @@ export default function RequestView(): JSX.Element {
 
       </Stack>
       <Stack horizontal verticalAlign="center" style={stackClass}>
-        <Label style={{ textAlign: 'left', width: 200 ,marginLeft:8}}>Date Needed: </Label>
+        <Label style={{ textAlign: 'left', width: 200 ,marginLeft:8}}>Date: </Label>
         <DatePicker
           styles={datePickerStyles}
           placeholder="Select a date..."
@@ -525,7 +525,7 @@ export default function RequestView(): JSX.Element {
         />
       </Stack>
       <Stack horizontal verticalAlign="center" style={stackClass}>
-        <Label style={{ textAlign: 'left', width: 200 ,marginLeft:8}}>Delivery Address: </Label> <Text style={{ fontFamily: '"Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif' }}>{address}</Text>
+        <Label style={{ textAlign: 'left', width: 200 ,marginLeft:8}}>Address: </Label> <Text style={{ fontFamily: '"Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif' }}>{address}</Text>
       </Stack>
       <hr />
       <Stack horizontal verticalAlign="center" style={stackClass}>
