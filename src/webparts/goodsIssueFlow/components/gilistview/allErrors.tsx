@@ -8,8 +8,9 @@ interface IAllErrors {
     formlvItems: IRequestListItem[];
   }>;
 }
+type FormikErrorValues = FormikErrors<string> | FormikErrors<Date>;
 export default function AllErrors({ errors }: IAllErrors): JSX.Element {
-  const res = new Set<string>();
+  const res = new Set<FormikErrorValues>();
   if (errors.formlvItems) {
     if (typeof errors.formlvItems === "string") {
       res.add(errors.formlvItems);
@@ -21,11 +22,13 @@ export default function AllErrors({ errors }: IAllErrors): JSX.Element {
           if (value?.HowMuchCanBeFullfilled)
             res.add(value.HowMuchCanBeFullfilled);
           if (value?.QtySent) res.add(value.QtySent);
+          if (value?.DateByWhenItWillReach)
+            res.add(value.DateByWhenItWillReach);
         }
       }
     }
   }
-  const res2: string[] = [];
+  const res2: FormikErrorValues[] = [];
   res.forEach((v) => res2.push(v));
   return res2.length > 0 ? (
     <>
