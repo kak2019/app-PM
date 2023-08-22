@@ -221,16 +221,21 @@ export default memo(function index() {
       maxWidth: 130,
       render: useCallback(
         (rowitem: IDistributionListItem) => {
-          return (
-            <Field
-              name={`formlvItems[${getIndexByID(rowitem.ID)}].Status`}
-              component={FormikDropdown}
-              styles={dropdownStyles}
-              placeholder="Select a status"
-              options={DISTRIBUTIONCONST.STATUS}
-              disabled={true}
-            />
-          );
+          if (isFreezed(rowitem.ID)) {
+            return ("Cancelled");
+          }
+          else {
+            return (
+              <Field
+                name={`formlvItems[${getIndexByID(rowitem.ID)}].Status`}
+                component={FormikDropdown}
+                styles={dropdownStyles}
+                placeholder="Select a status"
+                options={DISTRIBUTIONCONST.STATUS}
+                disabled={true}
+              />
+            );
+          }
         },
         [listviewItems]
       ),

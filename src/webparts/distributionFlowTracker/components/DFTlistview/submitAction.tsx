@@ -66,6 +66,7 @@ export default memo(function SubmitAction({
         fetchDistributionsBySender(distributionSender);
         toggleHideResultDialog();
         toggleIsSubmitting();
+        fetchDistributionsBySender(distributionSender);
     };
     const handleSubmit = (): void => {
         if ((errors as IFormErrors).formlvItems) {
