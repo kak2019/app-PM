@@ -49,8 +49,9 @@ export const DISTRIBUTIONCONST = Object.freeze({
         { PartID: "82", PartDescription: "SPACER OF PLASTIC, K INNER" },
         { PartID: "116", PartDescription: "FIXING SPACER OF PLASTIC" }
     ],
-    STATUS_OPTIONS: [
+    STATUS: [
         { key: "In Transit", text: "In Transit" },
+        { key: "Completed", text: "Completed" },
         { key: "Cancelled", text: "Cancelled" }
     ]
 });

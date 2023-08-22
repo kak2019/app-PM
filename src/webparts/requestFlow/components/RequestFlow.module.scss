@@ -34,43 +34,51 @@
   }
 }
 
-.temp{
+.temp {
   font-size: 12px !important;
   color: black;
   // background-color: rgba(0, 130, 155, 1) ;
 }
-.cancelbutton{
+
+.cancelbutton {
   //background-color: 'rgb(0, 130, 155)';
   width: 120px;
   margin-right: 25px;
 }
-.submitbutton{
+
+.submitbutton {
   width: 160px;
   color: white;
-  background-color: rgb(0, 130, 155);
+  background-color: rgb(0, 0, 0);
+
   &:hover {
     background-color: rgb(0, 130, 155);
-    color :"white",
+    color: "white",
   }
-  &:active{
+
+  &:active {
     background-color: rgb(0, 130, 155);
-    color :"white",
+    color: "white",
   }
 }
-.dialogcancelbutton{
+
+.dialogcancelbutton {
   width: 80px;
   margin-right: 14px;
 }
-.dialogyesbutton{
+
+.dialogyesbutton {
   width: 100px;
   color: white;
   background-color: rgb(0, 130, 155);
+
   &:hover {
     background-color: rgb(0, 130, 155);
-    color :"white",
+    color: "white",
   }
-  &:active{
+
+  &:active {
     background-color: rgb(0, 130, 155);
-    color :"white",
+    color: "white",
   }
 }

@@ -31,6 +31,7 @@ import styles from "./DFTListView.module.scss";
 import SimpleEmpty from "../../../../common/components/Empty";
 //import { formValidationSchema } from "./formValidation";
 import { toCSV } from "../../../../common/components/toCSV";
+import CancelAction from "./cancelAction";
 
 export default memo(function index() {
   const ctx = useContext(AppContext);
@@ -68,6 +69,33 @@ export default memo(function index() {
     [distributions]
   )
 
+  const isFreezedCancel = useCallback(
+    (ID: string): boolean => {
+      const res = distributions.filter((i) => i.ID === ID);
+      if (res.length > 0) {
+        if (res[0].Status === "Cancelled" || res[0].Status === "Completed") {
+          return true
+        }
+        return false
+      }
+      return false;
+    },
+    [distributions]
+  )
+
+  // const statusOptions = useCallback(
+  //   (ID: string) => {
+  //     const res = distributions.filter((i) => i.ID === ID);
+  //     if (res.length > 0) {
+  //       if (res[0].Status === "Completed") {
+  //         return DISTRIBUTIONCONST.STATUS
+  //       }
+  //       return DISTRIBUTIONCONST.STATUS_OPTIONS
+  //     }
+  //     return DISTRIBUTIONCONST.STATUS_OPTIONS;
+  //   },
+  //   [distributions]
+  // )
   //#region ==============Styles and Templates==============
   registerIcons({
     icons: {
@@ -123,74 +151,74 @@ export default memo(function index() {
     {
       name: "DistributionNumber",
       displayName: "Distribution Number",
-      minWidth: 150,
-      maxWidth: 200,
-      isResizable: true,
+      minWidth: 128,
+      maxWidth: 128,
+      isResizable: false,
       sorting: false,
     },
     {
       name: "Sender_x003a__x0020_Name",
       displayName: "Sender",
-      minWidth: 80,
-      maxWidth: 100,
-      isResizable: true,
+      minWidth: 140,
+      maxWidth: 140,
+      isResizable: false,
       sorting: false,
     },
     {
       name: "Receiver_x003a__x0020_Name",
       displayName: "Receiver",
-      minWidth: 80,
-      maxWidth: 100,
-      isResizable: true,
+      minWidth: 140,
+      maxWidth: 140,
+      isResizable: false,
       sorting: false,
     },
     {
       name: "PartNumber",
       displayName: "Part Number",
-      minWidth: 80,
-      maxWidth: 100,
-      isResizable: true,
+      minWidth: 50,
+      maxWidth: 50,
+      isResizable: false,
       sorting: false,
     },
     {
       name: "PartDescription",
       displayName: "Part Description",
-      minWidth: 120,
-      maxWidth: 150,
-      isResizable: true,
+      minWidth: 175,
+      maxWidth: 175,
+      isResizable: false,
       sorting: false,
     },
     {
       name: "Quantity",
       displayName: "Quantity",
       minWidth: 65,
-      maxWidth: 80,
-      isResizable: true,
+      maxWidth: 65,
+      isResizable: false,
       sorting: false,
     },
     {
       name: "ReceivedByDate",
       displayName: "Received By Date",
-      minWidth: 100,
-      maxWidth: 120,
-      isResizable: true,
+      minWidth: 90,
+      maxWidth: 90,
+      isResizable: false,
       sorting: false,
     },
     {
       name: "DeliveryLocationandCountry",
       displayName: "Delivery Location and Country",
-      minWidth: 200,
-      maxWidth: 250,
-      isResizable: true,
+      minWidth: 220,
+      maxWidth: 220,
+      isResizable: false,
       sorting: false,
     },
     {
       name: "Status",
       displayName: "Status",
-      isResizable: true,
+      isResizable: false,
       sorting: false,
-      minWidth: 150,
-      maxWidth: 210,
+      minWidth: 130,
+      maxWidth: 130,
       render: useCallback(
         (rowitem: IDistributionListItem) => {
           return (
@@ -199,8 +227,8 @@ export default memo(function index() {
               component={FormikDropdown}
               styles={dropdownStyles}
               placeholder="Select a status"
-              options={DISTRIBUTIONCONST.STATUS_OPTIONS}
-              disabled={isFreezed(rowitem.ID)}
+              options={DISTRIBUTIONCONST.STATUS}
+              disabled={true}
             />
           );
         },
@@ -210,9 +238,9 @@ export default memo(function index() {
     {
       name: "StatusUpdatedBy",
       displayName: "Status Updated By",
-      minWidth: 150,
-      maxWidth: 210,
-      isResizable: true,
+      minWidth: 90,
+      maxWidth: 90,
+      isResizable: false,
       sorting: false,
       render: useCallback(
         (rowitem: IDistributionListItem) => {
@@ -231,8 +259,8 @@ export default memo(function index() {
     {
       name: "ConfirmationFromReceiver",
       displayName: "Confirmation from Receiver",
-      minWidth: 165,
-      maxWidth: 300,
+      minWidth: 60,
+      maxWidth: 185,
       isResizable: true,
       sorting: false,
       render: useCallback(
@@ -254,8 +282,8 @@ export default memo(function index() {
     {
       name: "Field1",
       displayName: "ASN / Delivery Note",
-      minWidth: 150,
-      maxWidth: 180,
+      minWidth: 160,
+      maxWidth: 160,
       isResizable: false,
       sorting: false,
       render: useCallback(
@@ -275,8 +303,8 @@ export default memo(function index() {
     {
       name: "Field2",
       displayName: "Invoice",
-      minWidth: 150,
-      maxWidth: 180,
+      minWidth: 160,
+      maxWidth: 160,
       isResizable: false,
       sorting: false,
       render: useCallback(
@@ -296,8 +324,8 @@ export default memo(function index() {
     {
       name: "Remarks",
       displayName: "Remarks",
-      minWidth: 150,
-      maxWidth: 180,
+      minWidth: 160,
+      maxWidth: 160,
       isResizable: false,
       sorting: false,
       render: useCallback(
@@ -317,9 +345,9 @@ export default memo(function index() {
     {
       name: "Created",
       displayName: "Create Time",
-      minWidth: 100,
+      minWidth: 120,
       maxWidth: 120,
-      isResizable: true,
+      isResizable: false,
       sorting: true,
     },
     {
@@ -343,8 +371,11 @@ export default memo(function index() {
           // </Stack>
           <Stack horizontal tokens={stackTokens}>
             <SubmitAction
-              //disabled={isFreezed(rowitem.ID)}
               disabled={false}
+              idx={getIndexByID(rowitem.ID)}
+            />
+            <CancelAction
+              disabled={isFreezedCancel(rowitem.ID)}
               idx={getIndexByID(rowitem.ID)}
             />
           </Stack>
@@ -421,6 +452,7 @@ export default memo(function index() {
                           stickyHeader={true}
                           className={styles.listWrapper}
                           listClassName={styles.list}
+                          compact={true}
                         />
                       </>
                     ) : null}

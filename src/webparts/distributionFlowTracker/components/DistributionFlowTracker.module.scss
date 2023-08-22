@@ -5,6 +5,7 @@
   padding: 1em;
   color: "[theme:bodyText, default: #323130]";
   color: var(--bodyText);
+
   &.teams {
     font-family: $ms-font-family-fallbacks;
   }
@@ -30,5 +31,54 @@
       color: "[theme:linkHovered, default: #014446]";
       color: var(--linkHovered); // note: CSS Custom Properties support is limited to modern browsers only
     }
+  }
+}
+
+.temp {
+  font-size: 12px !important;
+  color: black;
+  // background-color: rgba(0, 130, 155, 1) ;
+}
+
+.cancelbutton {
+  //background-color: 'rgb(0, 130, 155)';
+  width: 120px;
+  margin-right: 25px;
+}
+
+.submitbutton {
+  width: 160px;
+  color: white;
+  background-color: rgb(0, 130, 155);
+
+  &:hover {
+    background-color: rgb(0, 130, 155);
+    color: "white",
+  }
+
+  &:active {
+    background-color: rgb(0, 130, 155);
+    color: "white",
+  }
+}
+
+.dialogcancelbutton {
+  width: 80px;
+  margin-right: 14px;
+}
+
+.dialogyesbutton {
+  width: 100px;
+  color: white;
+  background-color: rgb(0, 130, 155);
+
+  &:hover {
+    background-color: rgb(0, 130, 155);
+    color: "white",
+  }
+
+  &:active {
+    background-color: rgb(0, 130, 155);
+    color: "white",
   }
 }
