@@ -151,9 +151,9 @@ export default memo(function index() {
     {
       name: "DistributionNumber",
       displayName: "Distribution Number",
-      minWidth: 128,
-      maxWidth: 128,
-      isResizable: false,
+      minWidth: 150,
+      maxWidth: 150,
+      isResizable: true,
       sorting: false,
     },
     {
@@ -161,7 +161,7 @@ export default memo(function index() {
       displayName: "Sender",
       minWidth: 140,
       maxWidth: 140,
-      isResizable: false,
+      isResizable: true,
       sorting: false,
     },
     {
@@ -169,15 +169,15 @@ export default memo(function index() {
       displayName: "Receiver",
       minWidth: 140,
       maxWidth: 140,
-      isResizable: false,
+      isResizable: true,
       sorting: false,
     },
     {
       name: "PartNumber",
       displayName: "Part Number",
-      minWidth: 50,
-      maxWidth: 50,
-      isResizable: false,
+      minWidth: 100,
+      maxWidth: 100,
+      isResizable: true,
       sorting: false,
     },
     {
@@ -185,7 +185,7 @@ export default memo(function index() {
       displayName: "Part Description",
       minWidth: 175,
       maxWidth: 175,
-      isResizable: false,
+      isResizable: true,
       sorting: false,
     },
     {
@@ -193,15 +193,15 @@ export default memo(function index() {
       displayName: "Quantity",
       minWidth: 65,
       maxWidth: 65,
-      isResizable: false,
+      isResizable: true,
       sorting: false,
     },
     {
       name: "ReceivedByDate",
       displayName: "Received By Date",
-      minWidth: 90,
-      maxWidth: 90,
-      isResizable: false,
+      minWidth: 120,
+      maxWidth: 1200,
+      isResizable: true,
       sorting: false,
     },
     {
@@ -209,13 +209,13 @@ export default memo(function index() {
       displayName: "Delivery Location and Country",
       minWidth: 220,
       maxWidth: 220,
-      isResizable: false,
+      isResizable: true,
       sorting: false,
     },
     {
       name: "Status",
       displayName: "Status",
-      isResizable: false,
+      isResizable: true,
       sorting: false,
       minWidth: 130,
       maxWidth: 130,
@@ -238,9 +238,9 @@ export default memo(function index() {
     {
       name: "StatusUpdatedBy",
       displayName: "Status Updated By",
-      minWidth: 90,
-      maxWidth: 90,
-      isResizable: false,
+      minWidth: 120,
+      maxWidth: 120,
+      isResizable: true,
       sorting: false,
       render: useCallback(
         (rowitem: IDistributionListItem) => {
@@ -259,7 +259,7 @@ export default memo(function index() {
     {
       name: "ConfirmationFromReceiver",
       displayName: "Confirmation from Receiver",
-      minWidth: 60,
+      minWidth: 100,
       maxWidth: 185,
       isResizable: true,
       sorting: false,
@@ -284,7 +284,7 @@ export default memo(function index() {
       displayName: "ASN / Delivery Note",
       minWidth: 160,
       maxWidth: 160,
-      isResizable: false,
+      isResizable: true,
       sorting: false,
       render: useCallback(
         (rowitem: IDistributionListItem) => {
@@ -305,7 +305,7 @@ export default memo(function index() {
       displayName: "Invoice",
       minWidth: 160,
       maxWidth: 160,
-      isResizable: false,
+      isResizable: true,
       sorting: false,
       render: useCallback(
         (rowitem: IDistributionListItem) => {
@@ -326,7 +326,7 @@ export default memo(function index() {
       displayName: "Remarks",
       minWidth: 160,
       maxWidth: 160,
-      isResizable: false,
+      isResizable: true,
       sorting: false,
       render: useCallback(
         (rowitem: IDistributionListItem) => {
@@ -347,13 +347,13 @@ export default memo(function index() {
       displayName: "Create Time",
       minWidth: 120,
       maxWidth: 120,
-      isResizable: false,
+      isResizable: true,
       sorting: true,
     },
     {
       name: "Actions",
       minWidth: 250,
-      isResizable: false,
+      isResizable: true,
       render: (rowitem: IDistributionListItem) => {
         return (
           // Enable Reset Action
