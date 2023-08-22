@@ -3,6 +3,15 @@ export const formValidationSchema = Yup.object().shape({
   formlvItems: Yup.array().of(
     Yup.object().shape({
       Status: Yup.string().required(),
+      DateByWhenItWillReach: Yup.date().when(
+        "Status",
+        ([value]: string[], schema: Yup.Schema) =>
+          value === "GI / In Transit"
+            ? schema.required(
+                "Date By When It Will Reach is required when set GI status"
+              )
+            : schema
+      ),
       HowMuchCanBeFullfilled: Yup.number()
         .transform((_value, originalValue) =>
           Number(originalValue.replace(/,/g, ""))
