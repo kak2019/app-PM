@@ -496,7 +496,7 @@ export default function RequestView(): JSX.Element {
         <Label style={{ textAlign: 'left', width: 200 ,color:'white', marginLeft:8,  fontSize:18}} >Incoming</Label>
         {/* <TextField disabled defaultValue="I am disabled" style={{ width: 100 }} /> */}
       </Stack>
-      <Stack verticalAlign="center" horizontal >
+      <Stack verticalAlign="center" horizontal style={{marginTop:5}}>
         <Label style={{ textAlign: 'left', width: 200 , marginLeft:8}} >Request By: </Label>{" "} <Text style={{ fontFamily: '"Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif'} }>{myEntity?.Name}</Text>
         {/* <TextField disabled defaultValue="I am disabled" style={{ width: 100 }} /> */}
       </Stack>

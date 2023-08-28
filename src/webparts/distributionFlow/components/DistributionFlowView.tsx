@@ -525,7 +525,7 @@ export default function DistributionFlowView(): JSX.Element {
                 <Label style={{ textAlign: 'left', width: 200, color: 'white', marginLeft: 8 ,fontSize:18}}> Outgoing</Label>
                 {/* <Label style={{ fontFamily: '"Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif', color: 'white' }}> {myEntity?.Name}</Label> */}
             </Stack>
-            <Stack verticalAlign="center" horizontal >
+            <Stack verticalAlign="center" horizontal  style={{marginTop:5}}>
                 <Label style={{ textAlign: 'left', width: 200, marginLeft: 8 }}> Request By:</Label>
                 <Label style={{ fontFamily: '"Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif' }}> {myEntity?.Name}</Label>
             </Stack>
