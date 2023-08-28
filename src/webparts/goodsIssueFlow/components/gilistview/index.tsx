@@ -373,6 +373,25 @@ export default memo(function index() {
       ),
     },
     {
+      name: "Actions",
+      minWidth: 230,
+      isResizable: false,
+      render: (rowitem: IRequestListItem) => {
+        return (
+          <Stack horizontal tokens={stackTokens}>
+            <SubmitAction
+              disabled={isFreezed(rowitem.ID)}
+              idx={getIndexByID(rowitem.ID)}
+            />
+            <ResetAction
+              disabled={isFreezed(rowitem.ID)}
+              idx={getIndexByID(rowitem.ID)}
+            />
+          </Stack>
+        );
+      },
+    },
+    {
       name: "Field1",
       displayName: "ASN / Delivery Note",
       minWidth: 160,
@@ -514,25 +533,6 @@ export default memo(function index() {
         },
         [listviewItems]
       ),
-    },
-    {
-      name: "Actions",
-      minWidth: 250,
-      isResizable: false,
-      render: (rowitem: IRequestListItem) => {
-        return (
-          <Stack horizontal tokens={stackTokens}>
-            <SubmitAction
-              disabled={isFreezed(rowitem.ID)}
-              idx={getIndexByID(rowitem.ID)}
-            />
-            <ResetAction
-              disabled={isFreezed(rowitem.ID)}
-              idx={getIndexByID(rowitem.ID)}
-            />
-          </Stack>
-        );
-      },
     },
   ];
   //#endregion
