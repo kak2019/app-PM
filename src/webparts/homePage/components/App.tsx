@@ -88,6 +88,9 @@ export default memo(function App() {
               CreateFlowV: false,
               RequestFlowV: false,
               GoodIssueV: true,
+              CreateDistributionV:false,
+              MyDistributionV: false,
+
             });
             //setuserRoleText("Terminal");
             break;
