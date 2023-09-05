@@ -31,6 +31,7 @@ import styles from "./DFTListView.module.scss";
 import SimpleEmpty from "../../../../common/components/Empty";
 //import { formValidationSchema } from "./formValidation";
 import { toCSV } from "../../../../common/components/toCSV";
+import CancelAction from "./cancelAction";
 // import CancelAction from "./cancelAction";
 
 export default memo(function index() {
@@ -69,19 +70,19 @@ export default memo(function index() {
     [distributions]
   );
 
-  // const isFreezedCancel = useCallback(
-  //   (ID: string): boolean => {
-  //     const res = distributions.filter((i) => i.ID === ID);
-  //     if (res.length > 0) {
-  //       if (res[0].Status === "Cancelled" || res[0].Status === "Completed") {
-  //         return true;
-  //       }
-  //       return false;
-  //     }
-  //     return false;
-  //   },
-  //   [distributions]
-  // );
+  const isFreezedCancel = useCallback(
+    (ID: string): boolean => {
+      const res = distributions.filter((i) => i.ID === ID);
+      if (res.length > 0) {
+        if (res[0].Status === "Cancelled" || res[0].Status === "Completed") {
+          return true;
+        }
+        return false;
+      }
+      return false;
+    },
+    [distributions]
+  );
 
   // const statusOptions = useCallback(
   //   (ID: string) => {
@@ -276,7 +277,7 @@ export default memo(function index() {
               )}].ConfirmationFromReceiver`}
               component={FormikCheckbox}
               disabled={true}
-              //disabled={isFreezed(rowitem.ID)}
+            //disabled={isFreezed(rowitem.ID)}
             />
           );
         },
@@ -375,10 +376,10 @@ export default memo(function index() {
           // </Stack>
           <Stack horizontal tokens={stackTokens}>
             <SubmitAction disabled={false} idx={getIndexByID(rowitem.ID)} />
-            {/* <CancelAction
+            <CancelAction
               disabled={isFreezedCancel(rowitem.ID)}
               idx={getIndexByID(rowitem.ID)}
-            /> */}
+            />
           </Stack>
         );
       },
@@ -420,7 +421,7 @@ export default memo(function index() {
               actions.setSubmitting(false);
             }, 1000);
           }}
-          //validationSchema={formValidationSchema}
+        //validationSchema={formValidationSchema}
         >
           {(props) => (
             <Form>
@@ -429,7 +430,7 @@ export default memo(function index() {
                 render={(arrayHelpers) => (
                   <div>
                     {props.values.formlvItems &&
-                    props.values.formlvItems.length > 0 ? (
+                      props.values.formlvItems.length > 0 ? (
                       <>
                         <CommandBar
                           items={[
