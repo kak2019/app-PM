@@ -38,6 +38,18 @@ interface IDistributionMapping {
     "PMReceiverType": string
 
 }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function debounce<F extends (...args: any[]) => any>(fn: F, delay: number): (...funcArgs: Parameters<F>) => void {
+    let timer: NodeJS.Timeout | null = null;
+    return (...args: Parameters<F>) => {
+        if (timer) {
+            clearTimeout(timer);
+        }
+        timer = setTimeout(() => {
+            fn(...args);
+        }, delay);
+    };
+  }
 
 export default function DistributionFlowView(): JSX.Element {
 
@@ -461,6 +473,7 @@ export default function DistributionFlowView(): JSX.Element {
 
 
     };
+    const debouncedSubmitFunction = debounce(submitFunction, 300); 
 
     const validateRequest = (): void => {
         const templist = [];
@@ -629,7 +642,7 @@ export default function DistributionFlowView(): JSX.Element {
                     <DialogFooter styles={!dialogButtonVisible ? { actionsRight: { justifyContent: 'center' } } : {}}>
                         <DefaultButton onClick={() => { document.location.href = `${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx` }} text="OK" style={{ display: !dialogButtonVisible ? 'block' : 'none' }} className={styles.dialogyesbutton} />
                         <DefaultButton onClick={toggleHideDialog} text="Cancel" style={{ display: dialogButtonVisible ? 'block' : 'none' }} className={styles.dialogcancelbutton} />
-                        <PrimaryButton onClick={submitFunction} text="Yes" style={{ display: dialogButtonVisible ? 'block' : 'none' }} className={styles.dialogyesbutton} />
+                        <PrimaryButton onClick={debouncedSubmitFunction} text="Yes" style={{ display: dialogButtonVisible ? 'block' : 'none' }} className={styles.dialogyesbutton} />
                     </DialogFooter>
                 </Dialog>
                 : <Dialog

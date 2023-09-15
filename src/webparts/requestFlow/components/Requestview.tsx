@@ -48,6 +48,18 @@ interface IMappingOBJ {
   "Requester": { "Name": string },
   "Terminal": [{ "Name": string, "ID": string }]
 }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function debounce<F extends (...args: any[]) => any>(fn: F, delay: number): (...funcArgs: Parameters<F>) => void {
+  let timer: NodeJS.Timeout | null = null;
+  return (...args: Parameters<F>) => {
+      if (timer) {
+          clearTimeout(timer);
+      }
+      timer = setTimeout(() => {
+          fn(...args);
+      }, delay);
+  };
+}
 export default function RequestView(): JSX.Element {
   const colomnstyle = {
     root: {
@@ -433,6 +445,7 @@ export default function RequestView(): JSX.Element {
     //     setdialogContentProps((dialogContentProps)=>({...dialogContentProps,title: "Submission Failure"}))})
 
   }
+  const debouncedSubmitFunction = debounce(submitFunction, 300); 
 
   const stackClass = {
     marginTop: '10px'
@@ -605,7 +618,7 @@ export default function RequestView(): JSX.Element {
           <DialogFooter styles={!buttonvisible ? {actionsRight: {justifyContent: 'center'}} : {}}>
           <PrimaryButton onClick={() => { document.location.href = `${ctx.context._pageContext._web.absoluteUrl}/sitepages/Home.aspx` }} text="OK" style={{ display: !buttonvisible ? 'block' : 'none' }} className={styles.dialogyesbutton}/>
           <DefaultButton onClick={toggleHideDialog} text="Cancel" style={{ display: buttonvisible ? 'block' : 'none' }} />
-          <PrimaryButton onClick={submitFunction} text="Yes" style={{ display: buttonvisible ? 'block' : 'none' }} className={styles.dialogyesbutton}/>
+          <PrimaryButton onClick={debouncedSubmitFunction} text="Yes" style={{ display: buttonvisible ? 'block' : 'none' }} className={styles.dialogyesbutton}/>
         </DialogFooter>
         </Dialog>
 
