@@ -50,12 +50,12 @@ interface IMappingOBJ {
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function debounce<F extends (...args: any[]) => any>(fn: F, delay: number): (...funcArgs: Parameters<F>) => void {
-  let timer: NodeJS.Timeout | null = null;
+  let timer: number | undefined;
   return (...args: Parameters<F>) => {
       if (timer) {
           clearTimeout(timer);
       }
-      timer = setTimeout(() => {
+      timer = window.setTimeout(() => {
           fn(...args);
       }, delay);
   };
