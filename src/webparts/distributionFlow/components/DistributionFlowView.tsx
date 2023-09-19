@@ -473,7 +473,7 @@ export default function DistributionFlowView(): JSX.Element {
 
 
     };
-    const debouncedSubmitFunction = debounce(submitFunction, 300); 
+    const debouncedSubmitFunction = debounce(submitFunction, 1000); 
 
     const validateRequest = (): void => {
         const templist = [];
