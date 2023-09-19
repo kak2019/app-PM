@@ -445,7 +445,7 @@ export default function RequestView(): JSX.Element {
     //     setdialogContentProps((dialogContentProps)=>({...dialogContentProps,title: "Submission Failure"}))})
 
   }
-  const debouncedSubmitFunction = debounce(submitFunction, 300); 
+  const debouncedSubmitFunction = debounce(submitFunction, 1000); 
 
   const stackClass = {
     marginTop: '10px'
