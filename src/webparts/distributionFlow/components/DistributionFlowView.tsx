@@ -439,9 +439,10 @@ export default function DistributionFlowView(): JSX.Element {
         },
 
     };
-
+    const [submiting, setSubmiting] = React.useState<boolean>(false)
     const submitFunction = async (): Promise<void> => {
-
+        if(submiting) return
+        setSubmiting(true)
         //const resultRequestor: IWebEnsureUserResult = await sp.web.ensureUser("i:0#.f|membership|" + userEmail);
         const jsonData: { [key: string]: object } = {};
         const templist = [];

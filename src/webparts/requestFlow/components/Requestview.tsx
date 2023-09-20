@@ -49,17 +49,17 @@ interface IMappingOBJ {
   "Terminal": [{ "Name": string, "ID": string }]
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function debounce<F extends (...args: any[]) => any>(fn: F, delay: number): (...funcArgs: Parameters<F>) => void {
-  let timer: number | undefined;
-  return (...args: Parameters<F>) => {
-      if (timer) {
-          clearTimeout(timer);
-      }
-      timer = window.setTimeout(() => {
-          fn(...args);
-      }, delay);
-  };
-}
+// function debounce<F extends (...args: any[]) => any>(fn: F, delay: number): (...funcArgs: Parameters<F>) => void {
+//   let timer: number | undefined;
+//   return (...args: Parameters<F>) => {
+//       if (timer) {
+//           clearTimeout(timer);
+//       }
+//       timer = window.setTimeout(() => {
+//           fn(...args);
+//       }, delay);
+//   };
+// }
 export default function RequestView(): JSX.Element {
   const colomnstyle = {
     root: {
@@ -403,7 +403,10 @@ export default function RequestView(): JSX.Element {
   useEffect(() => {
     filterPartInfo();
   }, [allItems])
+  const [submiting, setSubmiting] = React.useState<boolean>(false)
   const submitFunction = async (): Promise<void> => {
+    if(submiting) return
+    setSubmiting(true)
     const resultRequestor: IWebEnsureUserResult = await sp.web.ensureUser("i:0#.f|membership|" + userEmail);
     const jsonData: { [key: string]: object } = {};
     const templist = []
@@ -445,7 +448,8 @@ export default function RequestView(): JSX.Element {
     //     setdialogContentProps((dialogContentProps)=>({...dialogContentProps,title: "Submission Failure"}))})
 
   }
-  const debouncedSubmitFunction = debounce(submitFunction, 1000); 
+  //const debouncedSubmitFunction = debounce(submitFunction, 1000); 
+  const debouncedSubmitFunction = submitFunction
 
   const stackClass = {
     marginTop: '10px'
