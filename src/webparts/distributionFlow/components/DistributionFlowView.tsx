@@ -39,17 +39,17 @@ interface IDistributionMapping {
 
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function debounce<F extends (...args: any[]) => any>(fn: F, delay: number): (...funcArgs: Parameters<F>) => void {
-    let timer: number | undefined;
-    return (...args: Parameters<F>) => {
-        if (timer) {
-            clearTimeout(timer);
-        }
-        timer =window.setTimeout(() => {
-            fn(...args);
-        }, delay);
-    };
-  }
+// function debounce<F extends (...args: any[]) => any>(fn: F, delay: number): (...funcArgs: Parameters<F>) => void {
+//     let timer: number | undefined;
+//     return (...args: Parameters<F>) => {
+//         if (timer) {
+//             clearTimeout(timer);
+//         }
+//         timer =window.setTimeout(() => {
+//             fn(...args);
+//         }, delay);
+//     };
+//   }
 
 export default function DistributionFlowView(): JSX.Element {
 
@@ -474,7 +474,7 @@ export default function DistributionFlowView(): JSX.Element {
 
 
     };
-    const debouncedSubmitFunction = debounce(submitFunction, 1000); 
+    const debouncedSubmitFunction = submitFunction; 
 
     const validateRequest = (): void => {
         const templist = [];
