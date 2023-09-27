@@ -1,7 +1,7 @@
 import { spfi } from '@pnp/sp';
 import { getSP } from '../../../../common/pnpjsConfig';
 
-const REQUESTSCONST = { LIST_NAME: 'Request Flow Original'};
+const REQUESTSCONST = { LIST_NAME: 'Request Flow Original V2'};
 
 const fetchById = async (arg: {
   Id: number;

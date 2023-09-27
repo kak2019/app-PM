@@ -11,7 +11,8 @@ import {
 import { useConst } from '@fluentui/react-hooks';
 import { DetailsList, DetailsListLayoutMode, SelectionMode, IColumn } from '@fluentui/react/lib/DetailsList';
 import { IDetailsColumnStyles, IDetailsListStyles, TextField } from 'office-ui-fabric-react';
-import { REQUESTSCONST } from '../../../common/features/requests';
+//import { REQUESTSCONST } from '../../../common/features/requests';
+import {BUNDLECONST} from '../assets/bundlesSlice'
 import { useEntities } from '../../../common/hooks';
 import { useContext, useEffect } from "react";
 import AppContext from '../../../common/AppContext';
@@ -39,10 +40,14 @@ import Erroricon from '../assets/error'
 
 // }
 interface Iitem {
-  "PartID": string,
-  "PartDescription": string,
+  //"PartID": string,
+  //"PartDescription": string,
+  "Material":string,
+  "MaterialDescription":string,
+  "Component":{"PartID": number, "Name": string,"Count": number}[],
   "Count"?: string,
   "ErrorMessage"?: string,
+
 }
 interface IMappingOBJ {
   "Requester": { "Name": string },
@@ -190,8 +195,8 @@ export default function RequestView(): JSX.Element {
     ,
   ] = useEntities();
   const [dialogitems, setdialogitems] = React.useState<Iitem[]>([])
-  const [allItems, setAllItems] = React.useState<Iitem[]>(REQUESTSCONST.PART_LIST)
-  const [items, setitems] = React.useState<Iitem[]>(REQUESTSCONST.PART_LIST)
+  const [allItems, setAllItems] = React.useState<Iitem[]>(BUNDLECONST.MATERIAL_LIST)
+  const [items, setitems] = React.useState<Iitem[]>(BUNDLECONST.MATERIAL_LIST)
   const [itemsValuekey, setitemsValuekey] = React.useState<string>()
   const [options, setOptions] = React.useState<IDropdownOption[]>([])
   const [address, setAddress] = React.useState<string>('')
@@ -202,13 +207,13 @@ export default function RequestView(): JSX.Element {
   }
   const _onChangeText = (ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, text: string): void => {
     setitems(
-      text ? allItems.filter(i => (i.PartID.toLowerCase().indexOf(text) > -1 || i.PartDescription.toLowerCase().indexOf(text.toLocaleLowerCase()) > -1)) : allItems,
+      text ? allItems.filter(i => (i.Material.toLowerCase().indexOf(text) > -1 || i.MaterialDescription.toLowerCase().indexOf(text.toLocaleLowerCase()) > -1)) : allItems,
     );
   };
   const onChangeSecondTextFieldValue = React.useCallback(
     (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string, id?: string) => {
       allItems.forEach((val: Iitem) => {
-        if (val.PartID === id) {
+        if (val.Material === id) {
           val.Count = newValue || ''
           if ((/^\d+$/.test(newValue)) || newValue === "") {
             val.ErrorMessage = ""
@@ -231,23 +236,23 @@ export default function RequestView(): JSX.Element {
   const dialogcolumns: IColumn[] = [
     {
       key: 'column1',
-      name: 'Part ID',
+      name: 'Bundle ID',
       ariaLabel: 'Column operations for File type, Press to sort on File type',
       //iconName: 'Page',
       isIconOnly: false,
       fieldName: 'name',
-      minWidth: 45,
-      maxWidth: 45,
+      minWidth: 81,
+      maxWidth: 81,
       styles:headerStyle,
       //onColumnClick: this._onColumnClick,
       headerClassName:styles.temp,
       onRender: (item: Iitem) => (
-        <Text style={{fontSize:12}}>{item.PartID}</Text>
+        <Text style={{fontSize:12}}>{item.Material}</Text>
       ),
     },
     {
       key: 'column2',
-      name: 'Part Description',
+      name: 'Bundle Description',
       ariaLabel: 'Column operations for File type, Press to sort on File type',
       //iconName: 'Page',
       isIconOnly: false,
@@ -257,7 +262,7 @@ export default function RequestView(): JSX.Element {
       styles:headerStyle,
       //onColumnClick: this._onColumnClick,
       onRender: (item: Iitem) => (
-        <Text style={{fontSize:12}}>{item.PartDescription}</Text>
+        <Text style={{fontSize:12}}>{item.MaterialDescription}</Text>
       ),
     }, {
       key: 'column3',
@@ -279,32 +284,32 @@ export default function RequestView(): JSX.Element {
   const columns: IColumn[] = [
     {
       key: 'column1',
-      name: 'Part ID',
+      name: 'Bundle ID',
       ariaLabel: 'Column operations for File type, Press to sort on File type',
       //iconName: 'Page',
       isIconOnly: false,
       fieldName: 'name',
-      minWidth: 61,
-      maxWidth: 61,
+      minWidth: 81,
+      maxWidth: 81,
       styles:colomnstyle,
       //onColumnClick: this._onColumnClick,
       onRender: (item: Iitem) => (
-        <Text>{item.PartID}</Text>
+        <Text>{item.Material}</Text>
       ),
     },
     {
       key: 'column2',
-      name: 'Part Description',
+      name: 'Bundle Description',
       ariaLabel: 'Column operations for File type, Press to sort on File type',
       //iconName: 'Page',
       isIconOnly: false,
       fieldName: 'name',
-      minWidth: 221,
-      maxWidth: 221,
+      minWidth: 251,
+      maxWidth: 301,
       styles:colomnstyle,
       //onColumnClick: this._onColumnClick,
       onRender: (item: Iitem) => (
-        <Text>{item.PartDescription}</Text>
+        <Text>{item.MaterialDescription}</Text>
       ),
     }, {
       key: 'column3',
@@ -318,7 +323,7 @@ export default function RequestView(): JSX.Element {
       styles:colomnstyle,
       //onColumnClick: this._onColumnClick,
       onRender: (item: Iitem, i: number) => (
-        <TextField key={item.PartID} value={item.Count} errorMessage={item.ErrorMessage} onChange={(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => onChangeSecondTextFieldValue(event, newValue, item.PartID)} />
+        <TextField key={item.Material} value={item.Count} errorMessage={item.ErrorMessage} onChange={(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => onChangeSecondTextFieldValue(event, newValue, item.Material)} />
       ),
     },
     {
@@ -414,7 +419,7 @@ export default function RequestView(): JSX.Element {
 
       //templist.push({key:i.toString(),value:dialogitems[i]})  
       templist[i] = dialogitems[i];
-      jsonData[i + 1] = dialogitems[i];
+      jsonData[i + 1] ={"Material":dialogitems[i].Material,"MaterialDescription":dialogitems[i].MaterialDescription,"Count":dialogitems[i]?.Count} ;
     }
     console.log("temp", jsonData)
     const request = {
@@ -423,8 +428,11 @@ export default function RequestView(): JSX.Element {
       RequesterIdId: myEntity?.ID,
       TerminalIdId: itemsValuekey,
       Date_x0020_Needed: DateValue,
-      PartJSON: JSON.stringify(jsonData),
-      Delivery_x0020_Address: address
+      //PartJSON: JSON.stringify(jsonData),
+      Delivery_x0020_Address: address,
+      BundleJSON: JSON.stringify(jsonData),
+      
+
     }
     ////console.log("result",result.)
     let promiss
@@ -492,7 +500,7 @@ export default function RequestView(): JSX.Element {
         toggleHideDialog();
         return
       } else if (dialogitems.length === 0) {
-        sethinterrormessage("Please fill in at least one part quantity.");
+        sethinterrormessage("Please fill in at least one Bundle quantity.");
         setdialogvisible(false)
         toggleHideDialog();
         return
@@ -500,7 +508,7 @@ export default function RequestView(): JSX.Element {
         sethinterrormessage(null);
         setdialogvisible(true)
         toggleHideDialog();
-        setdialogContentProps((dialogContentProps)=>({...dialogContentProps,subText : `The following ${dialogitems.length} ${dialogitems.length===1?"part":"parts"} will be included:`}))
+        setdialogContentProps((dialogContentProps)=>({...dialogContentProps,subText : `The following ${dialogitems.length} ${dialogitems.length===1?"Bundle":"Bundles"} will be included:`}))
       }
     }
 
