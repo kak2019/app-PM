@@ -57,6 +57,22 @@
           "manifest": "./src/webparts/onelinesentence/OnelinesentenceWebPart.manifest.json"
         }
       ]
+    },
+    "good-issue-v-2-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/goodIssueV2/GoodIssueV2WebPart.js",
+          "manifest": "./src/webparts/goodIssueV2/GoodIssueV2WebPart.manifest.json"
+        }
+      ]
+    },
+    "calculator-v-2-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/calculatorV2/CalculatorV2WebPart.js",
+          "manifest": "./src/webparts/calculatorV2/CalculatorV2WebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
@@ -68,6 +84,8 @@
     "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js",
     "HomePageWebPartStrings": "lib/webparts/homePage/loc/{locale}.js",
     "BundleCaculationWebPartStrings": "lib/webparts/bundleCaculation/loc/{locale}.js",
-    "OnelinesentenceWebPartStrings": "lib/webparts/onelinesentence/loc/{locale}.js"
+    "OnelinesentenceWebPartStrings": "lib/webparts/onelinesentence/loc/{locale}.js",
+    "GoodIssueV2WebPartStrings": "lib/webparts/goodIssueV2/loc/{locale}.js",
+    "CalculatorV2WebPartStrings": "lib/webparts/calculatorV2/loc/{locale}.js"
   }
 }
