@@ -11,7 +11,7 @@ import { IReadonlyTheme } from '@microsoft/sp-component-base';
 import * as strings from 'CalculatorV2WebPartStrings';
 import CalculatorV2 from './components/CalculatorV2';
 import { ICalculatorV2Props } from './components/ICalculatorV2Props';
-
+import { getSP } from '../../common/pnpjsConfig';
 export interface ICalculatorV2WebPartProps {
   description: string;
 }
@@ -29,7 +29,8 @@ export default class CalculatorV2WebPart extends BaseClientSideWebPart<ICalculat
         isDarkTheme: this._isDarkTheme,
         environmentMessage: this._environmentMessage,
         hasTeamsContext: !!this.context.sdks.microsoftTeams,
-        userDisplayName: this.context.pageContext.user.displayName
+        userDisplayName: this.context.pageContext.user.displayName,
+        context:this.context
       }
     );
 
@@ -38,7 +39,7 @@ export default class CalculatorV2WebPart extends BaseClientSideWebPart<ICalculat
 
   protected onInit(): Promise<void> {
     this._environmentMessage = this._getEnvironmentMessage();
-
+    getSP(this.context);
     return super.onInit();
   }
 

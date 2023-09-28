@@ -11,7 +11,8 @@ import { IReadonlyTheme } from '@microsoft/sp-component-base';
 import * as strings from 'GoodIssueV2WebPartStrings';
 import GoodIssueV2 from './components/GoodIssueV2';
 import { IGoodIssueV2Props } from './components/IGoodIssueV2Props';
-
+import { getSP } from '../../common/pnpjsConfig';
+import PnPTelemetry from "@pnp/telemetry-js";
 export interface IGoodIssueV2WebPartProps {
   description: string;
 }
@@ -29,7 +30,8 @@ export default class GoodIssueV2WebPart extends BaseClientSideWebPart<IGoodIssue
         isDarkTheme: this._isDarkTheme,
         environmentMessage: this._environmentMessage,
         hasTeamsContext: !!this.context.sdks.microsoftTeams,
-        userDisplayName: this.context.pageContext.user.displayName
+        userDisplayName: this.context.pageContext.user.displayName,
+        context:this.context
       }
     );
 
@@ -38,7 +40,9 @@ export default class GoodIssueV2WebPart extends BaseClientSideWebPart<IGoodIssue
 
   protected onInit(): Promise<void> {
     this._environmentMessage = this._getEnvironmentMessage();
-
+    getSP(this.context);
+    const telemetry = PnPTelemetry.getInstance();
+    telemetry.optOut();
     return super.onInit();
   }
 

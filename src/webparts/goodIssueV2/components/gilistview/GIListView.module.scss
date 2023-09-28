@@ -1,0 +1,51 @@
+.listWrapper {
+  background-color: #f0f0f0;
+  // min-height: 65vh;
+  /* Firefox */
+  min-height: -moz-calc(100vh - 264px);
+  /* WebKit */
+  min-height: -webkit-calc(100vh - 264px);
+  /* Opera */
+  min-height: -o-calc(100vh - 264px);
+  /* Standard */
+  min-height: calc(100vh - 264px);
+
+  min-width: 94vw;
+  // overflow: scroll;
+  overflow-x: inherit;
+}
+.list {
+  overflow: inherit;
+}
+.list div[role="gridcell"] {
+  align-items: flex-start;
+  display: flex;
+}
+.listViewSearchContainer {
+  margin-top: 5px;
+  margin-left: 20px;
+}
+div[data-automationid="DetailsRowFields"] {
+  align-items: baseline;
+}
+div[data-automation-id="CanvasControl"] {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+div[data-automationid="DetailsHeader"] {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+div[role="presentation"][class="ms-DetailsList-contentWrapper"] {
+  background-color: #f0f0f0;
+  // min-height: 65vh;
+  /* Firefox */
+  min-height: -moz-calc(100vh - 300px);
+  /* WebKit */
+  min-height: -webkit-calc(100vh - 300px);
+  /* Opera */
+  min-height: -o-calc(100vh - 300px);
+  /* Standard */
+  min-height: calc(100vh - 300px);
+  min-width: 93vw;
+}
