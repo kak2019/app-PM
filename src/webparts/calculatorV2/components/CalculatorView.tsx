@@ -280,7 +280,7 @@ export default function CaculateBundleView(): JSX.Element {
       <Label styles={{ root: { padding: '0 10px' } }}>
         <Stack horizontal verticalAlign="center" style={stackClass}>
         {/* <Label style={{ width: 100, marginLeft: 32 }}>Material: </Label> */}
-          <Label style={{ width: 80, marginLeft: 10 }}>Material: </Label>
+          <Label style={{ width: 180, marginLeft: 10 }}>Material: </Label>
           <Dropdown
             placeholder="Select an option"
             options={options}
