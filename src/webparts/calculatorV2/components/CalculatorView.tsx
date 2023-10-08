@@ -12,7 +12,9 @@ import { Dialog, DialogType} from '@fluentui/react/lib/Dialog';
 import OptionDetailSVG from '../assets/bundleQuestion'
 import { useId, useBoolean } from '@fluentui/react-hooks';
 
-
+import "@pnp/sp/items/get-all";
+import { spfi } from "@pnp/sp";
+import { getSP } from '../../../common/pnpjsConfig'
 
 //item : { 'Material': '10001', 'MaterialDescription': 'Bundle of PALLET OF WOOD, TYPE L', 'Component': { 'PALLET OF WOOD, TYPE L': 10 } },
 interface Iitem {
@@ -28,24 +30,90 @@ interface ComponentType {
   Count: number
 }
 
+interface InventoryItem{
+    Qtyonhand:string,
+    ID:string
+  }
 
 
 
-
-export default function CaculateBundleView(): JSX.Element {
+export default function CaculateBundleView({row}: {row?: {PartID: string, Quantity: string }}): JSX.Element {
   const [items, setitems] = React.useState<Iitem[]>(BUNDLECONST.MATERIAL_LIST)
   const [list, setList] = React.useState<ComponentType[]>([])
-  const [count, setCount] = React.useState<string>("1")
+  const [count, setCount] = React.useState<string>(row.Quantity||"1")
   const [curMaterial, setCurMaterial] = React.useState<Iitem>()
   const [hideDialog, setHideDialog] = React.useState<boolean>(true)
   const [isDraggable] = useBoolean(false);
-  const [selectedKey, setSelectedKey] = React.useState<string>('')
+  const [selectedKey, setSelectedKey] = React.useState<string>(row.PartID||'')
   const _getKey = (item: IColumn, index?: number): string => {
     return item.key;
   }
   React.useEffect(() => {
     setitems(BUNDLECONST.MATERIAL_LIST)
   }, [])
+  const sp = spfi(getSP());
+
+  const getTargetInventoryValue = (): Promise<InventoryItem> => {
+    
+    // 变量拼起来 空格会导致搜索不到
+    //const temp_Address = sp.web.lists.getByTitle("Entities").items.select("Title","Country","Address").filter(`Name eq ${(taregetID)}`).getAll();
+    console.log("1",row.PartID)
+    try{
+    const item =  sp.web.lists.getByTitle("Inventory Management").renderListDataAsStream({
+        ViewXml: `<View>
+                      <Query>
+                        <Where>
+                        <And>
+                          <Eq>
+                            <FieldRef Name="PartNumber"/>
+                            <Value Type="Text">1</Value>
+                          </Eq>
+                          <Eq>
+                          <FieldRef Name="Entity_x003a__x0020_Name"/>
+                          <Value Type="Text">Terminal 04</Value>
+                        </Eq>
+                        </And>
+                        </Where>
+                      </Query>
+                      <ViewFields>
+                        <FieldRef Name="QtyonHand"/>
+                        <FieldRef Name="ID"/>
+                      </ViewFields>
+                      <RowLimit>1</RowLimit>
+                    </View>`,
+      })
+      .then((response) => {
+        console.log("res",response)
+        if (response.Row.length > 0) {
+          return {
+            Qtyonhand: response.Row[0].QtyonHand,
+            ID: response.Row[0].ID,
+            
+          } as InventoryItem;
+        } else return {} as InventoryItem;
+      });
+      //console.log(,"item")
+    return item;
+  } catch (err) {
+    console.log(err);
+    return Promise.reject("Error when fetch request by Id");
+  }
+};
+  
+  React.useEffect(() => {
+    const item = BUNDLECONST.MATERIAL_LIST.find(val => val.Material === row.PartID)
+    if(item) {
+      // 查询 这个可以拿到想要的值
+    const  temp =  getTargetInventoryValue().then((value)=>{console.log(value.Qtyonhand,"ID:",value.ID)});
+    console.log(temp)
+    setList(item.Component.slice(0).map((val) => ({
+        ...val,
+        Count: Number(count) * val.Count
+      })));
+      // 设置列
+      
+    }
+  }, [row])
   const colomnstyle = {
     root: {
       color: "black",
@@ -101,9 +169,38 @@ export default function CaculateBundleView(): JSX.Element {
       // onRender: (item: Iitem, i: number) => (
       //  <Text> {item.Component[0].PartID}</Text>
       // ),
-    },
+    }, {
+        key: 'column4',
+        name: 'StockOnhand',
+        ariaLabel: 'Column operations for File type, Press to sort on File type',
+        //iconName: 'Page',
+        isIconOnly: false,
+        fieldName: 'Count',
+        minWidth: 141,
+        maxWidth: 141,
+        styles: colomnstyle
+        //onColumnClick: this._onColumnClick,
+        // onRender: (item: Iitem, i: number) => (
+        //  <Text> {item.Component[0].PartID}</Text>
+        // ),
+      },
+      {
+        key: 'column5',
+        name: 'Difference',
+        ariaLabel: 'Column operations for File type, Press to sort on File type',
+        //iconName: 'Page',
+        isIconOnly: false,
+        fieldName: 'Count',
+        minWidth: 141,
+        maxWidth: 141,
+        styles: colomnstyle
+        //onColumnClick: this._onColumnClick,
+        // onRender: (item: Iitem, i: number) => (
+        //  <Text> {item.Component[0].PartID}</Text>
+        // ),
+      },
     {
-      key: 'column4',
+      key: 'column6',
       name: '',
       ariaLabel: 'Column operations for File type, Press to sort on File type',
       //iconName: 'Page',
@@ -157,7 +254,8 @@ export default function CaculateBundleView(): JSX.Element {
       selectors: {
         '@media (min-width: 0px)': {
           //height: 500,
-          maxHeight:"70vh",
+          maxHeight:"60vh",
+          minHeight:300,
           maxWidth: 650,
           minwidth: 362,
           width: 600,
@@ -257,7 +355,8 @@ export default function CaculateBundleView(): JSX.Element {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'start',
-          //height: '100vh',
+          heighteight: '500',
+          minHeight:"30vh",
           minWidth: 400,
           maxWidth: '80vh',
         },
@@ -266,7 +365,7 @@ export default function CaculateBundleView(): JSX.Element {
       borderRadius: '10px'
     },
     headerWrapper: {
-      marginTop: '-16px'
+      marginTop: '16px'
     },
 
 
@@ -280,7 +379,7 @@ export default function CaculateBundleView(): JSX.Element {
       <Label styles={{ root: { padding: '0 10px' } }}>
         <Stack horizontal verticalAlign="center" style={stackClass}>
         {/* <Label style={{ width: 100, marginLeft: 32 }}>Material: </Label> */}
-          <Label style={{ width: 180, marginLeft: 10 }}>Material: </Label>
+          <Label style={{ width: 80, marginLeft: 10 }}>Material: </Label>
           <Dropdown
             placeholder="Select an option"
             options={options}

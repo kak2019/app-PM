@@ -43,7 +43,7 @@ import SubmitAction from "./submitAction";
 import SimpleEmpty from "../../../../common/components/Empty";
 import { toCSV } from "../../../../common/components/toCSV";
 import { QtySentField } from "./QtySentField";
-
+import DialogCalculator from "../../../calculatorV2/components/DialogCalcaulator";
 export default memo(function index() {
   const ctx = useContext(AppContext);
   // dayjs.extend(relativeTime);
@@ -53,6 +53,8 @@ export default memo(function index() {
   const [filterString1, setFilterString1] = useState("");
   const [filterString2, setFilterString2] = useState("");
   const [filterString3, setFilterString3] = useState("");
+  const [isShowDialog, setIsShowDialog] = useState(false)
+  const [currentRow, setCurrentRow] = useState({})
   // const webURL = ctx.context?._pageContext?._web?.absoluteUrl;
 
   useEffect(() => {
@@ -210,7 +212,12 @@ export default memo(function index() {
       sorting: false,
       render: useCallback(
       (rowitem: IRequestListItem) => {
-      return <a href={`https://www.baidu.com/?${rowitem.Quantity}&${rowitem.PartID}`}>{rowitem.Quantity}</a>
+        return <div style={{cursor: 'pointer', color: 'blue'}} onClick={() => {
+          console.log(rowitem)
+          setIsShowDialog(true)
+          setCurrentRow(rowitem);
+          //console.log(rowitem.TerminalId)
+        }}>{rowitem.Quantity}</div>
       },
       [listviewItems]
       ),
@@ -740,6 +747,8 @@ export default memo(function index() {
           />
         )
       ) : null}
+      <DialogCalculator row={currentRow} showDialog={isShowDialog} toggleHideDialog={() => {setIsShowDialog(!isShowDialog)}} />
     </>
   );
+  
 });

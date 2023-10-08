@@ -1,5 +1,5 @@
-import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
-import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
+import { Dialog, DialogType } from '@fluentui/react/lib/Dialog';
+import {  DefaultButton } from '@fluentui/react/lib/Button';
 import { ContextualMenu } from '@fluentui/react/lib/ContextualMenu';
 import { Toggle } from '@fluentui/react/lib/Toggle';
 import { useBoolean } from '@fluentui/react-hooks';
@@ -10,7 +10,15 @@ const dragOptions = {
   closeMenuItemText: 'Close',
   menu: ContextualMenu,
 };
-const modalPropsStyles = { main: { maxWidth: 800 } };
+const modalPropsStyles = { main: {selectors: {
+    '@media (min-width: 0px)': {
+      //height: 500,
+      maxHeight: '60vh',
+      maxWidth: 900,
+      minwidth: 900,
+        width: 900,
+    }
+  }, }};
 const dialogContentProps = {
   type: DialogType.normal,
   title: '',
@@ -18,9 +26,9 @@ const dialogContentProps = {
 };
 
 //<Dialog><div>看到就是成功</div></Dialog>
-
-export default function  dialogCalculator(): JSX.Element {
-    const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default function  dialogCalculator({showDialog, toggleHideDialog, row}: {row?: any, showDialog?: boolean,toggleHideDialog?: (ev?: React.MouseEvent<HTMLButtonElement>) => any}): JSX.Element {
+    //const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
     const [isDraggable, { toggle: toggleIsDraggable }] = useBoolean(false);
     const modalProps = React.useMemo(
       () => ({
@@ -34,18 +42,21 @@ export default function  dialogCalculator(): JSX.Element {
       <Toggle label="Is draggable" onChange={toggleIsDraggable} checked={isDraggable} />
       <DefaultButton secondaryText="Opens the Sample Dialog" onClick={toggleHideDialog} text="Open Dialog" />
       <Dialog
-        hidden={hideDialog}
+        hidden={!showDialog}
         onDismiss={toggleHideDialog}
         dialogContentProps={dialogContentProps}
         modalProps={modalProps}
        
       >
          {/* <div>能看到吗</div> */}
-         <CaculateBundleView/>
-        <DialogFooter>
+         {/* 模拟有数据的id */}
+         {/* <CaculateBundleView row={{...row, PartID: '10026'}}/> */}
+         <CaculateBundleView row={row}/>
+         {/* <CaculateBundleView/> */}
+        {/* <DialogFooter>
           <PrimaryButton onClick={toggleHideDialog} text="Send" />
           <DefaultButton onClick={toggleHideDialog} text="Don't send" />
-        </DialogFooter>
+        </DialogFooter> */}
       </Dialog>
     </>
 }
