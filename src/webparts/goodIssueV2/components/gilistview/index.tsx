@@ -8,7 +8,7 @@ import {
   IViewField,
   SelectionMode,
 } from "@pnp/spfx-controls-react/lib/ListView";
-import { useRequests } from "../../../../common/hooks/useRequests";
+import { useRequestsBundle } from "../../../../common/hooks/useRequestsBundle";
 import styles from "./GIListView.module.scss";
 import { IRequestListItem } from "../../../../common/model/requests";
 import AppContext from "../../../../common/AppContext";
@@ -29,7 +29,7 @@ import {
 import {
   REQUESTSCONST,
   RequestStatus,
-} from "../../../../common/features/requests";
+} from "../../../../common/features/requestsBundlelist";
 import {
   FormikDropdown,
   FormikDatePicker,
@@ -47,7 +47,7 @@ import DialogCalculator from "../../../calculatorV2/components/DialogCalcaulator
 export default memo(function index() {
   const ctx = useContext(AppContext);
   // dayjs.extend(relativeTime);
-  const [isFetchingRequest, , , requests, , , , , , , , , , ,] = useRequests();
+  const [isFetchingRequest, , , requests, , , , , , , , , , ,] = useRequestsBundle();
   const [listviewItems, setListViewItems] =
     useState<IRequestListItem[]>(undefined);
   const [filterString1, setFilterString1] = useState("");
@@ -188,7 +188,7 @@ export default memo(function index() {
       sorting: false,
     },
     {
-      name: "PartID",
+      name: "BundleID",
       displayName: "Bundle ID",
       minWidth: 70,
       maxWidth: 70,
@@ -196,7 +196,7 @@ export default memo(function index() {
       sorting: false,
     },
     {
-      name: "PartDescription",
+      name: "BundleDescription",
       displayName: "Bundle Description",
       minWidth: 175,
       maxWidth: 175,

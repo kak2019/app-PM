@@ -27,7 +27,7 @@ interface Iitem {
 interface ComponentType {
   PartID: number,
   Name: string,
-  Count: number,
+  Count: number
 }
 
 interface InventoryListItem {
@@ -45,14 +45,14 @@ interface InventoryItem{
 
 
 
-export default function CaculateBundleView({row}: {row?: {PartID: string, Quantity: string ,TerminalId_x003a_Name: string }}): JSX.Element {
+export default function CaculateBundleView({row}: {row?: {BundleID: string, Quantity: string ,TerminalId_x003a_Name: string }}): JSX.Element {
   const [items, setitems] = React.useState<Iitem[]>(BUNDLECONST.MATERIAL_LIST)
   const [list, setList] = React.useState<ComponentType[]>([])
   const [count, setCount] = React.useState<string>(row.Quantity||"1")
   const [curMaterial, setCurMaterial] = React.useState<Iitem>()
   const [hideDialog, setHideDialog] = React.useState<boolean>(true)
   const [isDraggable] = useBoolean(false);
-  const [selectedKey, setSelectedKey] = React.useState<string>(row.PartID||'')
+  const [selectedKey, setSelectedKey] = React.useState<string>(row.BundleID||'')
   const _getKey = (item: IColumn, index?: number): string => {
     return item.key;
   }
@@ -61,11 +61,11 @@ export default function CaculateBundleView({row}: {row?: {PartID: string, Quanti
   }, [])
   const sp = spfi(getSP());
 
-  const getTargetInventoryValue = (partId: number): Promise<InventoryItem> => {
+  const getTargetInventoryValue = (BundleID: number): Promise<InventoryItem> => {
     
     // 变量拼起来 空格会导致搜索不到
     //const temp_Address = sp.web.lists.getByTitle("Entities").items.select("Title","Country","Address").filter(`Name eq ${(taregetID)}`).getAll();
-    console.log("1",row.PartID)
+    console.log("1",row.BundleID)
     try{
     const item =  sp.web.lists.getByTitle("Inventory Management").renderListDataAsStream({
         ViewXml: `<View>
@@ -74,7 +74,7 @@ export default function CaculateBundleView({row}: {row?: {PartID: string, Quanti
                         <And>
                           <Eq>
                             <FieldRef Name="PartNumber"/>
-                            <Value Type="Text">${partId}</Value>
+                            <Value Type="Text">${BundleID}</Value>
                           </Eq>
                           <Eq>
                           <FieldRef Name="Entity_x003a__x0020_Name"/>
@@ -109,14 +109,16 @@ export default function CaculateBundleView({row}: {row?: {PartID: string, Quanti
 };
   
   React.useEffect(() => {
-    const item = BUNDLECONST.MATERIAL_LIST.find(val => val.Material === row.PartID)
+    const item = BUNDLECONST.MATERIAL_LIST.find(val => val.Material === row.BundleID)
+    console.log("Valval.Material",item)
     const arr: InventoryListItem[] = item.Component.slice(0)
       arr.forEach(async (val, i) => {
         await getTargetInventoryValue(val.PartID).then((value)=>{
           const Qtyonhand = Number(value.Qtyonhand.replace(',', ''))
           val.StockOnhand = Qtyonhand
-          val.Count = Number(row.Quantity)
-          val.Difference = Qtyonhand - Number(row.Quantity)
+          val.Count = Number(row.Quantity) * val.Count
+          //val.Difference = Qtyonhand - Number(row.Quantity) * val.Count
+          val.Difference = Qtyonhand -  val.Count
         });
         if(i === arr.length - 1) {
           setList(arr);
@@ -397,8 +399,9 @@ export default function CaculateBundleView({row}: {row?: {PartID: string, Quanti
             styles={dropdownStyles}
             onChange={handleDrodownChange}
             selectedKey={selectedKey}
+            disabled
           />
-          <div style={{ cursor: 'pointer' }} onClick={showOptionList}>
+          <div style={{ cursor: 'pointer' ,display:"none"}} onClick={showOptionList}>
             <OptionDetailSVG />
           </div>
         </Stack>
@@ -411,9 +414,10 @@ export default function CaculateBundleView({row}: {row?: {PartID: string, Quanti
             value={count}
             onChange={handleCountChange}
             styles={{ root: { width: 150 } }}
+            disabled
 
           />
-          <PrimaryButton text="GO" styles={{ root: { marginLeft: 10, backgroundColor: "rgba(0, 130, 155, 1)", borderRadius: '5px',minWidth:40 } }} className={styles.gobutton} onClick={handleGoClick} />
+          <PrimaryButton text="GO" styles={{ root: { marginLeft: 10, backgroundColor: "rgba(0, 130, 155, 1)", borderRadius: '5px',minWidth:40,display:"none" } }} className={styles.gobutton} onClick={handleGoClick} />
         </Stack>
         
         {list?.length > 0 && <hr style={{ color: "rgb(0, 130, 155)" }} />}

@@ -95,4 +95,4 @@ const requestsSlice = createSlice({
 
 export const { RequestStatusChanged, RequestItemChanged, RequestItemIdChanged, RequestListIdChange, RequestTermialIdChange } =
   requestsSlice.actions;
-export const requestsReducer = requestsSlice.reducer;
+export const requestsReducerbundle = requestsSlice.reducer;

@@ -4,7 +4,7 @@ import { useEntities } from "../../../common/hooks";
 import "./App.css";
 import { EntitiesStatus } from "../../../common/features/entities";
 import { MessageBar, MessageBarType } from "office-ui-fabric-react";
-import { useRequests } from "../../../common/hooks/useRequests";
+import { useRequestsBundle } from "../../../common/hooks/useRequestsBundle";
 import { RequestStatus } from "../../../common/features/requests";
 import GIListView from "./gilistview";
 import LoadingBox from "../../../common/components/Box/LoadingBox";
@@ -36,7 +36,7 @@ export default memo(function App() {
     ,
     ,
     ,
-  ] = useRequests();
+  ] = useRequestsBundle();
 
   useEffect(() => {
     fetchMyEntity();

@@ -5,7 +5,7 @@ import { PrimaryButton } from "office-ui-fabric-react";
 
 import { IRequestGIError, IRequestListItem } from "../../../../common/model";
 import { useBoolean } from "@fluentui/react-hooks";
-import { useRequests, useEntities } from "../../../../common/hooks";
+import { useRequestsBundle, useEntities } from "../../../../common/hooks";
 import { IPrincipal } from "@pnp/spfx-controls-react";
 import ConfirmationBox from "../../../../common/components/Box/ConfirmationBox";
 import SuccessConfirmationBox from "../../../../common/components/Box/SuccessConfirmationBox";
@@ -42,7 +42,7 @@ export default memo(function SubmitAction({
     changeRequestId,
     ,
     editRequest,
-  ] = useRequests();
+  ] = useRequestsBundle();
 
   const [isSubmitting, { toggle: toggleIsSubmitting }] = useBoolean(false);
   const [hideConfirmDialog, { toggle: toggleHideConfirmDialog }] =
