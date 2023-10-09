@@ -27,9 +27,17 @@ interface Iitem {
 interface ComponentType {
   PartID: number,
   Name: string,
-  Count: number
+  Count: number,
 }
 
+interface InventoryListItem {
+    PartID: number,
+    Name: string,
+    Count: number,
+    Quantity?: number,
+    StockOnhand?: number
+    Difference?: number
+  }
 interface InventoryItem{
     Qtyonhand:string,
     ID:string
@@ -37,7 +45,7 @@ interface InventoryItem{
 
 
 
-export default function CaculateBundleView({row}: {row?: {PartID: string, Quantity: string }}): JSX.Element {
+export default function CaculateBundleView({row}: {row?: {PartID: string, Quantity: string ,TerminalId_x003a_Name: string }}): JSX.Element {
   const [items, setitems] = React.useState<Iitem[]>(BUNDLECONST.MATERIAL_LIST)
   const [list, setList] = React.useState<ComponentType[]>([])
   const [count, setCount] = React.useState<string>(row.Quantity||"1")
@@ -53,7 +61,7 @@ export default function CaculateBundleView({row}: {row?: {PartID: string, Quanti
   }, [])
   const sp = spfi(getSP());
 
-  const getTargetInventoryValue = (): Promise<InventoryItem> => {
+  const getTargetInventoryValue = (partId: number): Promise<InventoryItem> => {
     
     // 变量拼起来 空格会导致搜索不到
     //const temp_Address = sp.web.lists.getByTitle("Entities").items.select("Title","Country","Address").filter(`Name eq ${(taregetID)}`).getAll();
@@ -66,11 +74,11 @@ export default function CaculateBundleView({row}: {row?: {PartID: string, Quanti
                         <And>
                           <Eq>
                             <FieldRef Name="PartNumber"/>
-                            <Value Type="Text">1</Value>
+                            <Value Type="Text">${partId}</Value>
                           </Eq>
                           <Eq>
                           <FieldRef Name="Entity_x003a__x0020_Name"/>
-                          <Value Type="Text">Terminal 04</Value>
+                          <Value Type="Text">${row.TerminalId_x003a_Name}</Value>
                         </Eq>
                         </And>
                         </Where>
@@ -102,17 +110,20 @@ export default function CaculateBundleView({row}: {row?: {PartID: string, Quanti
   
   React.useEffect(() => {
     const item = BUNDLECONST.MATERIAL_LIST.find(val => val.Material === row.PartID)
-    if(item) {
-      // 查询 这个可以拿到想要的值
-    const  temp =  getTargetInventoryValue().then((value)=>{console.log(value.Qtyonhand,"ID:",value.ID)});
-    console.log(temp)
-    setList(item.Component.slice(0).map((val) => ({
-        ...val,
-        Count: Number(count) * val.Count
-      })));
-      // 设置列
+    const arr: InventoryListItem[] = item.Component.slice(0)
+      arr.forEach(async (val, i) => {
+        await getTargetInventoryValue(val.PartID).then((value)=>{
+          const Qtyonhand = Number(value.Qtyonhand.replace(',', ''))
+          val.StockOnhand = Qtyonhand
+          val.Count = Number(row.Quantity)
+          val.Difference = Qtyonhand - Number(row.Quantity)
+        });
+        if(i === arr.length - 1) {
+          setList(arr);
+        }
+      })
       
-    }
+    
   }, [row])
   const colomnstyle = {
     root: {
@@ -175,7 +186,7 @@ export default function CaculateBundleView({row}: {row?: {PartID: string, Quanti
         ariaLabel: 'Column operations for File type, Press to sort on File type',
         //iconName: 'Page',
         isIconOnly: false,
-        fieldName: 'Count',
+        fieldName: 'StockOnhand',
         minWidth: 141,
         maxWidth: 141,
         styles: colomnstyle
@@ -190,7 +201,7 @@ export default function CaculateBundleView({row}: {row?: {PartID: string, Quanti
         ariaLabel: 'Column operations for File type, Press to sort on File type',
         //iconName: 'Page',
         isIconOnly: false,
-        fieldName: 'Count',
+        fieldName: 'Difference',
         minWidth: 141,
         maxWidth: 141,
         styles: colomnstyle

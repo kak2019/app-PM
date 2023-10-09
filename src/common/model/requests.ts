@@ -23,6 +23,8 @@ export interface IRequestListItem {
   Field2?: string;
   Remarks?: string;
   Created?: Date;
+  BundleID?:string;
+  BundleDescription?:string;
 }
 
 export interface IRequestGIError {
