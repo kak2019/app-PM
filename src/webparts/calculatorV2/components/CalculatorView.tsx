@@ -111,7 +111,8 @@ export default function CaculateBundleView({row}: {row?: {BundleID: string, Quan
   React.useEffect(() => {
     const item = BUNDLECONST.MATERIAL_LIST.find(val => val.Material === row.BundleID)
     console.log("Valval.Material",item)
-    const arr: InventoryListItem[] = item.Component.slice(0)
+    let count = 0
+    const arr: InventoryListItem[] = item.Component.slice(0).map(val => ({...val}))
       arr.forEach(async (val, i) => {
         await getTargetInventoryValue(val.PartID).then((value)=>{
           const Qtyonhand = Number(value.Qtyonhand.replace(',', ''))
@@ -120,13 +121,14 @@ export default function CaculateBundleView({row}: {row?: {BundleID: string, Quan
           //val.Difference = Qtyonhand - Number(row.Quantity) * val.Count
           val.Difference = Qtyonhand -  val.Count
         });
-        if(i === arr.length - 1) {
+        count ++
+        if(count=== arr.length) {
           setList(arr);
         }
       })
       
     
-  }, [row])
+  }, [])
   const colomnstyle = {
     root: {
       color: "black",

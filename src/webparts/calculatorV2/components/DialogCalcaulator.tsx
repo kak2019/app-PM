@@ -13,7 +13,7 @@ const dragOptions = {
 const modalPropsStyles = { main: {selectors: {
     '@media (min-width: 0px)': {
       //height: 500,
-      maxHeight: '60vh',
+      //maxHeight: '60vh',
       maxWidth: 900,
       minwidth: 900,
         width: 900,
@@ -39,8 +39,8 @@ export default function  dialogCalculator({showDialog, toggleHideDialog, row}: {
       [isDraggable],
     )
     return <>
-      <Toggle label="Is draggable" onChange={toggleIsDraggable} checked={isDraggable} />
-      <DefaultButton secondaryText="Opens the Sample Dialog" onClick={toggleHideDialog} text="Open Dialog" />
+      <Toggle label="" onChange={toggleIsDraggable} checked={isDraggable}  style={{display:"none"}}/>
+      <DefaultButton secondaryText="Opens the Sample Dialog" onClick={toggleHideDialog} text="Open Dialog"  style={{display:"none"}}/>
       <Dialog
         hidden={!showDialog}
         onDismiss={toggleHideDialog}
@@ -51,7 +51,7 @@ export default function  dialogCalculator({showDialog, toggleHideDialog, row}: {
          {/* <div>能看到吗</div> */}
          {/* 模拟有数据的id */}
          {/* <CaculateBundleView row={{...row, PartID: '10026'}}/> */}
-         <CaculateBundleView row={row}/>
+         {showDialog&&<CaculateBundleView row={row}/>}
          {/* <CaculateBundleView/> */}
         {/* <DialogFooter>
           <PrimaryButton onClick={toggleHideDialog} text="Send" />
