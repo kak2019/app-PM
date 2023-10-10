@@ -16,7 +16,7 @@ import MyDisribution from '../assets/myDisribution'
 import EditDocument from '../assets/editDocument'
 import Receive from '../assets/receive'
 import ViewHistory from '../assets/viewhistory'
-import InvoiceIcon from  '../assets/InvoiceIcon'
+import InvoiceIcon from '../assets/InvoiceIcon'
 
 interface IuserRoleobj {
   CreateFlowV: boolean;
@@ -26,7 +26,7 @@ interface IuserRoleobj {
   MyDistributionV: boolean;
   ReciecedDistributionV: boolean;
   InventoryV: boolean;
-  InvoiceTempV:boolean;
+  InvoiceTempV: boolean;
 }
 const USER_ROLE = {
   supplier: "Supplier",
@@ -34,7 +34,7 @@ const USER_ROLE = {
   fc: "Factory",
   kdfc: "KDFactory",
   wh: "WareHouse",
-  admin:"Admin"
+  admin: "Admin"
 };
 
 export default memo(function App() {
@@ -62,11 +62,11 @@ export default memo(function App() {
     MyDistributionV: true,
     ReciecedDistributionV: true,
     InventoryV: true,
-    InvoiceTempV:true
+    InvoiceTempV: true
   });
 
   useEffect(() => {
-    if(userEmail!=="" && userEmail!==undefined) fetchGroupsByUserEmail({ userEmail});
+    if (userEmail !== "" && userEmail !== undefined) fetchGroupsByUserEmail({ userEmail });
   }, []);
   useEffect(() => {
     if (groups.length > 0) {
@@ -78,7 +78,7 @@ export default memo(function App() {
               CreateFlowV: true,
               RequestFlowV: true,
               ReciecedDistributionV: false,
-              InvoiceTempV:false
+              InvoiceTempV: false
             });
             //setuserRoleText("Supplier");
             break;
@@ -88,7 +88,7 @@ export default memo(function App() {
               CreateFlowV: false,
               RequestFlowV: false,
               GoodIssueV: true,
-              CreateDistributionV:false,
+              CreateDistributionV: false,
               MyDistributionV: false,
 
             });
@@ -111,7 +111,8 @@ export default memo(function App() {
             //setuserRoleText("SPOL");
             break;
           case USER_ROLE.admin:
-            setuserRoleobj({...userRoleobj,
+            setuserRoleobj({
+              ...userRoleobj,
               CreateFlowV: true,
               RequestFlowV: true,
               GoodIssueV: false,
@@ -133,7 +134,7 @@ export default memo(function App() {
       margin: 0,
     },
   };
-  
+
 
   return (
     <section>
@@ -142,57 +143,90 @@ export default memo(function App() {
       <br/> */}
       {viewVisible ? (
         <Stack enableScopedSelectors styles={stackStyles}>
-          <div className={styles.section} style={{display:(userRoleobj.CreateFlowV||userRoleobj.RequestFlowV||userRoleobj.GoodIssueV)?"block":"none"}}>
-            <div className={styles.parttitle} style={{display:(userRoleobj.CreateFlowV||userRoleobj.RequestFlowV||userRoleobj.GoodIssueV)?"block":"none"}}>Request / Incoming</div>
+          <div className={styles.section} style={{ display: (userRoleobj.CreateFlowV || userRoleobj.RequestFlowV || userRoleobj.GoodIssueV) ? "block" : "none" }}>
+            <div className={styles.parttitle} style={{ display: (userRoleobj.CreateFlowV || userRoleobj.RequestFlowV || userRoleobj.GoodIssueV) ? "block" : "none" }}>Request / Incoming</div>
             <Stack enableScopedSelectors horizontal horizontalAlign="start">
-            
-            <DefaultButton
-              text="Incoming"
-              className={
-                userRoleobj.CreateFlowV
-                  ? styles.homePageButton
-                  : styles.homePageButtonDisabled
-              }
-              disabled={!userRoleobj.CreateFlowV}
-              href={`${webURL ? webURL + "/" : ""}sitepages/request.aspx`}
-              onRenderIcon={() => {
-                return <EditDocument />
-              }}
-            />
 
-            <DefaultButton
-              text="Incoming List"
-              className={
-                userRoleobj.RequestFlowV
-                  ? styles.homePageButton
-                  : styles.homePageButtonDisabled
-              }
-              disabled={!userRoleobj.RequestFlowV}
-              href={`${webURL ? webURL + "/" : ""}Lists/Request%20List`}
-              onRenderIcon={() => {
-                return <RequestListSvg />
-              }}
-            />
+              <DefaultButton
+                text="Incoming"
+                className={
+                  userRoleobj.CreateFlowV
+                    ? styles.homePageButton
+                    : styles.homePageButtonDisabled
+                }
+                disabled={!userRoleobj.CreateFlowV}
+                href={`${webURL ? webURL + "/" : ""}sitepages/request.aspx`}
+                onRenderIcon={() => {
+                  return <EditDocument />
+                }}
+              />
 
-            <DefaultButton
-              text="Goods Issue List"
-              className={
-                userRoleobj.GoodIssueV
-                  ? styles.homePageButton
-                  : styles.homePageButtonDisabled
-              }
-              disabled={!userRoleobj.GoodIssueV}
-              href={`${webURL ? webURL + "/" : ""}sitepages/GI.aspx`}
-              onRenderIcon={() => {
-                return <GoodIssue />
-              }}
-            />
-          </Stack>
+              <DefaultButton
+                text="Incoming List"
+                className={
+                  userRoleobj.RequestFlowV
+                    ? styles.homePageButton
+                    : styles.homePageButtonDisabled
+                }
+                disabled={!userRoleobj.RequestFlowV}
+                href={`${webURL ? webURL + "/" : ""}Lists/Request%20List`}
+                onRenderIcon={() => {
+                  return <RequestListSvg />
+                }}
+              />
+
+
+              <DefaultButton
+                text="Goods Issue List"
+                className={
+                  userRoleobj.GoodIssueV
+                    ? styles.homePageButton
+                    : styles.homePageButtonDisabled
+                }
+                disabled={!userRoleobj.GoodIssueV}
+                href={`${webURL ? webURL + "/" : ""}sitepages/GI.aspx`}
+                onRenderIcon={() => {
+                  return <GoodIssue />
+                }}
+
+
+              />
+
+              <DefaultButton
+                text="Incoming Bundle List"
+                className={
+                  userRoleobj.RequestFlowV
+                    ? styles.homePageButton
+                    : styles.homePageButtonDisabled
+                }
+                disabled={!userRoleobj.RequestFlowV}
+                href={`${webURL ? webURL + "/" : ""}Lists/Incoming%20Bundle%20List`}
+                onRenderIcon={() => {
+                  return <RequestListSvg />
+                }}
+              />
+              <DefaultButton
+                text="Goods Issue Bundle List"
+                className={
+                  userRoleobj.GoodIssueV
+                    ? styles.homePageButton
+                    : styles.homePageButtonDisabled
+                }
+                disabled={!userRoleobj.GoodIssueV}
+                href={`${webURL ? webURL + "/" : ""}sitepages/GIBundle.aspx`}
+                onRenderIcon={() => {
+                  return <GoodIssue />
+                }}
+
+
+              />
+
+            </Stack>
           </div>
 
           <div className={styles.section}>
             <div className={styles.parttitle}>Distribution / Outgoing</div>
-              <Stack enableScopedSelectors horizontal horizontalAlign="start">
+            <Stack enableScopedSelectors horizontal horizontalAlign="start">
               <DefaultButton
                 text="Outgoing"
                 className={
@@ -234,7 +268,7 @@ export default memo(function App() {
                   return <Receive />
                 }}
               />
-              </Stack>
+            </Stack>
           </div>
 
           <div className={styles.section}>
@@ -270,9 +304,9 @@ export default memo(function App() {
           </div>
 
           <div className={styles.section}>
-          <div className={styles.parttitle} style={{display:(userRoleobj.InvoiceTempV?"block":"none")}}>Invoice Template</div>
-          <Stack enableScopedSelectors horizontal horizontalAlign="start">
-          <DefaultButton
+            <div className={styles.parttitle} style={{ display: (userRoleobj.InvoiceTempV ? "block" : "none") }}>Invoice Template</div>
+            <Stack enableScopedSelectors horizontal horizontalAlign="start">
+              <DefaultButton
                 text="Invoice Print Out"
                 className={
                   userRoleobj.InvoiceTempV
@@ -282,7 +316,7 @@ export default memo(function App() {
                 disabled={!userRoleobj.InvoiceTempV}
                 href={`${webURL ? webURL + "/" : ""}/Shared Documents/UD interim Invoice%26packing list.xlsx`}
                 onRenderIcon={() => {
-                  return <InvoiceIcon/>
+                  return <InvoiceIcon />
                 }}
               />
             </Stack>
