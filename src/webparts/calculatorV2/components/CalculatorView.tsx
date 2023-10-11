@@ -146,7 +146,7 @@ export default function CaculateBundleView({row}: {row?: {BundleID: string, Quan
   const columns: IColumn[] = [
     {
       key: 'column1',
-      name: 'Bundle ID',
+      name: 'Part ID',
       ariaLabel: 'Column operations for File type, Press to sort on File type',
       isIconOnly: false,
       fieldName: 'PartID',
@@ -159,7 +159,7 @@ export default function CaculateBundleView({row}: {row?: {BundleID: string, Quan
     },
     {
       key: 'column2',
-      name: 'Bundle Description',
+      name: 'Part Description',
       ariaLabel: 'Column operations for File type, Press to sort on File type',
       //iconName: 'Page',
       isIconOnly: false,
@@ -172,7 +172,7 @@ export default function CaculateBundleView({row}: {row?: {BundleID: string, Quan
       // ),
     }, {
       key: 'column3',
-      name: 'Bundle Quantity',
+      name: 'Part Quantity',
       ariaLabel: 'Column operations for File type, Press to sort on File type',
       //iconName: 'Page',
       isIconOnly: false,
