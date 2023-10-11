@@ -173,8 +173,8 @@ const fetchByTerminalId = async (arg: {
               Remarks: item.Remarks,
               Created: item.Created,
 
-              BundleID: response.Row[0].BundleID,
-              BundleDescription: response.Row[0].BundleDescription,
+              BundleID: item.BundleID,
+              BundleDescription: item.BundleDescription,
             } as IRequestListItem)
           );
         } else {

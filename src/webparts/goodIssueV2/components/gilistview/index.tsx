@@ -198,8 +198,8 @@ export default memo(function index() {
     {
       name: "BundleDescription",
       displayName: "Bundle Description",
-      minWidth: 175,
-      maxWidth: 175,
+      minWidth: 205,
+      maxWidth: 205,
       isResizable: false,
       sorting: false,
     },
@@ -572,7 +572,7 @@ export default memo(function index() {
     const aLink = document.createElement("a");
     const evt = new Event("click");
 
-    aLink.download = "Goods Issue List";
+    aLink.download = "Goods Issue Bundle List";
     aLink.href = encodedUri;
     aLink.dispatchEvent(evt);
     aLink.click();
