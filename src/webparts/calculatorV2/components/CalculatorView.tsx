@@ -257,10 +257,13 @@ export default function CaculateBundleView({row}: {row?: {BundleID: string, Quan
     }
   ))
   const dropdownStyles: Partial<IDropdownStyles> = {
-    dropdown: { width: 150 },
+    dropdown: { width: 150},
     callout: { maxHeight: "20px", overflowY: 'auto' },
     root: {
-      marginRight: 10
+      marginRight: 10,
+    },
+    title:{
+      color:"black"
     }
   };
 
@@ -415,7 +418,7 @@ export default function CaculateBundleView({row}: {row?: {BundleID: string, Quan
           <TextField
             value={count}
             onChange={handleCountChange}
-            styles={{ root: { width: 150 } }}
+            styles={{ root: { width: 150 }, field:{color:"black"}}}
             disabled
 
           />
