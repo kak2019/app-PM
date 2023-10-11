@@ -146,12 +146,12 @@ export default function CaculateBundleView({row}: {row?: {BundleID: string, Quan
   const columns: IColumn[] = [
     {
       key: 'column1',
-      name: 'ID',
+      name: 'Bundle ID',
       ariaLabel: 'Column operations for File type, Press to sort on File type',
       isIconOnly: false,
       fieldName: 'PartID',
-      minWidth: 35 ,
-      maxWidth: 61,
+      minWidth: 91 ,
+      maxWidth: 91,
       styles: colomnstyle
       // onRender: (item: Iitem) => (
       //   <Text>{item.Material}</Text>
@@ -159,7 +159,7 @@ export default function CaculateBundleView({row}: {row?: {BundleID: string, Quan
     },
     {
       key: 'column2',
-      name: 'Description',
+      name: 'Bundle Description',
       ariaLabel: 'Column operations for File type, Press to sort on File type',
       //iconName: 'Page',
       isIconOnly: false,
@@ -172,7 +172,7 @@ export default function CaculateBundleView({row}: {row?: {BundleID: string, Quan
       // ),
     }, {
       key: 'column3',
-      name: 'Quantity',
+      name: 'Bundle Quantity',
       ariaLabel: 'Column operations for File type, Press to sort on File type',
       //iconName: 'Page',
       isIconOnly: false,
@@ -376,11 +376,11 @@ export default function CaculateBundleView({row}: {row?: {BundleID: string, Quan
           maxWidth: '80vh',
         },
       },
-      marginTop: '10px',
+      marginTop: '5px',//10
       borderRadius: '10px'
     },
     headerWrapper: {
-      marginTop: '16px'
+      marginTop: '0px'//16
     },
 
 
@@ -390,11 +390,11 @@ export default function CaculateBundleView({row}: {row?: {BundleID: string, Quan
   return (
     <section className={styles.caculatorbody}>
 
-      <Label className={styles.caculatortitle} >Calculator</Label>
-      <Label styles={{ root: { padding: '0 10px' } }}>
+      {/* <Label className={styles.caculatortitle} >Calculator</Label> */}
+      <Label styles={{ root: { padding: '0 0px' } }}>
         <Stack horizontal verticalAlign="center" style={stackClass}>
         {/* <Label style={{ width: 100, marginLeft: 32 }}>Material: </Label> */}
-          <Label style={{ width: 80, marginLeft: 10 }}>Material: </Label>
+          <Label style={{ width: 80, marginLeft: 10 }}>Bundle ID: </Label>
           <Dropdown
             placeholder="Select an option"
             options={options}
