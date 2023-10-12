@@ -125,7 +125,7 @@ export default function RequestView(): JSX.Element {
           maxHeight: 900,
           maxWidth: 550,
           minwidth: 362,
-          width: 300,
+          width: 400,
         }
       },
       textAlign: 'center',
