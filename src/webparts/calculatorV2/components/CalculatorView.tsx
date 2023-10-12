@@ -12,6 +12,8 @@ import { Dialog, DialogType} from '@fluentui/react/lib/Dialog';
 import OptionDetailSVG from '../assets/bundleQuestion'
 import { useId, useBoolean } from '@fluentui/react-hooks';
 
+import { Text } from '@fluentui/react/lib/Text';
+
 import "@pnp/sp/items/get-all";
 import { spfi } from "@pnp/sp";
 import { getSP } from '../../../common/pnpjsConfig'
@@ -143,6 +145,22 @@ export default function CaculateBundleView({row}: {row?: {BundleID: string, Quan
       }
     }
   }
+  const colomnstylediff = {
+    root: {
+      color: "black",
+      backgroundColor: '#E9E9E9',
+      '&:hover': {
+        backgroundColor: '#E9E9E9',
+        color: "black",
+      },
+      '&:active': {
+        backgroundColor: '#E9E9E9',
+        color: "black",
+      }
+    },
+   
+    
+  }
   const columns: IColumn[] = [
     {
       key: 'column1',
@@ -180,10 +198,6 @@ export default function CaculateBundleView({row}: {row?: {BundleID: string, Quan
       minWidth: 141,
       maxWidth: 141,
       styles: colomnstyle
-      //onColumnClick: this._onColumnClick,
-      // onRender: (item: Iitem, i: number) => (
-      //  <Text> {item.Component[0].PartID}</Text>
-      // ),
     }, {
         key: 'column4',
         name: 'StockOnhand',
@@ -194,10 +208,6 @@ export default function CaculateBundleView({row}: {row?: {BundleID: string, Quan
         minWidth: 141,
         maxWidth: 141,
         styles: colomnstyle
-        //onColumnClick: this._onColumnClick,
-        // onRender: (item: Iitem, i: number) => (
-        //  <Text> {item.Component[0].PartID}</Text>
-        // ),
       },
       {
         key: 'column5',
@@ -208,11 +218,10 @@ export default function CaculateBundleView({row}: {row?: {BundleID: string, Quan
         fieldName: 'Difference',
         minWidth: 141,
         maxWidth: 141,
-        styles: colomnstyle
-        //onColumnClick: this._onColumnClick,
-        // onRender: (item: Iitem, i: number) => (
-        //  <Text> {item.Component[0].PartID}</Text>
-        // ),
+        styles: colomnstylediff,
+        onRender: (list: InventoryListItem) => (
+        <Text style={{color:list?.Difference>0?"green":"red"}}>{list?.Difference}</Text>
+      ),
       },
     {
       key: 'column6',
@@ -374,7 +383,7 @@ export default function CaculateBundleView({row}: {row?: {BundleID: string, Quan
           flexDirection: 'column',
           alignItems: 'start',
           heighteight: '500',
-          minHeight:"30vh",
+          // minHeight:"30vh",
           minWidth: 400,
           maxWidth: '80vh',
         },
@@ -385,6 +394,7 @@ export default function CaculateBundleView({row}: {row?: {BundleID: string, Quan
     headerWrapper: {
       marginTop: '0px'//16
     },
+
 
 
   };
@@ -427,7 +437,7 @@ export default function CaculateBundleView({row}: {row?: {BundleID: string, Quan
         
         {list?.length > 0 && <hr style={{ color: "rgb(0, 130, 155)" }} />}
         {list?.length > 0&&<Label  style={{  marginLeft: 10  ,fontWeight:600}}>Components:</Label>}
-        {list?.length > 0 && <DetailsList
+        {list?.length > 0 && <><DetailsList
           items={list}// [{"Emballage Number":"123","Emballage Type":"456" ,"Count":"11"},]
           //compact={isCompactMode}
           columns={columns}
@@ -439,7 +449,9 @@ export default function CaculateBundleView({row}: {row?: {BundleID: string, Quan
           onShouldVirtualize={() => false}
           styles={partgridStyles}
         //onItemInvoked={this._onItemInvoked}
-        />}
+        />
+        <Label >*These data are for your reference only. There may be some difference because the inventory data is being processed.</Label></>
+        }
         <div style={{ display: "none" }}>
           <hr style={{ color: "rgb(0, 130, 155)" }} />
           <DetailsList
@@ -489,7 +501,7 @@ export default function CaculateBundleView({row}: {row?: {BundleID: string, Quan
         //onItemInvoked={this._onItemInvoked}
         />
       </Dialog>
-      <Label/>
+      {/* <Label/> */}
     </section>
   )
 

@@ -198,8 +198,8 @@ export default memo(function index() {
     {
       name: "BundleDescription",
       displayName: "Bundle Description",
-      minWidth: 205,
-      maxWidth: 205,
+      minWidth: 251,
+      maxWidth: 251,
       isResizable: false,
       sorting: false,
     },
