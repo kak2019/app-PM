@@ -190,13 +190,13 @@ export default function CaculateBundleView({row}: {row?: {BundleID: string, Quan
       // ),
     }, {
       key: 'column3',
-      name: 'Part Quantity',
+      name: 'Quantity',
       ariaLabel: 'Column operations for File type, Press to sort on File type',
       //iconName: 'Page',
       isIconOnly: false,
       fieldName: 'Count',
-      minWidth: 141,
-      maxWidth: 141,
+      minWidth: 91,
+      maxWidth: 91,
       styles: colomnstyle
     }, {
         key: 'column4',
@@ -205,8 +205,8 @@ export default function CaculateBundleView({row}: {row?: {BundleID: string, Quan
         //iconName: 'Page',
         isIconOnly: false,
         fieldName: 'StockOnhand',
-        minWidth: 141,
-        maxWidth: 141,
+        minWidth: 91,
+        maxWidth: 91,
         styles: colomnstyle
       },
       {
@@ -216,24 +216,24 @@ export default function CaculateBundleView({row}: {row?: {BundleID: string, Quan
         //iconName: 'Page',
         isIconOnly: false,
         fieldName: 'Difference',
-        minWidth: 141,
-        maxWidth: 141,
+        minWidth: 90,
+        maxWidth: 90,
         styles: colomnstylediff,
         onRender: (list: InventoryListItem) => (
         <Text style={{color:list?.Difference>0?"green":"red"}}>{list?.Difference}</Text>
       ),
       },
-    {
-      key: 'column6',
-      name: '',
-      ariaLabel: 'Column operations for File type, Press to sort on File type',
-      //iconName: 'Page',
-      isIconOnly: false,
-      fieldName: '',
-      minWidth: 20,
-      maxWidth: 20,
-      styles: colomnstyle
-    }
+    // {
+    //   key: 'column6',
+    //   name: '',
+    //   ariaLabel: 'Column operations for File type, Press to sort on File type',
+    //   //iconName: 'Page',
+    //   isIconOnly: false,
+    //   fieldName: '',
+    //   minWidth: 20,
+    //   maxWidth: 20,
+    //   styles: colomnstyle
+    // }
   ]
 
   const materialColumns = [
@@ -384,8 +384,8 @@ export default function CaculateBundleView({row}: {row?: {BundleID: string, Quan
           alignItems: 'start',
           heighteight: '500',
           // minHeight:"30vh",
-          minWidth: 400,
-          maxWidth: '80vh',
+          // minWidth: 400,
+          // maxWidth: '80vh',
         },
       },
       marginTop: '5px',//10
@@ -450,7 +450,7 @@ export default function CaculateBundleView({row}: {row?: {BundleID: string, Quan
           styles={partgridStyles}
         //onItemInvoked={this._onItemInvoked}
         />
-        <Label >*These data are for your reference only. There may be some difference because the inventory data is being processed.</Label></>
+        <Label >*Difference may be slight deviation if your inventory is being processed in other transaction.</Label></>
         }
         <div style={{ display: "none" }}>
           <hr style={{ color: "rgb(0, 130, 155)" }} />
